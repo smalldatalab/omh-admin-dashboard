@@ -1,0 +1,2 @@
+module PamUsersHelper
+end
