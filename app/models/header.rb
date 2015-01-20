@@ -10,6 +10,5 @@ class Header
 
   embeds_one :schema_id
   embeds_one :acquisition_provenance
-
   
 end
