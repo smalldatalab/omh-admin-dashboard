@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :first_name, :last_name, :gmail, :user_id
+  permit_params :first_name, :last_name, :gmail, :study_ids => [], studies_attributes: [:id, :name] 
 
   # See permitted parameters documentation:
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
@@ -20,10 +20,16 @@ ActiveAdmin.register User do
 
   index do
     selectable_column
-    id_column
+    # id_column
     column :gmail
     column :first_name
     column :last_name
+    column :studies do |user|
+      if user.studies.present?
+       study_name = user.studies.all.map {|a| a.name.inspect}.join(', ')
+       study_name = study_name.gsub /"/, ''
+      end 
+    end
     column("Pam Data Last Updated") { |user| user.most_recent_pam_data_point }
     column("Mobility Data Last Updated") { |user| user.most_recent_mobility_data_point}
     # column("Download PAM Data") { |user| link_to('Download PAM Data', user_pam_path(user)) }
@@ -33,14 +39,32 @@ ActiveAdmin.register User do
   filter :gmail
   filter :first_name
   filter :last_name
+  filter :studies
 
   form do |f|
-    f.inputs "Admin Details" do
+    f.inputs "User Details" do
       f.input :gmail
       f.input :first_name
       f.input :last_name
-      f.actions
+      # f.input :studies, as: :check_boxes, collection: Study.all_names 
+     
+      # f.has_many :studies do |study_f|
+      #   study_f.inputs "Studies" do 
+      #     # if !study_f.object.nil? 
+      #     #   study_f.input :destroy, as: :boolean, label: "Destroy?"
+      #     # end 
+      #     study_f.input :studies, collection: Study.all_names 
+
+    # f.inputs "Studies" do
+    #   f.has_many :studies do |j|
+    #     j.inputs :study_name, collection: Study.all_names 
+    #   end
+    
+     f.input :studies, as: :check_boxes, collection: Study.all
+      
     end
+      # f.input :study_name, collection: Study.all_names
+    f.actions  
   end
 
   action_item :only => :show do
@@ -55,6 +79,7 @@ ActiveAdmin.register User do
     column :gmail
     column :first_name
     column :last_name
+    column("Studie") {|user| user.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
     column("Pam Data Last Updated") { |user| user.most_recent_pam_data_point }
     column("Mobility Data Last Updated") { |user| user.most_recent_mobility_data_point}
     column (:created_at) { |time| time.created_at.to_formatted_s(:long_ordinal)} 

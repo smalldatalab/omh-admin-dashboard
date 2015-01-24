@@ -1,5 +1,15 @@
 class User < ActiveRecord::Base 
 	# use_connection_ninja(:sdl_admin_dashboard_development)
+  # params.require(:user).permit(:study_name_ids => [])
+# attr_accessible : studies_attributes  
+  # attr_accessible :study_ids
+
+  has_many :studies
+  has_many :admin_users, through: :studies
+
+  accepts_nested_attributes_for :studies
+
+  # accepts_nested_attributes_for :studies, :allow_destroy => true
 
   def user_record
     return PamUser.find_by('email_address' => {'address' => self.gmail})
