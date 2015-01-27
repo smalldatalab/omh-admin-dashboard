@@ -1,15 +1,14 @@
 require 'capistrano/ext/multistage'
 require 'capistrano_colors'
 require 'bundler/capistrano'
-require 'whenever/capistrano'
 
 def template(from, to)
   erb = File.read(File.expand_path("../templates/#{from}", __FILE__))
   put ERB.new(erb).result(binding), to
 end
 
-set :application, "pushcart"
-set :repository, "git@github.com:smalldatalab/pushcart.git"
+set :application, "sdl_admin_dashboard"
+set :repository, "git@github.com:JudyWu/sdl_admin_dashboard.git"
 set :stages, %w(production)
 set :use_sudo, false
 set :deploy_via, :remote_cache
