@@ -14,6 +14,14 @@ test:
   username: judywu
   password: 
 
+staging: 
+  adapter: postgresql
+  encoding: utf8
+  database: <%= Rails.application.secrets.db_name %>
+  pool: 5
+  username: <%= Rails.application.secrets.db_user %>
+  password: <%= Rails.application.secrets.db_password %>
+
 production: 
   adapter: postgresql
   encoding: utf8

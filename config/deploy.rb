@@ -50,7 +50,7 @@ namespace :deploy do
 
   desc "Setup a GitHub-style deployment."
   task :setup, except: { no_release: true } do
-    # run "git clone #{repository} #{current_path};"
+    run "git clone #{repository} #{current_path};"
     run "cd #{current_path}; git fetch origin; git reset --hard origin/#{branch}"
     initialize_secrets
   end
