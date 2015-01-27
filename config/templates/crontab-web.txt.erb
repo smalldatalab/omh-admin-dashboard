@@ -1,0 +1,4 @@
+@hourly curl -o <%= current_path %>/public/404.html http://<%= nginx_server %>/error404;
+@hourly curl -o <%= current_path %>/public/422.html http://<%= nginx_server %>/error404;
+@hourly curl -o <%= current_path %>/public/500.html http://<%= nginx_server %>/error500;
+@hourly curl -o <%= current_path %>/public/502.html http://<%= nginx_server %>/error502;
