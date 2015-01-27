@@ -110,18 +110,18 @@ namespace :foreman do
 
   task :restart do
     restart_web
-    restart_worker
+    # restart_worker
   end
 
   task :start do
     start_web
-    start_worker
+    # start_worker
     # start_search
   end
 
   task :stop do
     stop_web
-    stop_worker
+    # stop_worker
     # stop_search
   end
 
