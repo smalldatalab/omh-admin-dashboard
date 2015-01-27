@@ -1,7 +1,11 @@
 class Study < ActiveRecord::Base
   # attr_accessible :name
-  belongs_to :admin_user
-  belongs_to :user 
+  has_many :admin_users, through: :study_owners
+  has_many :study_owners
+
+  has_many :users, through: :study_participants
+  has_many :study_participants
+
 
   # study_names = Study.all.map {|a| a.name}
   

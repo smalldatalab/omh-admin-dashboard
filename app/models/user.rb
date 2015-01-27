@@ -4,36 +4,48 @@ class User < ActiveRecord::Base
 # attr_accessible : studies_attributes  
   # attr_accessible :study_ids
 
-  has_many :studies
-  has_many :admin_users, through: :studies
+  has_many :study_participants
+  has_many :studies, through: :study_participants
+  has_many :admin_users, through: :study_owners
 
   accepts_nested_attributes_for :studies
 
   # accepts_nested_attributes_for :studies, :allow_destroy => true
 
   def user_record
-    return PamUser.find_by('email_address' => {'address' => self.gmail})
+    if PamUser.where('email_address' => {'address' => self.gmail}).blank? 
+      return nil
+    else 
+      return PamUser.find_by('email_address' => {'address' => self.gmail})
+    end 
   end
 
   def most_recent_pam_data_point
     pam_user = user_record
-     
-    if pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').last.nil? 
+
+    if pam_user.nil? 
       return nil 
     else 
-      pam_data =  pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').map! { |i| DateTime.parse(i.header.creation_date_time) }
-      pam_data.sort.last.to_formatted_s(:long_ordinal)
+      if pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').last.nil? 
+        return nil 
+      else 
+        pam_data =  pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').map! { |i| DateTime.parse(i.header.creation_date_time) }
+        pam_data.sort.last.to_formatted_s(:long_ordinal)
+      end
     end
 	end
 
   def most_recent_mobility_data_point
     mobility_user = user_record
-
-    if mobility_user.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').last.nil?
-      nil
-    else 
-      mobility_data = mobility_user.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').map! { |i| DateTime.parse(i.header.creation_date_time) }
-      mobility_data.sort.last.to_formatted_s(:long_ordinal)
+    if mobility_user.nil?
+      return nil 
+    else  
+      if mobility_user.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').last.nil?
+        nil
+      else 
+        mobility_data = mobility_user.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').map! { |i| DateTime.parse(i.header.creation_date_time) }
+        mobility_data.sort.last.to_formatted_s(:long_ordinal)
+      end
     end
   end
   

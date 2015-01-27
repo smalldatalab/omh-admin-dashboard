@@ -35,11 +35,33 @@ ActiveAdmin.register User do
     # column("Download PAM Data") { |user| link_to('Download PAM Data', user_pam_path(user)) }
     actions
   end
+  
+
+  show do 
+    attributes_table do 
+      row :id
+      row :first_name
+      row :last_name
+      row :gmail
+      row :studies do |user|
+        if user.studies.present?
+          study_name = user.studies.all.map {|a| a.name.inspect}.join(', ')
+          study_name = study_name.gsub /"/, ''
+        end 
+      end
+      row("Pam Data Last Updated") { |user| user.most_recent_pam_data_point }
+      row("Mobility Data Last Updated") { |user| user.most_recent_mobility_data_point}
+      row :created_at
+      row :updated_at
+    end
+    active_admin_comments
+  end 
+
 
   filter :gmail
   filter :first_name
   filter :last_name
-  filter :studies
+  filter :studies, collection: Study.all
 
   form do |f|
     f.inputs "User Details" do
@@ -79,7 +101,7 @@ ActiveAdmin.register User do
     column :gmail
     column :first_name
     column :last_name
-    column("Studie") {|user| user.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
+    column("Studies") {|user| user.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
     column("Pam Data Last Updated") { |user| user.most_recent_pam_data_point }
     column("Mobility Data Last Updated") { |user| user.most_recent_mobility_data_point}
     column (:created_at) { |time| time.created_at.to_formatted_s(:long_ordinal)} 

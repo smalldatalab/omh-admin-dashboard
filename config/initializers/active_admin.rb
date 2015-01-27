@@ -4,6 +4,23 @@ ActiveAdmin.setup do |config|
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #
+   
+  module ActiveAdmin
+    module Views
+      # class TableFor
+      #   def bool_column(attribute)
+      #     column(attribute){ |model| model[attribute] ? '&#x2714;'.html_safe : '&#x2717;'.html_safe }
+      #   end
+      # end
+      class AttributesTable
+        def bool_row(attribute)
+          row(attribute){ |model| model[attribute] ? "Yes" : "No" }
+        end
+      end
+    end
+  end
+  
+ 
   config.site_title = "Sdl Admin Dashboard"
 
   # Set the link url for the title. For example, to take
@@ -62,7 +79,7 @@ ActiveAdmin.setup do |config|
   # method in a before filter of all controller actions to
   # ensure that there is a user with proper rights. You can use
   # CanCanAdapter or make your own. Please refer to documentation.
-  # config.authorization_adapter = ActiveAdmin::CanCanAdapter
+  config.authorization_adapter = AdminAuthorizations
 
   # In case you prefer Pundit over other solutions you can here pass
   # the name of default policy class. This policy will be used in every
@@ -79,6 +96,7 @@ ActiveAdmin.setup do |config|
   # Method provided here should be defined in application_controller.rb.
   # config.on_unauthorized_access = :access_denied
 
+
   # == Current User
   #
   # Active Admin will associate actions with the current
@@ -87,6 +105,19 @@ ActiveAdmin.setup do |config|
   # This setting changes the method which Active Admin calls
   # (within the application controller) to return the currently logged in user.
   config.current_user_method = :current_admin_user
+
+  # config.namespace :admin_user do |admin_user|
+  #   admin_user.authentication_method = :authenticate_admin_user!
+  #   admin_user.current_user_method = :current_admin_user
+  #   admin_user.logout_link_path = :destroy_admin_user_session_path
+  #   admin_user.root_to = 'studies#index'
+  # end 
+
+  # config.namespace :researchers do |researcher|
+  #   researcher.authentication_method = false
+  #   researcher.current_user_method = :current_user
+  #   researcher.logout_link_path = false
+  # end
 
   # == Logging Out
   #

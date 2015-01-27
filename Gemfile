@@ -32,6 +32,7 @@ gem 'devise', '~> 3.4.1'
 gem 'activeadmin', github: 'activeadmin'
 
 
+
 gem 'mongoid', '4.0.0'
 
 gem 'mongoid_rails_migrations'
@@ -42,6 +43,13 @@ gem 'taps'
 
 gem 'connection_ninja'
 
+gem 'cancan'
+
+group :development do
+  gem "binding_of_caller"
+  gem "better_errors"
+  gem 'quiet_assets'
+end
 
 # gem 'activeadmin',  github: 'gregbell/active_admin' #Move to specific version once a stable Rails 4 gem is on rubygems
 # gem 'country_select'
