@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+ruby '2.1.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.4'
@@ -14,6 +15,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
+
+gem 'thin'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -45,10 +48,15 @@ gem 'connection_ninja'
 
 gem 'cancan'
 
+gem 'foreman',                   '~> 0.63.0'
+
 group :development do
   gem "binding_of_caller"
   gem "better_errors"
   gem 'quiet_assets'
+  gem 'capistrano',    '~> 2.15.5'
+  gem 'capistrano-ext'
+  gem 'capistrano_colors'
 end
 
 # gem 'activeadmin',  github: 'gregbell/active_admin' #Move to specific version once a stable Rails 4 gem is on rubygems
