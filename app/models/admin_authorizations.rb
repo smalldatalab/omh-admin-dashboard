@@ -4,6 +4,8 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
   		case subject
   		when normalized(Study)
   			false
+      when normalized(DataStream)
+        false 
   		when normalized(AdminUser)
   			false
   		else
@@ -24,6 +26,18 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
   	  end
   	when 'ActiveAdmin::Comment'
   	  collection.where(:author_id => user.id)
+    # when 'Study'
+    #   if user.researcher 
+    #     user.studies.name
+    #   else 
+    #     collection
+    #   end
+    # when 'DataStream'
+    #   if user.researcher
+    #      user.data_streams.name
+    #   else 
+    #     collection
+    #   end
   	else
   	  collection
   	end

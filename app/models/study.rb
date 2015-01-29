@@ -6,11 +6,10 @@ class Study < ActiveRecord::Base
   has_many :users, through: :study_participants
   has_many :study_participants
 
-
   # study_names = Study.all.map {|a| a.name}
   
-  def self.all_names
-  	all.map {|a| a.name} 
-  end
+  # def self.all_names
+  # 	all.map {|a| a.name} 
+  # end
 
 end

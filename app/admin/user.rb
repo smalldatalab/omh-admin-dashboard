@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :first_name, :last_name, :gmail, :study_ids => [], studies_attributes: [:id, :name] 
+  permit_params :first_name, :last_name, :gmail, :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name] 
 
   # See permitted parameters documentation:
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
@@ -24,6 +24,12 @@ ActiveAdmin.register User do
     column :gmail
     column :first_name
     column :last_name
+    column :data_streams do |user|
+      if user.data_streams.present? 
+        data_stream_name = user.data_streams.all.map { |a| a.name.inspect}.join(', ')
+        data_stream_name = data_stream_name.gsub /"/, ''
+      end 
+    end 
     column :studies do |user|
       if user.studies.present?
        study_name = user.studies.all.map {|a| a.name.inspect}.join(', ')
@@ -81,7 +87,7 @@ ActiveAdmin.register User do
     #   f.has_many :studies do |j|
     #     j.inputs :study_name, collection: Study.all_names 
     #   end
-    
+     f.input :data_streams, as: :check_boxes, collection: DataStream.all
      f.input :studies, as: :check_boxes, collection: Study.all
       
     end

@@ -1,4 +1,4 @@
-ActiveAdmin.register Study do 
+ActiveAdmin.register DataStream do
   permit_params :name
   
   index do
@@ -12,8 +12,9 @@ ActiveAdmin.register Study do
 
 
   form do |f|
-    f.inputs "Study Details" do
+    f.inputs "Data Stream Details" do
       f.input :name
+      # f.input :study_date
 
       f.actions
     end

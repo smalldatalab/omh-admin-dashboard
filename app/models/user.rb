@@ -6,9 +6,16 @@ class User < ActiveRecord::Base
 
   has_many :study_participants
   has_many :studies, through: :study_participants
-  has_many :admin_users, through: :study_owners
+
+  has_many :admin_users, through: :studies
+  has_many :admin_users, through: :data_streams
+  
+  has_many :user_streams
+  has_many :data_streams, through: :user_streams
+  
 
   accepts_nested_attributes_for :studies
+  accepts_nested_attributes_for :data_streams
 
   # accepts_nested_attributes_for :studies, :allow_destroy => true
 
