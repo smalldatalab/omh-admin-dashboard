@@ -1,0 +1,17 @@
+<!DOCTYPE html> 
+<html> 
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Welcome to Small Data Workshop, <%= @user.first_name %></h1>
+    <p>
+      You have been chosen as a participant in the <%= @user.studies.first.name %> study.
+      We are sending you the consent. After you have read through and signed, please send us back.  
+    </p>
+
+    <p>For more information, you can reply to this email address: xxxx</p>
+
+    <p>Thanks for participating in the study.</p>
+  </body>
+</html> 

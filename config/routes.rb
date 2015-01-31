@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     resources :pam_data_points
     resources :mobility_data_points
   end
+  
+
 
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -44,6 +44,9 @@ ActiveAdmin.register User do
   
 
   show do 
+    content do 
+      para "Hello World!!"
+    end 
     attributes_table do 
       row :id
       row :first_name
@@ -102,6 +105,10 @@ ActiveAdmin.register User do
   action_item :only => :show do 
     link_to 'Mobility Data csv File', user_mobility_data_points_path(user, format: 'csv')
   end
+
+  action_item :only => :show do 
+    link_to 'Send Consent Email', method: :consent_email
+  end 
 
   csv do
     column :gmail

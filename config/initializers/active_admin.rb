@@ -18,6 +18,15 @@ ActiveAdmin.setup do |config|
         end
       end
     end
+
+
+    class User < ActiveRecord::Base 
+      after_create :consent_email 
+
+      def consent_email 
+        UserMailer.user_created(self.id).deliver
+      end 
+    end 
   end
   
  
