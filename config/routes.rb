@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   resources :users do
     resources :pam_data_points
     resources :mobility_data_points
+    resources :ohmage_data_points
+    resources :calendar_data_points, :format => :json
   end
   
 

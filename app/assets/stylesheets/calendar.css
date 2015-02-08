@@ -1,0 +1,18 @@
+/* component stuff below */
+html {
+  margin: 0; }
+
+body {
+  margin: 0;
+  font-family: 'Source Sans Pro', sans-serif; }
+
+.fc th {
+  border: none; }
+
+/*
+.fc-day.fc-sun, .fc-day.fc-sat { background: #E3F2FF; }
+.fc-day.fc-other-month { background: #eee; }
+.fc-day.fc-sun.fc-other-month, .fc-day.fc-sat.fc-other-month { background: #c9dfff; }
+*/
+.fc-day.fc-other-month {
+  background: #eee; }

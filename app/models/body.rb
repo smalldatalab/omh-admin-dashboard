@@ -16,4 +16,7 @@ class Body
 
   embeds_one :effective_time_frame
 
+  embeds_one :data
+
+
 end

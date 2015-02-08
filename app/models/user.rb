@@ -44,11 +44,12 @@ class User < ActiveRecord::Base
 
   def most_recent_mobility_data_point
     mobility_user = user_record
+
     if mobility_user.nil?
       return nil 
     else  
       if mobility_user.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').last.nil?
-        nil
+        return nil
       else 
         mobility_data = mobility_user.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').map! { |i| DateTime.parse(i.header.creation_date_time) }
         mobility_data.sort.last.to_formatted_s(:long_ordinal)
@@ -56,13 +57,56 @@ class User < ActiveRecord::Base
     end
   end
   
+  def most_recent_ohmage_data_point
+    ohmage_user = user_record
+
+    if ohmage_user.nil?
+      return nil 
+    else 
+      if ohmage_user.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey').last.nil?
+        return nil 
+      else 
+        ohmage_data = ohmage_user.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey').map! { |i| DateTime.parse(i.header.creation_date_time) }
+        ohmage_data.sort.last.to_formatted_s(:long_ordinal)
+      end
+    end
+  end 
+
   def all_pam_data_points
-    return user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
+    if user_record.nil?
+      return nil 
+    else 
+      if user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').last.nil?
+        return nil 
+      else 
+        return user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
+      end
+    end 
   end
   
   def all_mobility_data_points
-    return user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS')
+    if user_record.nil? 
+      return nil 
+    else 
+      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').last.nil?
+        return nil 
+      else 
+        return user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS')
+      end 
+    end
   end
+
+  def all_ohmage_data_points 
+    if user_record.nil?
+      return nil 
+    else 
+      if user_record.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey').last.nil?
+        return nil 
+      else 
+        return user_record.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey')
+      end
+    end 
+  end 
 
 
   def pam_data_csv
@@ -85,7 +129,10 @@ class User < ActiveRecord::Base
               'affect valence',
               'mood'
              ]
-      all_pam_data_points.each do |data_point|
+      if all_pam_data_points.nil?
+        return nil 
+      else
+        all_pam_data_points.each do |data_point|
         csv << [
                 data_point._id,
                 data_point._class,
@@ -104,6 +151,7 @@ class User < ActiveRecord::Base
                 data_point.body.affect_valence,
                 data_point.body.mood
                ] 
+        end
       end
     end
   end
@@ -131,8 +179,11 @@ class User < ActiveRecord::Base
               'vertical accuracy', 
               'altitude' 
              ]
-      all_mobility_data_points.each do |data_point|
-        csv << [
+      if all_mobility_data_points.nil?
+        return nil 
+      else 
+        all_mobility_data_points.each do |data_point|
+          csv << [
                 data_point._id,
                 data_point._class,
                 data_point.user_id, 
@@ -153,9 +204,59 @@ class User < ActiveRecord::Base
                 escape_nil_location(data_point, :vertical_accuracy),
                 escape_nil_location(data_point, :altitude)
                ] 
+        end
       end
     end
   end
+
+  def ohmage_data_csv
+    CSV.generate do |csv|
+      csv << [
+              'id',
+              'class',
+              'user id', 
+              'name space',
+              'name', 
+              'version major', 
+              'version minor', 
+              'creation date time', 
+              'source name',
+              'modality',
+              'rise from sitting',
+              'twist pivot',
+              'knee pain severity',
+              'bed', 
+              'bending',
+              'kneeling',
+              'socks',
+              'squatting'
+             ]
+      all_ohmage_data_points.each do |data_point|
+        csv << [
+                data_point._id,
+                data_point._class,
+                data_point.user_id, 
+                data_point.header.schema_id.namespace,
+                data_point.header.schema_id.name,
+                data_point.header.schema_id.version.major,
+                data_point.header.schema_id.version.minor,
+                data_point.header.creation_date_time,
+                data_point.header.acquisition_provenance.source_name,
+                data_point.header.acquisition_provenance.modality,
+                data_point.body.data.RisefromSitting,
+                data_point.body.data.TwistPivot,
+                data_point.body.data.KneePainSeverity,
+                data_point.body.data.Bed,
+                data_point.body.data.Bending,
+                data_point.body.data.Kneeling,
+                data_point.body.data.Socks, 
+                data_point.body.data.Squatting
+               ] 
+      end
+    end
+  end
+
+
 
   def escape_nil_location(data, attribute)
     data.body.location.nil? ? nil : data.body.location.send(attribute)
@@ -164,5 +265,24 @@ class User < ActiveRecord::Base
   def escape_nil_activities(data, attribute)
     data.body.activities.nil? ? nil : data.body.activities[0][attribute]
   end
+
+
+  def all_calendar_data_points
+    file = File.read('data/data.json')
+    data = JSON.parse(file)
+  end  
+
+
+  def get_calendar_data_url(u)
+    u.all_calendar_data_points.to_json
+  end 
+# // <div id="calendar_data_points" data-url="http://localhost:3000/users/2/calendar_data_points.json"></div>
+# // <div id="calendar_data_points" data-url="http://localhost:3000/users/<%= @user.id %>/calendar_data_points.json"></div>
+# // <div id="calendar_data_points" data-url="http://localhost:3000/users/<%= @user.id %>/calendar_data_points.json?startdate=YYYY-MM-DD&enddate=YYYY-MM-DD"></div>
+
+
+
+
+
 
 end

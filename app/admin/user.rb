@@ -38,14 +38,15 @@ ActiveAdmin.register User do
     end
     column("Pam Data Last Updated") { |user| user.most_recent_pam_data_point }
     column("Mobility Data Last Updated") { |user| user.most_recent_mobility_data_point}
+    column("ohmage Data Last Updated") { |user| user.most_recent_ohmage_data_point}
     # column("Download PAM Data") { |user| link_to('Download PAM Data', user_pam_path(user)) }
     actions
   end
   
 
   show do 
-    content do 
-      para "Hello World!!"
+    panel "Calendar View" do
+      render partial: 'calendar_view', locals: { users: @user}
     end 
     attributes_table do 
       row :id
@@ -58,8 +59,9 @@ ActiveAdmin.register User do
           study_name = study_name.gsub /"/, ''
         end 
       end
-      row("Pam Data Last Updated") { |user| user.most_recent_pam_data_point }
+      row("PAM Data Last Updated") { |user| user.most_recent_pam_data_point }
       row("Mobility Data Last Updated") { |user| user.most_recent_mobility_data_point}
+      row("ohmage Data Last Updated") { |user| user.most_recent_ohmage_data_point}
       row :created_at
       row :updated_at
     end
@@ -99,11 +101,15 @@ ActiveAdmin.register User do
   end
 
   action_item :only => :show do
-    link_to 'Pam Data CSV File', user_pam_data_points_path(user, format: 'csv')
+    link_to 'PAM Data CSV File', user_pam_data_points_path(user, format: 'csv')
   end
 
   action_item :only => :show do 
     link_to 'Mobility Data csv File', user_mobility_data_points_path(user, format: 'csv')
+  end
+
+  action_item :only => :show do
+    link_to 'ohmage Data csv File', user_ohmage_data_points_path(user, format: 'csv') 
   end
 
   # action_item :only => :show do 
@@ -115,8 +121,9 @@ ActiveAdmin.register User do
     column :first_name
     column :last_name
     column("Studies") {|user| user.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
-    column("Pam Data Last Updated") { |user| user.most_recent_pam_data_point }
+    column("PAM Data Last Updated") { |user| user.most_recent_pam_data_point }
     column("Mobility Data Last Updated") { |user| user.most_recent_mobility_data_point}
+    column("ohmage Data Last Updated") { |user| user.most_recent_ohmage_data_point}
     column (:created_at) { |time| time.created_at.to_formatted_s(:long_ordinal)} 
     column (:updated_at) { |time| time.updated_at.to_formatted_s(:long_ordinal)}
   end
