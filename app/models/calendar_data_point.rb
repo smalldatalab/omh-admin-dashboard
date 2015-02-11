@@ -1,5 +1,3 @@
-require 'json'
-
 class CalendarDataPoint 
 
   # attr_accessor :users, :fullname, :givenname, :familyname, :daily

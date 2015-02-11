@@ -86,7 +86,7 @@ function bindDay(today, ranges, target) {
 $(document).ready(function() {
     var my_daily_data = null;
     var ranges = null;
-    var metrics = ['minutes-ambulatory', 'away-from-home', 'max-gait-speed'];
+    var metrics = ['active_time_in_seconds', 'max_gait_speed_in_meter_per_second', 'time_not_at_home_in_seconds'];
     var calendar_data = $('#calendar_data_points').data('url')
 
      // "http://localhost:3000/users/2/calendar_data_points.json"
@@ -96,7 +96,8 @@ $(document).ready(function() {
         .done(function(data) {
             console.log("Loaded!: ", data);
             // get just our own data to display on this thing
-            my_daily_data = data['users']['c6651b99-8f9c-4d83-8f4b-8c02a00ddf9c']['daily'];
+            my_daily_data = data['daily'];
+            //['users']['c6651b99-8f9c-4d83-8f4b-8c02a00ddf9c']
             console.log("User data!: ", my_daily_data);
 
             var my_daily_array = Object.keys(my_daily_data).map(function(k) { return my_daily_data[k] });

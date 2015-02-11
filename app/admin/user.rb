@@ -36,9 +36,9 @@ ActiveAdmin.register User do
        study_name = study_name.gsub /"/, ''
       end 
     end
-    column("Pam Data Last Updated") { |user| user.most_recent_pam_data_point }
-    column("Mobility Data Last Updated") { |user| user.most_recent_mobility_data_point}
-    column("ohmage Data Last Updated") { |user| user.most_recent_ohmage_data_point}
+    column("Pam Data Last Uploaded") { |user| user.most_recent_pam_data_point }
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
+    column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}
     # column("Download PAM Data") { |user| link_to('Download PAM Data', user_pam_path(user)) }
     actions
   end
@@ -59,9 +59,9 @@ ActiveAdmin.register User do
           study_name = study_name.gsub /"/, ''
         end 
       end
-      row("PAM Data Last Updated") { |user| user.most_recent_pam_data_point }
-      row("Mobility Data Last Updated") { |user| user.most_recent_mobility_data_point}
-      row("ohmage Data Last Updated") { |user| user.most_recent_ohmage_data_point}
+      row("PAM Data Last Uploaded") { |user| user.most_recent_pam_data_point }
+      row("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
+      row("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}
       row :created_at
       row :updated_at
     end
@@ -121,9 +121,9 @@ ActiveAdmin.register User do
     column :first_name
     column :last_name
     column("Studies") {|user| user.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
-    column("PAM Data Last Updated") { |user| user.most_recent_pam_data_point }
-    column("Mobility Data Last Updated") { |user| user.most_recent_mobility_data_point}
-    column("ohmage Data Last Updated") { |user| user.most_recent_ohmage_data_point}
+    column("PAM Data Last Uploaded") { |user| user.most_recent_pam_data_point }
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
+    column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}
     column (:created_at) { |time| time.created_at.to_formatted_s(:long_ordinal)} 
     column (:updated_at) { |time| time.updated_at.to_formatted_s(:long_ordinal)}
   end

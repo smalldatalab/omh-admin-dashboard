@@ -109,6 +109,19 @@ class User < ActiveRecord::Base
   end 
 
 
+  def all_calendar_data_points 
+    if user_record.nil? 
+      return nil 
+    else
+      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary').last.nil? 
+        return nil 
+      else 
+        return user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary')
+
+      end 
+    end 
+  end 
+
   def pam_data_csv
     CSV.generate do |csv|
       csv << [
@@ -257,6 +270,21 @@ class User < ActiveRecord::Base
   end
 
 
+  def calendar_data_json 
+    json_data = []
+    all_calendar_data_points.each do |data_point|
+        json_data << {
+          daily: {
+            date: data_point.body.date,
+            active_time_in_seconds: data_point.body.active_time_in_seconds,
+            max_gait_speed_in_meter_per_second: data_point.body.max_gait_speed_in_meter_per_second,
+            time_not_at_home_in_seconds: data_point.body.time_not_at_home_in_seconds
+              
+          } 
+        }
+    end 
+    return json_data.to_json
+  end  
 
   def escape_nil_location(data, attribute)
     data.body.location.nil? ? nil : data.body.location.send(attribute)
@@ -265,12 +293,6 @@ class User < ActiveRecord::Base
   def escape_nil_activities(data, attribute)
     data.body.activities.nil? ? nil : data.body.activities[0][attribute]
   end
-
-
-  def all_calendar_data_points
-    file = File.read('data/data.json')
-    data = JSON.parse(file)
-  end  
 
 
   def get_calendar_data_url(u)
