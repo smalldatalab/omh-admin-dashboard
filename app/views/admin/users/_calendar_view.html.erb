@@ -17,9 +17,9 @@
         #stats .stat_value { display: block; width: 60px; }
 
         .legend { display: inline-block; margin-right: 5px; border: solid 1px #ccc; width: 12px; height: 12px; opacity: 0.5; }
-        .legend.minutes-ambulatory { background-color: #FFAC46; }
-        .legend.away-from-home { background-color: #46D1FF; }
-        .legend.max-gait-speed { background-color: #6EEDA5; }
+        .legend.active_time_in_seconds { background-color: #FFAC46; }
+        .legend.time_not_at_home_in_seconds { background-color: #46D1FF; }
+        .legend.max_gait_speed_in_meter_per_second { background-color: #6EEDA5; }
 
         #filter_controls { padding: 3px; }
         </style>
@@ -54,8 +54,8 @@
         </ol> -->
         <div id="calendar_data_points" data-url="http://localhost:3000/users/<%= @user.id %>/calendar_data_points.json"></div>
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-9"style="margin-bottom: 10px;">
+            <div >
+                <div style="margin-bottom: 10px;">
                     <div id="calendar"></div>
 
                     <div id="filter_controls">
@@ -63,31 +63,31 @@
                         <span><input type="checkbox" id="show_events" checked="checked" /> <label for="show_events">display events</label></span>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div >
                     <div id="info">
-                        <div id="info_content" style="display: none;">
+                        <div id="info_content">
                             <h2 style="margin: 0 0 10px 0;"></h2>
 
                             <table id="stats">
                                 <tr>
-                                    <td><span class="legend away-from-home"></span></td>
+                                    <td><span class="legend time_not_at_home_in_seconds"></span></td>
                                     <td class="stat_label">Hours Away from Home:</td>
-                                    <td><span id="info_away-from-home" data-field="away-from-home" class="stat_value"></span></td>
+                                    <td><span id="info_time_not_at_home_in_seconds" data-field="time_not_at_home_in_seconds" class="stat_value"></span></td>
                                 </tr>
                                 <tr>
-                                    <td><span class="legend minutes-ambulatory"></span></td>
+                                    <td><span class="legend active_time_in_seconds"></span></td>
                                     <td class="stat_label">Minutes Ambulatory:</td>
-                                    <td><span id="info_minutes-ambulatory" data-field="minutes-ambulatory" class="stat_value"></span></td>
+                                    <td><span id="info_active_time_in_seconds" data-field="active_time_in_seconds" class="stat_value"></span></td>
                                 </tr>
                                 <tr>
-                                    <td><span class="legend max-gait-speed"></span></td>
+                                    <td><span class="legend max_gait_speed_in_meter_per_second"></span></td>
                                     <td class="stat_label">Max Gait Speed:</td>
-                                    <td><span id="info_max-gait-speed" data-field="max-gait-speed" class="stat_value"></span></td>
+                                    <td><span id="info_max_gait_speed_in_meter_per_second" data-field="max_gait_speed_in_meter_per_second" class="stat_value"></span></td>
                                 </tr>
 
                                 <tr>
                                     <td style="text-align: left;" colspan="3">
-                                        <div id="averaged-notice" style="color: #555; font-size: 13px;"> (averaged over the selected days)</div>
+                                        <div id="averaged-notice" style="color: #555; font-size: 13px;"> (averaged over the selected _s)</div>
                                     </td>
                                 </tr>
                             </table>

@@ -3,9 +3,9 @@
  */
 
 var metric_colors = {
-    'minutes-ambulatory': "#FFAC46",
-    'away-from-home': "#46D1FF",
-    'max-gait-speed': "#6EEDA5"
+    'active_time_in_seconds': "#FFAC46",
+    'time_not_at_home_in_seconds': "#46D1FF",
+    'max_gait_speed_in_meter_per_second': "#6EEDA5"
 };
 
 // utility function for updating each day cell with a visualization of the three quantities
@@ -70,34 +70,27 @@ function bindDay(today, ranges, target) {
     });
 
     /*
-    $("<div />").append($("<b />").text("away-from-home: ")).append($("<span />").text(today['away-from-home']))
+    $("<div />").append($("<b />").text("time_not_at_home_in_seconds: ")).append($("<span />").text(today['time_not_at_home_in_seconds']))
         .appendTo(target);
-    $("<div />").append($("<b />").text("max-gait-speed: ")).append($("<span />").text(today['max-gait-speed']))
+    $("<div />").append($("<b />").text("max_gait_speed_in_meter_per_second: ")).append($("<span />").text(today['max_gait_speed_in_meter_per_second']))
         .appendTo(target);
-    $("<div />").append($("<b />").text("minutes-ambulatory: ")).append($("<span />").text(today['minutes-ambulatory']))
+    $("<div />").append($("<b />").text("active_time_in_seconds: ")).append($("<span />").text(today['active_time_in_seconds']))
         .appendTo(target);
     */
 }
 
-
-
-
-
 $(document).ready(function() {
     var my_daily_data = null;
     var ranges = null;
-    var metrics = ['active_time_in_seconds', 'max_gait_speed_in_meter_per_second', 'time_not_at_home_in_seconds'];
-    var calendar_data = $('#calendar_data_points').data('url')
+    var metrics = ['max_gait_speed_in_meter_per_second', 'active_time_in_seconds', 'time_not_at_home_in_seconds'];
+    var calendar_data = $('#calendar_data_points').data('url');
 
-     // "http://localhost:3000/users/2/calendar_data_points.json"
-    // $('#calendar_data_points').data('url')
-    
+    // get the dummy data we created
     $.getJSON(calendar_data)
         .done(function(data) {
             console.log("Loaded!: ", data);
             // get just our own data to display on this thing
-            my_daily_data = data['daily'];
-            //['users']['c6651b99-8f9c-4d83-8f4b-8c02a00ddf9c']
+            my_daily_data = data['users']['c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c']['daily'];
             console.log("User data!: ", my_daily_data);
 
             var my_daily_array = Object.keys(my_daily_data).map(function(k) { return my_daily_data[k] });
@@ -108,7 +101,7 @@ $(document).ready(function() {
                 result[m] = d3.max(my_daily_array, function(d) { return d[m]; });
                 return result;
             }, {});
-
+            
             // let's iterate over the visible day_viz things and put stuff in them
             $(".day_viz").each(function(idx, elem) {
 
@@ -118,7 +111,9 @@ $(document).ready(function() {
                 }
             });
         })
-        .fail(function(d, textStatus, error) { console.error("getJSON failed, status:" + textStatus + ", error: " + error )});
+        .fail(function() {
+            alert("Failed to load user daily data!");
+        });
 
     // create the main calendar widget
     $('#calendar').fullCalendar({
@@ -151,7 +146,7 @@ $(document).ready(function() {
                 .addClass('day_viz')
                 .data('day', date.toJSON())
                 .appendTo(cell);
-
+            
             // fill it with data
             if (my_daily_data != null && my_daily_data.hasOwnProperty($day_viz.data('day'))) {
                 var today = my_daily_data[$day_viz.data('day')];
@@ -159,23 +154,25 @@ $(document).ready(function() {
             }
         },
         select: function(start, end, jsEvent, view ) {
-            $("#info_content").stop().slideDown(300);
+            // $("#info_content").stop().slideDown(300);
 
             var end_inclusive = end.clone().subtract(1, 'day');
-
+            
             var $info = $("#info");
 
             // get data for all selected days, if available
             var days_data = null;
+
             if (my_daily_data != null) {
                 days_data = d3.time.day.utc.range(start, end)
                     .filter(function(d) {
                         return my_daily_data.hasOwnProperty(d3.time.day.utc.floor(d).toJSON());
                     }).map(function(d) {
-                        return {date: d.toJSON(), values: my_daily_data[d.toJSON()]}
+                        return {date: d.toJSON(), values: my_daily_data[d.toJSON()]};
                     });
             }
-
+            
+            
             console.log("Data for selected days: ", days_data);
 
             $info.find("textarea").text();
@@ -210,9 +207,9 @@ $(document).ready(function() {
                     $(this).text(+d3.mean(days_data, function(d) { return d.values[field]; }).toFixed(2));
                 });
             }
-            else {
-                $("#info_content").hide();
-            }
+            // else {
+            //     $("#info_content").hide();
+            // }
         },
         unselect: function() {
             $("#info_content").slideUp(300);

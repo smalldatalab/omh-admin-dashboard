@@ -112,10 +112,7 @@ ActiveAdmin.register User do
     link_to 'ohmage Data csv File', user_ohmage_data_points_path(user, format: 'csv') 
   end
 
-  # action_item :only => :show do 
-  #   link_to 'Send Consent Email', method: :consent_email
-  # end 
-
+ 
   csv do
     column :gmail
     column :first_name
@@ -129,3 +126,4 @@ ActiveAdmin.register User do
   end
 
 end
+
