@@ -24,18 +24,18 @@ ActiveAdmin.register User do
     column :gmail
     column :first_name
     column :last_name
-    column :data_streams do |user|
-      if user.data_streams.present? 
-        data_stream_name = user.data_streams.all.map { |a| a.name.inspect}.join(', ')
-        data_stream_name = data_stream_name.gsub /"/, ''
-      end 
-    end 
     column :studies do |user|
       if user.studies.present?
        study_name = user.studies.all.map {|a| a.name.inspect}.join(', ')
        study_name = study_name.gsub /"/, ''
       end 
     end
+    column :data_streams do |user|
+      if user.data_streams.present? 
+        data_stream_name = user.data_streams.all.map { |a| a.name.inspect}.join(', ')
+        data_stream_name = data_stream_name.gsub /"/, ''
+      end 
+    end 
     column("Pam Data Last Uploaded") { |user| user.most_recent_pam_data_point }
     column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}
@@ -59,6 +59,12 @@ ActiveAdmin.register User do
           study_name = study_name.gsub /"/, ''
         end 
       end
+      row :data_streams do |user|
+        if user.data_streams.present? 
+          data_stream_name = user.data_streams.all.map { |a| a.name.inspect}.join(', ')
+          data_stream_name = data_stream_name.gsub /"/, ''
+        end 
+      end 
       row("PAM Data Last Uploaded") { |user| user.most_recent_pam_data_point }
       row("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
       row("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}
@@ -73,6 +79,7 @@ ActiveAdmin.register User do
   filter :first_name
   filter :last_name
   filter :studies, collection: Study.all
+  filter :data_streams, collection: DataStream.all
 
   form do |f|
     f.inputs "User Details" do
@@ -92,9 +99,9 @@ ActiveAdmin.register User do
     #   f.has_many :studies do |j|
     #     j.inputs :study_name, collection: Study.all_names 
     #   end
-     f.input :data_streams, as: :check_boxes, collection: DataStream.all
-     f.input :studies, as: :check_boxes, collection: Study.all
-      
+     
+      f.input :studies, as: :check_boxes, collection: Study.all
+      f.input :data_streams, as: :check_boxes, collection: DataStream.all
     end
       # f.input :study_name, collection: Study.all_names
     f.actions  
@@ -112,12 +119,16 @@ ActiveAdmin.register User do
     link_to 'ohmage Data csv File', user_ohmage_data_points_path(user, format: 'csv') 
   end
 
- 
+  action_item :only => :show do 
+    link_to 'calendar data json', user_calendar_data_points_path(user, format: 'json')
+  end
+
   csv do
     column :gmail
     column :first_name
     column :last_name
     column("Studies") {|user| user.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
+    column("Data Streams") {|user| user.data_streams.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
     column("PAM Data Last Uploaded") { |user| user.most_recent_pam_data_point }
     column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}

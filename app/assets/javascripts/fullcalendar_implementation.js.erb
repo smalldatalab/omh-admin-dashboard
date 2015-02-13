@@ -116,7 +116,7 @@ $(document).ready(function() {
             });
         })
         .fail(function() {
-            alert("Failed to load user daily data!");
+            alert("User does not have mobility daily data!");
         });
 
     // create the main calendar widget
@@ -150,7 +150,9 @@ $(document).ready(function() {
                 .addClass('day_viz')
                 .data('day', date.toJSON())
                 .appendTo(cell);
-            console.log('Test 3:', $day_viz);
+            
+            console.log('Test 3:', $day_viz.data('day'));
+
             // fill it with data
             if (my_daily_data != null && my_daily_data.hasOwnProperty($day_viz.data('day'))) {
                 var today = my_daily_data[$day_viz.data('day')];
