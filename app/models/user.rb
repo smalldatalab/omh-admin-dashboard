@@ -287,7 +287,7 @@ class User < ActiveRecord::Base
         time_not_at_home_in_seconds: data_point.body.time_not_at_home_in_seconds
       }      
     end
-    return json_data.to_json 
+    return JSON.parse(json_data.to_json)
   end  
 
   def escape_nil_location(data, attribute)

@@ -84,7 +84,7 @@ $(document).ready(function() {
     var ranges = null;
     var metrics = ['max_gait_speed_in_meter_per_second', 'active_time_in_seconds', 'time_not_at_home_in_seconds'];
     var calendar_data = $('#calendar_data_points').data('url');
-
+    
     // get the dummy data we created
     $.getJSON(calendar_data)
         .done(function(data) {
@@ -94,20 +94,24 @@ $(document).ready(function() {
             console.log("User data!: ", my_daily_data);
 
             var my_daily_array = Object.keys(my_daily_data).map(function(k) { return my_daily_data[k] });
-
+            
+            console.log('Test 1:', my_daily_array);
             // determine the maximum value for each metric so we can scale it
             // 'ranges' is an object with a key for each metric and its value being the max for that metric
             ranges = metrics.reduce(function(result, m) {
                 result[m] = d3.max(my_daily_array, function(d) { return d[m]; });
                 return result;
             }, {});
-            
+
+            console.log('Test 2:', ranges);
+            console.log('sajd:', $('.day_viz'));
             // let's iterate over the visible day_viz things and put stuff in them
             $(".day_viz").each(function(idx, elem) {
 
                 if (my_daily_data.hasOwnProperty($(this).data('day'))) {
                     var today = my_daily_data[$(this).data('day')];
                     bindDay(today, ranges, $(this));
+                    alert("my_daily_data has hasOwnProperty");
                 }
             });
         })
@@ -146,7 +150,7 @@ $(document).ready(function() {
                 .addClass('day_viz')
                 .data('day', date.toJSON())
                 .appendTo(cell);
-            
+            console.log('Test 3:', $day_viz);
             // fill it with data
             if (my_daily_data != null && my_daily_data.hasOwnProperty($day_viz.data('day'))) {
                 var today = my_daily_data[$day_viz.data('day')];
@@ -172,7 +176,7 @@ $(document).ready(function() {
                     });
             }
             
-            
+
             console.log("Data for selected days: ", days_data);
 
             $info.find("textarea").text();
