@@ -95,7 +95,6 @@ $(document).ready(function() {
 
             var my_daily_array = Object.keys(my_daily_data).map(function(k) { return my_daily_data[k] });
             
-            console.log('Test 1:', my_daily_array);
             // determine the maximum value for each metric so we can scale it
             // 'ranges' is an object with a key for each metric and its value being the max for that metric
             ranges = metrics.reduce(function(result, m) {
@@ -103,15 +102,12 @@ $(document).ready(function() {
                 return result;
             }, {});
 
-            console.log('Test 2:', ranges);
-            console.log('sajd:', $('.day_viz'));
             // let's iterate over the visible day_viz things and put stuff in them
             $(".day_viz").each(function(idx, elem) {
 
                 if (my_daily_data.hasOwnProperty($(this).data('day'))) {
                     var today = my_daily_data[$(this).data('day')];
                     bindDay(today, ranges, $(this));
-                    alert("my_daily_data has hasOwnProperty");
                 }
             });
         })
@@ -150,8 +146,6 @@ $(document).ready(function() {
                 .addClass('day_viz')
                 .data('day', date.toJSON())
                 .appendTo(cell);
-            
-            console.log('Test 3:', $day_viz.data('day'));
 
             // fill it with data
             if (my_daily_data != null && my_daily_data.hasOwnProperty($day_viz.data('day'))) {
