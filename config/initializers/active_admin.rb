@@ -21,13 +21,13 @@ ActiveAdmin.setup do |config|
     end
 
 
-    class User < ActiveRecord::Base 
-      after_create :consent_email 
+    # class User < ActiveRecord::Base 
+    #   after_create :consent_email 
 
-      def consent_email 
-        UserMailer.user_created(self.id).deliver
-      end 
-    end 
+    #   def consent_email 
+    #     UserMailer.user_created(self.id).deliver
+    #   end 
+    # end 
   end
   
  
@@ -116,11 +116,14 @@ ActiveAdmin.setup do |config|
   # (within the application controller) to return the currently logged in user.
   config.current_user_method = :current_admin_user
 
-  # config.namespace :admin_user do |admin_user|
-  #   admin_user.authentication_method = :authenticate_admin_user!
-  #   admin_user.current_user_method = :current_admin_user
-  #   admin_user.logout_link_path = :destroy_admin_user_session_path
-  #   admin_user.root_to = 'studies#index'
+  config.load_paths = [File.expand_path('app/admin', Rails.root), File.expand_path('app/users', Rails.root)]
+  
+  config.namespace :users do |namespaced|
+    namespaced.authentication_method = :current_user
+  end
+
+  # config.namespace :user do |user|
+  #   user.root_to :user
   # end 
 
   # config.namespace :researchers do |researcher|

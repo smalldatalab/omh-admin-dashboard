@@ -207,9 +207,9 @@ $(document).ready(function() {
                     $(this).text(+d3.mean(days_data, function(d) { return d.values[field]; }).toFixed(2));
                 });
             }
-            // else {
-            //     $("#info_content").hide();
-            // }
+            else {
+                $("#info_content").hide();
+            }
         },
         unselect: function() {
             $("#info_content").slideUp(300);

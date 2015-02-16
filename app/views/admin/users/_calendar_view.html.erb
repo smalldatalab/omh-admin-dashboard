@@ -52,12 +52,12 @@
             <li><a href="#">Faisal Alquaddoomi</a></li>
             <li class="active">Daily Statistics</li>
         </ol> -->
-        <div id="calendar_data_points" data-url="https://lifestreams.smalldata.io/users/<%= @user.id %>/calendar_data_points.json"></div>
+        <div id="calendar_data_points" data-url="http://localhost:3000/users/<%= @user.id %>/calendar_data_points.json"></div>
 
         <!-- http://localhost:3000/users/<%= @user.id %>/calendar_data_points.json -->
         <div class="container-fluid">
-            <div >
-                <div style="margin-bottom: 10px;">
+            <div class="row">
+                <div class="col-lg-9" style="margin-bottom: 10px;">
                     <div id="calendar"></div>
 
                     <div id="filter_controls">
@@ -65,9 +65,9 @@
                         <span><input type="checkbox" id="show_events" checked="checked" /> <label for="show_events">display events</label></span>
                     </div>
                 </div>
-                <div >
+                <div class="col-lg-3">
                     <div id="info">
-                        <div id="info_content">
+                        <div id="info_content" style="display: none;">
                             <h2 style="margin: 0 0 10px 0;"></h2>
 
                             <table id="stats">
@@ -113,3 +113,6 @@
         ========================================
         -->
     </body>
+
+
+
