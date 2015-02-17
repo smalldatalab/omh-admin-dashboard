@@ -116,7 +116,7 @@ ActiveAdmin.setup do |config|
   # (within the application controller) to return the currently logged in user.
   config.current_user_method = :current_admin_user
 
-  config.load_paths = [File.expand_path('app/users', Rails.root)]
+  config.load_paths = [File.expand_path('app/admin', Rails.root), File.expand_path('app/users', Rails.root)]
   
   # config.namespace :users do |namespaced|
   #   namespaced.authentication_method = :current_user
