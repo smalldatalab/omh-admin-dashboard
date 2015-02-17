@@ -141,26 +141,30 @@ class User < ActiveRecord::Base
               'affect valence',
               'mood'
              ]
-        all_pam_data_points.each do |data_point|
-          csv << [
-                data_point._id,
-                data_point._class,
-                data_point.user_id, 
-                data_point.header.schema_id.namespace,
-                data_point.header.schema_id.name,
-                data_point.header.schema_id.version.major,
-                data_point.header.schema_id.version.minor,
-                data_point.header.creation_date_time,
-                data_point.header.acquisition_provenance.source_name,
-                data_point.header.acquisition_provenance.modality,
-                data_point.body.affect_arousal,
-                data_point.body.negative_affect,
-                data_point.body.positive_affect,
-                data_point.body.effective_time_frame.date_time,
-                data_point.body.affect_valence,
-                data_point.body.mood
-               ] 
-      
+        if all_pam_data_points.nil?
+          return nil
+        else  
+          all_pam_data_points.each do |data_point|
+            csv << [
+                  data_point._id,
+                  data_point._class,
+                  data_point.user_id, 
+                  data_point.header.schema_id.namespace,
+                  data_point.header.schema_id.name,
+                  data_point.header.schema_id.version.major,
+                  data_point.header.schema_id.version.minor,
+                  data_point.header.creation_date_time,
+                  data_point.header.acquisition_provenance.source_name,
+                  data_point.header.acquisition_provenance.modality,
+                  data_point.body.affect_arousal,
+                  data_point.body.negative_affect,
+                  data_point.body.positive_affect,
+                  data_point.body.effective_time_frame.date_time,
+                  data_point.body.affect_valence,
+                  data_point.body.mood
+                 ] 
+        
+        end
       end
     end
   end
@@ -240,27 +244,31 @@ class User < ActiveRecord::Base
               'socks',
               'squatting'
              ]
-      all_ohmage_data_points.each do |data_point|
-        csv << [
-                data_point._id,
-                data_point._class,
-                data_point.user_id, 
-                data_point.header.schema_id.namespace,
-                data_point.header.schema_id.name,
-                data_point.header.schema_id.version.major,
-                data_point.header.schema_id.version.minor,
-                data_point.header.creation_date_time,
-                data_point.header.acquisition_provenance.source_name,
-                data_point.header.acquisition_provenance.modality,
-                data_point.body.data.RisefromSitting,
-                data_point.body.data.TwistPivot,
-                data_point.body.data.KneePainSeverity,
-                data_point.body.data.Bed,
-                data_point.body.data.Bending,
-                data_point.body.data.Kneeling,
-                data_point.body.data.Socks, 
-                data_point.body.data.Squatting
-               ] 
+      if all_ohmage_data_points.nil?
+        return nil 
+      else 
+        all_ohmage_data_points.each do |data_point|
+          csv << [
+                  data_point._id,
+                  data_point._class,
+                  data_point.user_id, 
+                  data_point.header.schema_id.namespace,
+                  data_point.header.schema_id.name,
+                  data_point.header.schema_id.version.major,
+                  data_point.header.schema_id.version.minor,
+                  data_point.header.creation_date_time,
+                  data_point.header.acquisition_provenance.source_name,
+                  data_point.header.acquisition_provenance.modality,
+                  data_point.body.data.RisefromSitting,
+                  data_point.body.data.TwistPivot,
+                  data_point.body.data.KneePainSeverity,
+                  data_point.body.data.Bed,
+                  data_point.body.data.Bending,
+                  data_point.body.data.Kneeling,
+                  data_point.body.data.Socks, 
+                  data_point.body.data.Squatting
+                 ] 
+        end
       end
     end
   end
