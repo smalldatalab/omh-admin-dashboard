@@ -1,4 +1,4 @@
-class MobilityDataPointsController < ApplicationController
+class Admin::MobilityDataPointsController < ActionController::Base
     
   def index
   	@user = User.find(params[:user_id])
