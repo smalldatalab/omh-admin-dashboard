@@ -119,9 +119,9 @@ ActiveAdmin.register User  do
     link_to 'ohmage Data csv File', admin_user_ohmage_data_points_path(user, format: 'csv') 
   end
 
-  action_item :only => :show do 
-    link_to 'calendar data json', admin_user_calendar_data_points_path(user, format: 'json')
-  end
+  # action_item :only => :show do 
+  #   link_to 'calendar data json', admin_user_calendar_data_points_path(user, format: 'json')
+  # end
 
   csv do
     column :gmail
