@@ -4,21 +4,22 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   
 
-
-  resources :users do
-    resources :pam_data_points
-    resources :mobility_data_points
-    resources :ohmage_data_points
-    resources :calendar_data_points, :format => :json
+  namespace :admin do 
+    resources :users do
+      resources :pam_data_points
+      resources :mobility_data_points
+      resources :ohmage_data_points
+      resources :calendar_data_points, :format => :json
+    end
   end
-
   
-  namespace :users do 
-    resources :pam_data_points
-    resources :mobility_data_points
-    resources :ohmage_data_points
-    resources :calendar_data_points, :format => :json
-  end 
+  # namespace :users do 
+  #   # resources :pam_data_points
+  #   # resources :mobility_data_points
+  #   # resources :ohmage_data_points
+  #   # resources :calendar_data_points, :format => :json
+
+  # end 
 
 
 
