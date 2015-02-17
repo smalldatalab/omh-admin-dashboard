@@ -1,4 +1,4 @@
-ActiveAdmin.register User do
+ActiveAdmin.register User  do
   permit_params :first_name, :last_name, :gmail, :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name] 
 
   # See permitted parameters documentation:

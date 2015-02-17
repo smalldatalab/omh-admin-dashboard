@@ -57,7 +57,7 @@ ActiveAdmin.setup do |config|
   # will namespace routes to /hello_world/*
   #
   # To set no namespace by default, use:
-  #   config.default_namespace = false
+    # config.default_namespace = false
   #
   # Default:
   # config.default_namespace = :admin
@@ -118,9 +118,9 @@ ActiveAdmin.setup do |config|
 
   config.load_paths = [File.expand_path('app/admin', Rails.root), File.expand_path('app/users', Rails.root)]
   
-  # config.namespace :users do |namespaced|
-  #   namespaced.authentication_method = :current_user
-  # end
+  config.namespace :users do |namespaced|
+    namespaced.authentication_method = :current_user
+  end
 
   # config.namespace :user do |user|
   #   user.root_to :user
