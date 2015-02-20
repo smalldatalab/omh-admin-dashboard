@@ -36,6 +36,12 @@ ActiveAdmin.register User  do
         data_stream_name = data_stream_name.gsub /"/, ''
       end 
     end 
+    column :surveys do |user|
+      if user.surveys.present? 
+        survey_name = user.surveys.all.map { |a| a.name.inspect}.join(', ')
+        survey_name = survey_name.gsub /"/, ''
+      end 
+    end 
     column("Pam Data Last Uploaded") { |user| user.most_recent_pam_data_point }
     column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}
@@ -65,6 +71,12 @@ ActiveAdmin.register User  do
           data_stream_name = data_stream_name.gsub /"/, ''
         end 
       end 
+      row :surveys do |user|
+        if user.surveys.present? 
+          survey_name = user.surveys.all.map { |a| a.name.inspect}.join(', ')
+          survey_name = survey_name.gsub /"/, ''
+        end 
+      end 
       row("PAM Data Last Uploaded") { |user| user.most_recent_pam_data_point }
       row("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
       row("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}
@@ -80,6 +92,7 @@ ActiveAdmin.register User  do
   filter :last_name
   filter :studies, collection: Study.all
   filter :data_streams, collection: DataStream.all
+  filter :surveys, collection: Survey.all
 
   form do |f|
     f.inputs "User Details" do
@@ -101,7 +114,7 @@ ActiveAdmin.register User  do
     #   end
      
       f.input :studies, as: :check_boxes, collection: Study.all
-      f.input :data_streams, as: :check_boxes, collection: DataStream.all
+     
     end
       # f.input :study_name, collection: Study.all_names
     f.actions  
@@ -129,6 +142,7 @@ ActiveAdmin.register User  do
     column :last_name
     column("Studies") {|user| user.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
     column("Data Streams") {|user| user.data_streams.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
+    column("Surveys") {|user| user.surveys.all.map {|a| a.name.inspect}.join(', ').gsub /"/, ''}
     column("PAM Data Last Uploaded") { |user| user.most_recent_pam_data_point }
     column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}

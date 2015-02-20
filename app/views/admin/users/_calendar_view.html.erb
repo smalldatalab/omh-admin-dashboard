@@ -25,7 +25,7 @@
         </style>
 
  <body>
-        <!-- <nav class="navbar navbar-inverse navbar-static-top">
+       <!--  <nav class="navbar navbar-inverse navbar-static-top">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -52,7 +52,19 @@
             <li><a href="#">Faisal Alquaddoomi</a></li>
             <li class="active">Daily Statistics</li>
         </ol> -->
+
+
+        <div>
+          <ul style="display: block;">  
+            <li class="stat_label">Hours Away from Home<span class="legend time_not_at_home_in_seconds"></span></li>
+            <li class="stat_label">Minutes Ambulatory<span class="legend active_time_in_seconds"></span></li>  
+            <li class="stat_label">Max Gait Speed<span class="legend max_gait_speed_in_meter_per_second"></li>
+          </ul>
+        </div>
+
+
         <div id="calendar_data_points" data-url="http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json"></div>
+        <!-- http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json -->
 
         <!-- http://localhost:3000/admin/users/<%= @user.id %>/calendar_data_points.json -->
         <div class="container-fluid">

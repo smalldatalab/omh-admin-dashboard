@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150129160828) do
+ActiveRecord::Schema.define(version: 20150218011010) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,35 @@ ActiveRecord::Schema.define(version: 20150129160828) do
 
   add_index "study_participants", ["study_id"], name: "index_study_participants_on_study_id", using: :btree
   add_index "study_participants", ["user_id"], name: "index_study_participants_on_user_id", using: :btree
+
+  create_table "study_streams", force: true do |t|
+    t.integer  "study_id"
+    t.integer  "data_stream_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "study_streams", ["data_stream_id"], name: "index_study_streams_on_data_stream_id", using: :btree
+  add_index "study_streams", ["study_id"], name: "index_study_streams_on_study_id", using: :btree
+
+  create_table "study_surveys", force: true do |t|
+    t.integer  "survey_id"
+    t.integer  "study_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "study_surveys", ["study_id"], name: "index_study_surveys_on_study_id", using: :btree
+  add_index "study_surveys", ["survey_id"], name: "index_study_surveys_on_survey_id", using: :btree
+
+  create_table "surveys", force: true do |t|
+    t.string   "name"
+    t.string   "version"
+    t.string   "description"
+    t.string   "definition"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "user_streams", force: true do |t|
     t.integer  "user_id"

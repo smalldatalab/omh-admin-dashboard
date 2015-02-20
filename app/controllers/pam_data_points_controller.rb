@@ -1,4 +1,4 @@
-class Admin::PamDataPointsController < ActionController::Base
+class Admin::PamDataPointsController < ApplicationController
   def index
      @user = User.find(params[:user_id])
      respond_to do |format|

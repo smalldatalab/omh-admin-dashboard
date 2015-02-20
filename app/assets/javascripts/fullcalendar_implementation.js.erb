@@ -102,6 +102,20 @@ $(document).ready(function() {
                 return result;
             }, {});
 
+            // ranges = {max_gait_speed_in_meter_per_second: 10, active_time_in_seconds: 11000, time_not_at_home_in_seconds: 40000};
+            // deviations = metrics.reduce(function(result, m) {
+            //     result[m] = d3.deviation(my_daily_array, function(d) {return d[m]});
+            //     return result;
+            // }, {});
+
+            // means = metrics.reduce(function(result, m) {
+            //     result[m] = d3.mean(my_daily_array, function(d) {return d[m]});
+            //     return result;
+            // }, {}); 
+
+            // console.log("Test 1: ", deviations);
+            // console.log("Test 2: ", means);
+
             // let's iterate over the visible day_viz things and put stuff in them
             $(".day_viz").each(function(idx, elem) {
 

@@ -36,6 +36,7 @@ gem 'devise', '~> 3.4.1'
 gem 'activeadmin', github: 'activeadmin'
 
 
+gem 'd3-rails', '~> 3.5.2'
 
 gem 'mongoid', '4.0.0'
 

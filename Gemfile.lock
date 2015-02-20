@@ -81,6 +81,8 @@ GEM
     coffee-script-source (1.8.0)
     connection_ninja (0.4.1)
     connection_pool (2.1.0)
+    d3-rails (3.5.2)
+      railties (>= 3.1)
     daemons (1.1.9)
     debug_inspector (0.0.2)
     devise (3.4.1)
@@ -252,6 +254,7 @@ DEPENDENCIES
   capistrano_colors
   coffee-rails (~> 4.0.0)
   connection_ninja
+  d3-rails (~> 3.5.2)
   devise (~> 3.4.1)
   foreman (~> 0.63.0)
   jbuilder (~> 2.0)

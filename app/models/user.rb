@@ -8,16 +8,14 @@ class User < ActiveRecord::Base
   has_many :studies, through: :study_participants
 
   has_many :admin_users, through: :studies
-  has_many :admin_users, through: :data_streams
   
-  has_many :user_streams
-  has_many :data_streams, through: :user_streams
+  has_many :surveys, through: :studies 
+  has_many :data_streams, through: :studies
   
 
   accepts_nested_attributes_for :studies
-  accepts_nested_attributes_for :data_streams
-
-  # accepts_nested_attributes_for :studies, :allow_destroy => true
+  
+  validates :studies, presence: true
 
   def user_record
     if PamUser.where('email_address' => {'address' => self.gmail}).blank? 

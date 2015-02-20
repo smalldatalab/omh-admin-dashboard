@@ -1,4 +1,4 @@
-class Admin::CalendarDataPointsController < ActionController::Base 
+class Admin::CalendarDataPointsController < ApplicationController 
 
   def all_calendar_data_points
     file = File.read('data/data.json')
