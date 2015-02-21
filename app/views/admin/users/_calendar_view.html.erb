@@ -12,14 +12,15 @@
         }
 
         #stats { margin-bottom: 1em; font-size: larger; }
-        #stats td { padding: 2px; text-align: right; }
+        #stats td { padding: 2px; }
         #stats .stat_label { font-weight: bold; color: #555; }
-        #stats .stat_value { display: block; width: 60px; }
+        #stats .stat_value { display: block; width: 10px; text-align: left;}
 
-        .legend { display: inline-block; margin-right: 5px; border: solid 1px #ccc; width: 12px; height: 12px; opacity: 0.5; }
+        .legend { display: inline-block; margin-right: 5px; border: solid 1px #ccc; width: 20px; height: 20px; opacity: 0.5; float: right;}
         .legend.active_time_in_seconds { background-color: #FFAC46; }
         .legend.time_not_at_home_in_seconds { background-color: #46D1FF; }
         .legend.max_gait_speed_in_meter_per_second { background-color: #6EEDA5; }
+       
 
         #filter_controls { padding: 3px; }
         </style>
@@ -53,23 +54,31 @@
             <li class="active">Daily Statistics</li>
         </ol> -->
 
+        <div id="calendar_data_points" data-url="http://localhost:3000/admin/users/<%= @user.id %>/calendar_data_points.json"></div>
+        <!-- http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json -->
 
-        <div>
+        <!-- http://localhost:3000/admin/users/<%= @user.id %>/calendar_data_points.json -->
+
+        <!-- <div>
           <ul style="display: block;">  
             <li class="stat_label">Hours Away from Home<span class="legend time_not_at_home_in_seconds"></span></li>
             <li class="stat_label">Minutes Ambulatory<span class="legend active_time_in_seconds"></span></li>  
             <li class="stat_label">Max Gait Speed<span class="legend max_gait_speed_in_meter_per_second"></li>
           </ul>
+        </div> -->
+
+        <div class="fc-toolbar"> 
+            <div class="fc-center">
+                <button id="time_not_at_home_in_seconds_button" class="fc-button fc-state-default" type="button">Hours Away from Home</button>
+                <button id="active_time_in_seconds_button" class="fc-button fc-state-default" type="button">Minutes Ambulatory</button>
+                <button id="max_gait_speed_in_meter_per_second_button" class="fc-button fc-state-default"  type="button">Max Gait Speed</button>
+                <button id="all_three_bars" class="fc-button fc-state-default"  type="button">View All</button>
+            </div>          
         </div>
 
-
-        <div id="calendar_data_points" data-url="http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json"></div>
-        <!-- http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json -->
-
-        <!-- http://localhost:3000/admin/users/<%= @user.id %>/calendar_data_points.json -->
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-9" style="margin-bottom: 10px;">
+            <div>
+                <div style="margin-bottom: 10px;">
                     <div id="calendar"></div>
 
                     <div id="filter_controls">
@@ -77,7 +86,7 @@
                         <span><input type="checkbox" id="show_events" checked="checked" /> <label for="show_events">display events</label></span>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div >
                     <div id="info">
                         <div id="info_content" style="display: none;">
                             <h2 style="margin: 0 0 10px 0;"></h2>
@@ -100,7 +109,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td style="text-align: left;" colspan="3">
+                                    <td style="">
                                         <div id="averaged-notice" style="color: #555; font-size: 13px;"> (averaged over the selected _s)</div>
                                     </td>
                                 </tr>

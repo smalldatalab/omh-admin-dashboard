@@ -169,6 +169,19 @@ body .fc { /* extra precedence to overcome jqui */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
+#active_time_in_seconds_button { 
+  color: #FFAC46 !important; 
+} 
+
+#time_not_at_home_in_seconds_button { 
+ color: #46D1FF !important;
+}
+       
+#max_gait_speed_in_meter_per_second_button {  
+  color: #6EEDA5 !important; 
+}
+
+
 .fc-state-hover,
 .fc-state-down,
 .fc-state-active,

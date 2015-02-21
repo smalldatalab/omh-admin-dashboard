@@ -8,6 +8,12 @@ var metric_colors = {
     'max_gait_speed_in_meter_per_second': "#6EEDA5"
 };
 
+var  metric_class_names = {
+    'active_time_in_seconds': "active_time_in_seconds_bar",
+    'time_not_at_home_in_seconds': "time_not_at_home_in_seconds_bar",
+    'max_gait_speed_in_meter_per_second': "max_gait_speed_in_meter_per_second_bar"
+};
+
 // utility function for updating each day cell with a visualization of the three quantities
 function bindDay(today, ranges, target) {
     if (today == null) {
@@ -52,7 +58,9 @@ function bindDay(today, ranges, target) {
                 width: "32%", height: (v/ranges[k] * 100) + "%",
                 background: metric_colors[k]
             })
-            .appendTo(target);
+            .appendTo(target); 
+
+        $bar.addClass(metric_class_names[k]);     
 
         // add a label to the bar
         $("<div />")
@@ -69,14 +77,14 @@ function bindDay(today, ranges, target) {
         i += 1;
     });
 
-    /*
-    $("<div />").append($("<b />").text("time_not_at_home_in_seconds: ")).append($("<span />").text(today['time_not_at_home_in_seconds']))
-        .appendTo(target);
-    $("<div />").append($("<b />").text("max_gait_speed_in_meter_per_second: ")).append($("<span />").text(today['max_gait_speed_in_meter_per_second']))
-        .appendTo(target);
-    $("<div />").append($("<b />").text("active_time_in_seconds: ")).append($("<span />").text(today['active_time_in_seconds']))
-        .appendTo(target);
-    */
+   
+    // $("<div />").append($("<b />").text("time_not_at_home_in_seconds: ")).append($("<span />").text(today['time_not_at_home_in_seconds']))
+    //     .appendTo(target);
+    // $("<div />").append($("<b />").text("max_gait_speed_in_meter_per_second: ")).append($("<span />").text(today['max_gait_speed_in_meter_per_second']))
+    //     .appendTo(target);
+    // $("<div />").append($("<b />").text("active_time_in_seconds: ")).append($("<span />").text(today['active_time_in_seconds']))
+    //     .appendTo(target);
+    
 }
 
 $(document).ready(function() {
@@ -91,7 +99,10 @@ $(document).ready(function() {
             console.log("Loaded!: ", data);
             // get just our own data to display on this thing
             my_daily_data = data['users']['c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c']['daily'];
+
             console.log("User data!: ", my_daily_data);
+
+
 
             var my_daily_array = Object.keys(my_daily_data).map(function(k) { return my_daily_data[k] });
             
@@ -128,7 +139,7 @@ $(document).ready(function() {
         .fail(function() {
             alert("User does not have mobility daily data!");
         });
-
+    
     // create the main calendar widget
     $('#calendar').fullCalendar({
         /*
@@ -168,7 +179,7 @@ $(document).ready(function() {
             }
         },
         select: function(start, end, jsEvent, view ) {
-            // $("#info_content").stop().slideDown(300);
+            $("#info_content").stop().slideDown(300);
 
             var end_inclusive = end.clone().subtract(1, 'day');
             
@@ -234,6 +245,32 @@ $(document).ready(function() {
         }
     });
 
+    
+    $('#max_gait_speed_in_meter_per_second_button').click(function() {
+        $('div.day_viz div.time_not_at_home_in_seconds_bar').hide();
+        $('div.day_viz div.active_time_in_seconds_bar').hide();
+        $('div.day_viz div.max_gait_speed_in_meter_per_second_bar').show();
+    }); 
+   
+
+    $('#time_not_at_home_in_seconds_button').click(function() {
+        $('div.day_viz div.max_gait_speed_in_meter_per_second_bar').hide();
+        $('div.day_viz div.active_time_in_seconds_bar').hide();
+        $('div.day_viz div.time_not_at_home_in_seconds_bar').show();
+    }); 
+
+    $('#active_time_in_seconds_button').click(function() {
+        $('div.day_viz div.time_not_at_home_in_seconds_bar').hide();
+        $('div.day_viz div.max_gait_speed_in_meter_per_second_bar').hide();
+        $('div.day_viz div.active_time_in_seconds_bar').show();
+    }); 
+
+    $('#all_three_bars').click(function() {
+        $('div.day_viz div.active_time_in_seconds_bar').show();
+        $('div.day_viz div.time_not_at_home_in_seconds_bar').show();
+        $('div.day_viz div.max_gait_speed_in_meter_per_second_bar').show();
+    })
+
     // move the filters to the middle of the calendar control's header
     // $("#filter_controls").detach().appendTo(".fc-center");
 
@@ -256,4 +293,6 @@ $(document).ready(function() {
             $(".fc-event-container").fadeTo(100, 0);
         }
     });
+
+
 });
