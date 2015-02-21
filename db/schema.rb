@@ -117,7 +117,7 @@ ActiveRecord::Schema.define(version: 20150218011010) do
     t.string   "version"
     t.string   "description"
     t.string   "definition"
-    t.boolean  "open_to_all_users", default: false
+    t.boolean  "open_to_all", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
