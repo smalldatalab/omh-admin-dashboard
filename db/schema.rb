@@ -119,7 +119,7 @@ ActiveRecord::Schema.define(version: 20150220203418) do
     t.string   "definition"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "public",      default: false
+    t.boolean  "public_to_all_users", default: false
   end
 
   create_table "user_streams", force: true do |t|
