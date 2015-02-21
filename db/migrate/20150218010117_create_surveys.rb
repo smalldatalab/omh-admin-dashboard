@@ -5,7 +5,7 @@ class CreateSurveys < ActiveRecord::Migration
       t.string :version 
       t.string :description 
       t.string :definition
-      t.boolean :share, default: false 
+      t.boolean :public_survey, default: false 
 
       t.timestamps 
     end

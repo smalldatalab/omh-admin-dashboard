@@ -1,5 +1,5 @@
 ActiveAdmin.register Survey do
-  permit_params :name, :version, :description, :definition
+  permit_params :name, :version, :public_survey, :description, :definition
 
   index do
     selectable_column
@@ -8,7 +8,7 @@ ActiveAdmin.register Survey do
     column :version
     column :description
     column :definition
-
+    column :public_survey
    
     actions
   end
@@ -25,6 +25,7 @@ ActiveAdmin.register Survey do
       row :definition
       row :created_at 
       row :updated_at
+      bool_row :public_survey
 
     end
     active_admin_comments
@@ -35,7 +36,7 @@ ActiveAdmin.register Survey do
       f.input :name
       f.input :version 
       f.input :description
-      # f.input :share, as: :boolean
+      f.input :public_survey, as: :boolean
       f.input :definition, as: :text, validates: true
     end
   f.actions
