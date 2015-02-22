@@ -139,7 +139,7 @@ class User < ActiveRecord::Base
               'affect valence',
               'mood'
              ]
-        if all_pam_data_points.last.nil?
+        if all_pam_data_points.nil?
           return nil
         else  
           all_pam_data_points.each do |data_point|
@@ -190,7 +190,7 @@ class User < ActiveRecord::Base
               'vertical accuracy', 
               'altitude' 
              ]
-      if all_mobility_data_points.last.nil?
+      if all_mobility_data_points.nil?
         return nil 
       else 
         all_mobility_data_points.each do |data_point|
@@ -242,7 +242,7 @@ class User < ActiveRecord::Base
               'socks',
               'squatting'
              ]
-      if all_ohmage_data_points.last.nil?
+      if all_ohmage_data_points.nil?
         return nil 
       else 
         all_ohmage_data_points.each do |data_point|
@@ -283,7 +283,7 @@ class User < ActiveRecord::Base
                     }                  
                   }
                 }
-    if all_calendar_data_points.last.nil? 
+    if all_calendar_data_points.nil? 
       return nil 
     else 
       all_calendar_data_points.each do |data_point| 
