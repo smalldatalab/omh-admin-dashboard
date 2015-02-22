@@ -3,6 +3,7 @@ class CreateStudySurveys < ActiveRecord::Migration
     create_table :study_surveys do |t|
       t.belongs_to :survey, index: true
       t.belongs_to :study, index: true
+      t.belongs_to :admin_survey, index: true
 
       t.timestamps 
     end

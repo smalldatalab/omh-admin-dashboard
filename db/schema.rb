@@ -95,20 +95,24 @@ ActiveRecord::Schema.define(version: 20150218011010) do
   create_table "study_streams", force: true do |t|
     t.integer  "study_id"
     t.integer  "data_stream_id"
+    t.integer  "admin_stream_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "study_streams", ["admin_stream_id"], name: "index_study_streams_on_admin_stream_id", using: :btree
   add_index "study_streams", ["data_stream_id"], name: "index_study_streams_on_data_stream_id", using: :btree
   add_index "study_streams", ["study_id"], name: "index_study_streams_on_study_id", using: :btree
 
   create_table "study_surveys", force: true do |t|
     t.integer  "survey_id"
     t.integer  "study_id"
+    t.integer  "admin_survey_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "study_surveys", ["admin_survey_id"], name: "index_study_surveys_on_admin_survey_id", using: :btree
   add_index "study_surveys", ["study_id"], name: "index_study_surveys_on_study_id", using: :btree
   add_index "study_surveys", ["survey_id"], name: "index_study_surveys_on_survey_id", using: :btree
 
