@@ -139,7 +139,7 @@ class User < ActiveRecord::Base
               'affect valence',
               'mood'
              ]
-        if all_pam_data_points.nil?
+        if all_pam_data_points.last.nil?
           return nil
         else  
           all_pam_data_points.each do |data_point|
@@ -190,7 +190,7 @@ class User < ActiveRecord::Base
               'vertical accuracy', 
               'altitude' 
              ]
-      if all_mobility_data_points.nil?
+      if all_mobility_data_points.last.nil?
         return nil 
       else 
         all_mobility_data_points.each do |data_point|
@@ -242,7 +242,7 @@ class User < ActiveRecord::Base
               'socks',
               'squatting'
              ]
-      if all_ohmage_data_points.nil?
+      if all_ohmage_data_points.last.nil?
         return nil 
       else 
         all_ohmage_data_points.each do |data_point|
@@ -283,16 +283,18 @@ class User < ActiveRecord::Base
                     }                  
                   }
                 }
-    
-    all_calendar_data_points.each do |data_point| 
-      json_data[:users][:c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c][:daily][data_point.body.date + 'T00:00:00.000Z'] = {
-        max_gait_speed_in_meter_per_second: data_point.body.max_gait_speed_in_meter_per_second,
-        active_time_in_seconds: data_point.body.active_time_in_seconds,
-        time_not_at_home_in_seconds: data_point.body.time_not_at_home_in_seconds
-      }
-
-         
+    if all_calendar_data_points.last.nil? 
+      return nil 
+    else 
+      all_calendar_data_points.each do |data_point| 
+        json_data[:users][:c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c][:daily][data_point.body.date + 'T00:00:00.000Z'] = {
+          max_gait_speed_in_meter_per_second: escape_nil_date(data_point, :max_gait_speed_in_meter_per_second),
+          active_time_in_seconds: escape_nil_date(data_point, :active_time_in_seconds),
+          time_not_at_home_in_seconds: escape_nil_date(data_point, :time_not_at_home_in_seconds)
+        }   
+      end
     end
+
     return JSON.parse(json_data.to_json)
   end  
 
@@ -304,6 +306,10 @@ class User < ActiveRecord::Base
     data.body.activities.nil? ? nil : data.body.activities[0][attribute]
   end
 
+  def escape_nil_date(data, attribute)
+    data.body.date.nil? ? nil : data.body.date.send(attribute)
+
+  end 
 
   def get_calendar_data_url(u)
     u.all_calendar_data_points.to_json
