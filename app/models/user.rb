@@ -283,9 +283,9 @@ class User < ActiveRecord::Base
                     }                  
                   }
                 }
-    if all_calendar_data_points.nil? 
-      return nil 
-    else 
+    # if all_calendar_data_points.nil? 
+    #   return nil 
+    # else 
       all_calendar_data_points.each do |data_point| 
         json_data[:users][:c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c][:daily][data_point.body.date + 'T00:00:00.000Z'] = {
           max_gait_speed_in_meter_per_second:  data_point.body.max_gait_speed_in_meter_per_second,
@@ -296,7 +296,7 @@ class User < ActiveRecord::Base
           # data_point.body.time_not_at_home_in_seconds
         }   
       end
-    end
+    # end
 
     return JSON.parse(json_data.to_json)
   end  
