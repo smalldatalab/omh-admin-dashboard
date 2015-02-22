@@ -288,9 +288,12 @@ class User < ActiveRecord::Base
     else 
       all_calendar_data_points.each do |data_point| 
         json_data[:users][:c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c][:daily][data_point.body.date + 'T00:00:00.000Z'] = {
-          max_gait_speed_in_meter_per_second: escape_nil_date(data_point, :max_gait_speed_in_meter_per_second),
-          active_time_in_seconds: escape_nil_date(data_point, :active_time_in_seconds),
-          time_not_at_home_in_seconds: escape_nil_date(data_point, :time_not_at_home_in_seconds)
+          max_gait_speed_in_meter_per_second: escape_nil_max_gait,
+          # data_point.body.max_gait_speed_in_meter_per_second,
+          active_time_in_seconds: escape_nil_active_time,
+          # data_point.body.active_time_in_seconds,
+          time_not_at_home_in_seconds: escape_nil_not_at_home
+          # data_point.body.time_not_at_home_in_seconds
         }   
       end
     end
@@ -306,9 +309,18 @@ class User < ActiveRecord::Base
     data.body.activities.nil? ? nil : data.body.activities[0][attribute]
   end
 
-  def escape_nil_date(data, attribute)
-    data.body.date.nil? ? nil : data.body.date.send(attribute)
+  def escape_nil_max_gait
+    data.body.max_gait_speed_in_meter_per_second.nil? ? nil : data.body.max_gait_speed_in_meter_per_second
 
+  end 
+
+   def escape_nil_active_time
+    data.body.active_time_in_seconds.nil? ? nil : data.body.active_time_in_seconds
+
+  end 
+
+  def escape_nil_not_at_home
+    data.body.time_not_at_home_in_seconds.nil? ? nil : data.body.time_not_at_home_in_seconds
   end 
 
   def get_calendar_data_url(u)
