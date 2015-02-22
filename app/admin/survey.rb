@@ -36,7 +36,7 @@ ActiveAdmin.register Survey do
       f.input :name
       f.input :version 
       f.input :description
-      f.input :public_survey
+      f.input :public_survey, as: :boolean
       f.input :definition, as: :text, validates: true
     end
   f.actions
