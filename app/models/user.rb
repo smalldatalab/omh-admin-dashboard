@@ -271,6 +271,70 @@ class User < ActiveRecord::Base
     end
   end
 
+  def mobility_daily_summary_data_csv
+     CSV.generate do |csv|
+      csv << [
+              'id',
+              'user id',
+              'class',
+              'namespace', 
+              'name',
+              'version major',
+              'version minor',
+              'creation date time', 
+              'creation date time epoch milli', 
+              'source_name', 
+              'modality',
+              'date', 
+              'device',
+              'active time in seconds',
+              'walking distance in km', 
+              'geodiameter in km',
+              'max gait speed in meter per second', 
+              'leaving home time',
+              'return home time', 
+              'time not at home in seconds',
+              'coverage',
+              'home latitude', 
+              'hoeme longitude'
+             ]
+      if all_calendar_data_points.nil?
+        return nil 
+      else 
+        all_calendar_data_points.each do |data_point|
+          csv << [
+                  data_point._id,
+                  data_point.user_id, 
+                  data_point._class,
+                  data_point.header.schema_id.namespace,
+                  data_point.header.schema_id.name,
+                  data_point.header.schema_id.version.major,
+                  data_point.header.schema_id.version.minor,
+                  data_point.header.creation_date_time,
+                  data_point.header.creation_date_time_epoch_milli, 
+                  data_point.header.acquisition_provenance.source_name,
+                  data_point.header.acquisition_provenance.modality,
+                  data_point.body.date,
+                  data_point.body.device,
+                  data_point.body.active_time_in_seconds,
+                  data_point.body.walking_distance_in_km, 
+                  data_point.body.geodiameter_in_km, 
+                  data_point.body.max_gait_speed_in_meter_per_second,
+                  data_point.body.leave_home_time,
+                  date_point.body.return_home_time, 
+                  data_point.body.time_not_at_home_in_seconds,
+                  data_point.body.coverage,
+                  data_point.body.home.latitude, 
+                  data_point.body.home.longitude 
+                 
+                 ] 
+        end
+      end
+    end
+
+
+  end 
+
 
   def calendar_data_json 
     json_data = { 
@@ -283,9 +347,9 @@ class User < ActiveRecord::Base
                     }                  
                   }
                 }
-    # if all_calendar_data_points.nil? 
-    #   return nil 
-    # else 
+    if all_calendar_data_points.nil? 
+      return nil 
+    else 
       all_calendar_data_points.each do |data_point| 
         json_data[:users][:c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c][:daily][data_point.body.date + 'T00:00:00.000Z'] = {
           max_gait_speed_in_meter_per_second:  data_point.body.max_gait_speed_in_meter_per_second,
@@ -296,7 +360,7 @@ class User < ActiveRecord::Base
           # data_point.body.time_not_at_home_in_seconds
         }   
       end
-    # end
+    end
 
     return JSON.parse(json_data.to_json)
   end  

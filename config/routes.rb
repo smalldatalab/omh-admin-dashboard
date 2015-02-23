@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       resources :mobility_data_points
       resources :ohmage_data_points
       resources :calendar_data_points, :format => :json
+      resources :mobility_daily_summary_data_points
     end
   end
   
