@@ -17,10 +17,10 @@ ActiveAdmin.register User  do
   # show do
   #   # actions
   # end
-
+  
   index do
     selectable_column
-    # id_column
+    id_column
     column :gmail
     column :first_name
     column :last_name
@@ -45,12 +45,13 @@ ActiveAdmin.register User  do
     column("Pam Data Last Uploaded") { |user| user.most_recent_pam_data_point }
     column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}
-    # column("Download PAM Data") { |user| link_to('Download PAM Data', user_pam_path(user)) }
+  
     actions
   end
   
 
-  show do 
+  show :title => proc {|user| (user.first_name.blank? && user.last_name.blank?) ? user.gmail : ( user.first_name.blank? ? user.last_name : user.first_name ) }  do 
+    
     panel "Calendar View" do
       render partial: 'calendar_view', locals: { users: @user}
     end 
@@ -116,10 +117,9 @@ ActiveAdmin.register User  do
       f.input :studies, as: :check_boxes, collection: Study.all
      
     end
-      # f.input :study_name, collection: Study.all_names
     f.actions  
   end
-
+  
   action_item :only => :show do
     link_to 'PAM Data CSV File', admin_user_pam_data_points_path(user, format: 'csv')
   end
@@ -135,6 +135,9 @@ ActiveAdmin.register User  do
   action_item :only => :show do
     link_to 'ohmage Data csv File', admin_user_ohmage_data_points_path(user, format: 'csv') 
   end
+
+
+
   csv do
     column :gmail
     column :first_name

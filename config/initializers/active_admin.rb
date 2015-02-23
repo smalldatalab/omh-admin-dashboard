@@ -31,7 +31,7 @@ ActiveAdmin.setup do |config|
   end
   
  
-  config.site_title = "Sdl Admin Dashboard"
+  config.site_title = "SDL Admin Dashboard"
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
