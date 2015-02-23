@@ -5,6 +5,7 @@ ActiveAdmin.register DataStream do
     selectable_column
     id_column
     column :name
+    
     actions
   end
 
@@ -14,8 +15,7 @@ ActiveAdmin.register DataStream do
   form do |f|
     f.inputs "Data Stream Details" do
       f.input :name
-      # f.input :study_date
-
+    
       f.actions
     end
   end

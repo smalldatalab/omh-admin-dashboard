@@ -32,14 +32,16 @@ ActiveAdmin.register User  do
     end
     column :data_streams do |user|
       if user.data_streams.present? 
-        data_stream_name = user.data_streams.all.map { |a| a.name.inspect}.join(', ')
+        data_stream_name = user.data_streams.all.uniq.map { |a| a.name.inspect}.join(', ')
         data_stream_name = data_stream_name.gsub /"/, ''
+        
       end 
     end 
     column :surveys do |user|
       if user.surveys.present? 
-        survey_name = user.surveys.all.map { |a| a.name.inspect}.join(', ')
+        survey_name = user.surveys.all.uniq.map { |a| a.name.inspect}.join(', ')
         survey_name = survey_name.gsub /"/, ''
+        
       end 
     end 
     column("Pam Data Last Uploaded") { |user| user.most_recent_pam_data_point }
@@ -70,12 +72,14 @@ ActiveAdmin.register User  do
         if user.data_streams.present? 
           data_stream_name = user.data_streams.all.map { |a| a.name.inspect}.join(', ')
           data_stream_name = data_stream_name.gsub /"/, ''
+          
         end 
       end 
       row :surveys do |user|
         if user.surveys.present? 
           survey_name = user.surveys.all.map { |a| a.name.inspect}.join(', ')
           survey_name = survey_name.gsub /"/, ''
+          
         end 
       end 
       row("PAM Data Last Uploaded") { |user| user.most_recent_pam_data_point }
@@ -100,20 +104,6 @@ ActiveAdmin.register User  do
       f.input :gmail
       f.input :first_name
       f.input :last_name
-      # f.input :studies, as: :check_boxes, collection: Study.all_names 
-     
-      # f.has_many :studies do |study_f|
-      #   study_f.inputs "Studies" do 
-      #     # if !study_f.object.nil? 
-      #     #   study_f.input :destroy, as: :boolean, label: "Destroy?"
-      #     # end 
-      #     study_f.input :studies, collection: Study.all_names 
-
-    # f.inputs "Studies" do
-    #   f.has_many :studies do |j|
-    #     j.inputs :study_name, collection: Study.all_names 
-    #   end
-     
       f.input :studies, as: :check_boxes, collection: Study.all
      
     end

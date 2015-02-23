@@ -27,7 +27,12 @@ ActiveAdmin.register AdminUser do
       row :created_at
       row :updated_at 
       bool_row :researcher
-      row :studies
+      row :studies do |q|
+        if q.studies.present?
+         study_name = q.studies.all.map {|a| a.name.inspect}.join(', ')
+         study_name = study_name.gsub /"/, ''
+        end 
+      end
 
     end
     active_admin_comments
