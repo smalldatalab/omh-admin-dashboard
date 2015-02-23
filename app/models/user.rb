@@ -296,7 +296,7 @@ class User < ActiveRecord::Base
               'time not at home in seconds',
               'coverage',
               'home latitude', 
-              'hoeme longitude'
+              'home longitude'
              ]
       if all_calendar_data_points.nil?
         return nil 
@@ -324,10 +324,9 @@ class User < ActiveRecord::Base
                   data_point.body.return_home_time, 
                   data_point.body.time_not_at_home_in_seconds,
                   data_point.body.coverage,
-                  data_point.body.home.latitude, 
-                  data_point.body.home.longitude 
-                 
-                 ] 
+                  escape_nil_home(data_point, :latitude), 
+                  escape_nil_home(data_point, :longitude) 
+                  ] 
         end
       end
     end
@@ -368,6 +367,10 @@ class User < ActiveRecord::Base
   def escape_nil_location(data, attribute)
     data.body.location.nil? ? nil : data.body.location.send(attribute)
   end
+  
+  def escape_nil_home(data, attribute)
+    data.body.home.nil? ? nil : data.body.home.send(attribute)
+  end 
 
   def escape_nil_activities(data, attribute)
     data.body.activities.nil? ? nil : data.body.activities[0][attribute]
