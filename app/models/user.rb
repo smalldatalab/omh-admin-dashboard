@@ -321,7 +321,7 @@ class User < ActiveRecord::Base
                   data_point.body.geodiameter_in_km, 
                   data_point.body.max_gait_speed_in_meter_per_second,
                   data_point.body.leave_home_time,
-                  date_point.body.return_home_time, 
+                  data_point.body.return_home_time, 
                   data_point.body.time_not_at_home_in_seconds,
                   data_point.body.coverage,
                   data_point.body.home.latitude, 
