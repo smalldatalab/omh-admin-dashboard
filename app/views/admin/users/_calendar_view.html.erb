@@ -54,7 +54,7 @@
             <li class="active">Daily Statistics</li>
         </ol> -->
 
-        <div id="calendar_data_points" data-url="http://ohmage-omh.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json"></div>
+        <div id="calendar_data_points" data-url="http://localhost:3000/admin/users/<%= @user.id %>/calendar_data_points.json"></div>
         <!-- http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json -->
 
         <!-- http://localhost:3000/admin/users/<%= @user.id %>/calendar_data_points.json -->
@@ -71,9 +71,9 @@
 
         <div class="fc-toolbar"> 
             <div class="fc-center">
-                <button id="max_gait_speed_in_meter_per_second_button" class="fc-button fc-state-default"  type="button">Max Gait Speed</button>
-                <button id="active_time_in_seconds_button" class="fc-button fc-state-default" type="button">Minutes Ambulatory</button>
-                 <button id="time_not_at_home_in_seconds_button" class="fc-button fc-state-default" type="button">Hours Away from Home</button>
+                <button id="max_gait_speed_in_meter_per_second_button" class="fc-button fc-state-default"  type="button">Max Gait Speed In Meter Per Second</button>
+                <button id="active_time_in_seconds_button" class="fc-button fc-state-default" type="button">Active Time In Seconds</button>
+                 <button id="time_not_at_home_in_seconds_button" class="fc-button fc-state-default" type="button">Time Not At Home In Seconds</button>
                 <button id="all_three_bars" class="fc-button fc-state-default"  type="button">View All</button>
             </div>          
         </div>
@@ -96,18 +96,18 @@
                             <table id="stats">
                                 <tr>
                                     <td><span class="legend max_gait_speed_in_meter_per_second"></span></td>
-                                    <td class="stat_label">Max Gait Speed:</td>
+                                    <td class="stat_label">Max Gait Speed In Meter Per Second:</td>
                                     <td><span id="info_max_gait_speed_in_meter_per_second" data-field="max_gait_speed_in_meter_per_second" class="stat_value"></span></td>
                             
                                 </tr>
                                 <tr>
                                     <td><span class="legend active_time_in_seconds"></span></td>
-                                    <td class="stat_label">Minutes Ambulatory:</td>
+                                    <td class="stat_label">Active Time In Seconds:</td>
                                     <td><span id="info_active_time_in_seconds" data-field="active_time_in_seconds" class="stat_value"></span></td>
                                 </tr>
                                 <tr>
                                     <td><span class="legend time_not_at_home_in_seconds"></span></td>
-                                    <td class="stat_label">Hours Away from Home:</td>
+                                    <td class="stat_label">TIme Not At Home In Seconds:</td>
                                     <td><span id="info_time_not_at_home_in_seconds" data-field="time_not_at_home_in_seconds" class="stat_value"></span></td>
                                 
                                 </tr>
@@ -119,13 +119,32 @@
                                 </tr>
                             </table>
 
-                            <div id="info_notes">
+                            <!-- <div id="info_notes">
                                 <h3>Notes</h3>
-                                <textarea style="width: 100%; height: 150px; resize: vertical;"></textarea>
-                                <div style="text-align: right;">
-                                    <button>Save Notes</button>
-                                </div>
+                                
+                                    <textarea style="width: 100%; height: 150px; resize: vertical;">   
+                                    </textarea>
+                                    <div style="text-align: right;">
+                                        <button>Save Notes</button>
+                                       
+                                    </div>
+                            </div> -->
+                           <!--  <div id="info_notes">
+                                <fieldset class="inputs">
+
+                                </fieldset>
+                                <fieldset class="actions">
+                                    <ol>
+                                        <li class="action input_action">
+                                            <input type="submit" value="Add Comment" name="commit"></input>
+                                        </li>
+                                    </ol>
+                                </fieldset>
                             </div>
+ -->
+
+
+
                         </div>
                     </div>
                 </div>
@@ -138,6 +157,65 @@
         ========================================
         -->
     </body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

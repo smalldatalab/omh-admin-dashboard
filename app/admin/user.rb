@@ -53,10 +53,6 @@ ActiveAdmin.register User  do
   
 
   show :title => proc {|user| (user.first_name.blank? && user.last_name.blank?) ? user.gmail : ( user.first_name.blank? ? user.last_name : user.first_name ) }  do 
-    
-    panel "Calendar View" do
-      render partial: 'calendar_view', locals: { users: @user}
-    end 
     attributes_table do 
       row :id
       row :first_name
@@ -88,7 +84,12 @@ ActiveAdmin.register User  do
       row :created_at
       row :updated_at
     end
-    active_admin_comments
+
+    panel "Calendar View" do
+      render partial: 'calendar_view', locals: { users: @user}
+    end
+
+    active_admin_comments   
   end 
 
 
