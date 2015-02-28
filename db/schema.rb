@@ -120,7 +120,7 @@ ActiveRecord::Schema.define(version: 20150218011010) do
     t.string   "name"
     t.string   "version"
     t.string   "description"
-    t.string   "definition"
+    t.text     "definition"
     t.boolean  "public_survey", default: false
     t.datetime "created_at"
     t.datetime "updated_at"

@@ -7,7 +7,7 @@ ActiveAdmin.register Survey do
     column :name
     column :version
     column :description
-    column :definition
+    # column :definition
     column :public_survey
    
     actions
@@ -37,7 +37,7 @@ ActiveAdmin.register Survey do
       f.input :version 
       f.input :description
       f.input :public_survey, as: :boolean
-      f.input :definition, as: :text, validates: true
+      f.input :definition, as: :text, validates: true, size: nil
     end
   f.actions
   end
