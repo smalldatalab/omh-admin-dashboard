@@ -6,23 +6,23 @@ class Body
   embedded_in :pam_data_point, :inverse_of => :body
   
   field :activities, type: Array
-  field :affect_arousal, type: Integer
-  field :negative_affect, type: Integer
-  field :positive_affect, type: Integer
-  field :affect_valence, type: Integer
+  field :affect_arousal, type: Float
+  field :negative_affect, type: Float
+  field :positive_affect, type: Float
+  field :affect_valence, type: Float
   field :mood, type: String
 
 # For the mobility daily summary data points 
   field :date, type: String
   field :device, type: String
-  field :active_time_in_seconds, type: Integer
-  field :walking_distance_in_km, type: Integer
-  field :geodiameter_in_km, type: Integer
-  field :leave_home_time, type: Integer
-  field :return_home_time, type: Integer
-  field :coverage, type: Integer
-  field :max_gait_speed_in_meter_per_second, type: Integer
-  field :time_not_at_home_in_seconds, type: Integer
+  field :active_time_in_seconds, type: Float
+  field :walking_distance_in_km, type: Float
+  field :geodiameter_in_km, type: Float
+  field :leave_home_time, type: Float
+  field :return_home_time, type: Float
+  field :coverage, type: Float
+  field :max_gait_speed_in_meter_per_second, type: Float
+  field :time_not_at_home_in_seconds, type: Float
 
   embeds_one :location
 

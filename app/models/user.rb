@@ -294,9 +294,7 @@ class User < ActiveRecord::Base
               'leaving home time',
               'return home time', 
               'time not at home in seconds',
-              'coverage',
-              'home latitude', 
-              'home longitude'
+              'coverage'
              ]
       if all_calendar_data_points.nil?
         return nil 
@@ -323,9 +321,7 @@ class User < ActiveRecord::Base
                   data_point.body.leave_home_time,
                   data_point.body.return_home_time, 
                   data_point.body.time_not_at_home_in_seconds,
-                  data_point.body.coverage,
-                  escape_nil_home(data_point, :latitude), 
-                  escape_nil_home(data_point, :longitude) 
+                  data_point.body.coverage
                   ] 
         end
       end
@@ -351,7 +347,7 @@ class User < ActiveRecord::Base
     else 
       all_calendar_data_points.each do |data_point| 
         json_data[:users][:c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c][:daily][data_point.body.date + 'T00:00:00.000Z'] = {
-          max_gait_speed_in_meter_per_second:  data_point.body.max_gait_speed_in_meter_per_second,
+          max_gait_speed_in_meter_per_second:  data_point.body.max_gait_speed_in_meter_per_second.ceil,
           # data_point.body.max_gait_speed_in_meter_per_second,
           active_time_in_seconds: data_point.body.active_time_in_seconds,
           # data_point.body.active_time_in_seconds,

@@ -7,7 +7,7 @@ class Datum
   
   field :RisefromSitting, type: String
   field :TwistPivot, type: String
-  field :KneePainSeverity, type: Integer
+  field :KneePainSeverity, type: Float
   field :Bed, type: String
   field :Bending, type: String
   field :Kneeling, type: String
