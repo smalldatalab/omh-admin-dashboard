@@ -1,6 +1,5 @@
-class StudySurvey < ActiveRecord::Base
+class SSurvey < ActiveRecord::Base
   belongs_to :survey
-  belongs_to :admin_survey, class_name: 'Survey'
   belongs_to :study
 
 

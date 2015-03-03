@@ -5,13 +5,14 @@ class Study < ActiveRecord::Base
   has_many :users, through: :study_participants
   has_many :study_participants
 
-  has_many :study_streams
-  has_many :data_streams, through: :study_streams
-  has_many :admin_streams, through: :study_streams, class_name: 'DataStream'
+  has_many :s_data_streams
+  has_many :data_streams, through: :s_data_streams
+  # has_many :admin_streams, through: :studies, class_name: "DataStream"
 
-  has_many :study_surveys
-  has_many :surveys, through: :study_surveys
-  has_many :admin_surveys, through: :study_surveys, class_name: 'Survey'
+  has_many :s_surveys
+  has_many :surveys, through: :s_surveys
+  # has_many :admin_surveys, through: :studies, class_name: "Survey"
+
 
   accepts_nested_attributes_for :data_streams
   accepts_nested_attributes_for :surveys 

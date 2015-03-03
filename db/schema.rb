@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150228155104) do
+ActiveRecord::Schema.define(version: 20150303012146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,22 @@ ActiveRecord::Schema.define(version: 20150228155104) do
     t.datetime "updated_at"
   end
 
+  create_table "s_data_streams", force: true do |t|
+    t.integer "study_id"
+    t.integer "data_stream_id"
+  end
+
+  add_index "s_data_streams", ["data_stream_id"], name: "index_s_data_streams_on_data_stream_id", using: :btree
+  add_index "s_data_streams", ["study_id"], name: "index_s_data_streams_on_study_id", using: :btree
+
+  create_table "s_surveys", force: true do |t|
+    t.integer "survey_id"
+    t.integer "study_id"
+  end
+
+  add_index "s_surveys", ["study_id"], name: "index_s_surveys_on_study_id", using: :btree
+  add_index "s_surveys", ["survey_id"], name: "index_s_surveys_on_survey_id", using: :btree
+
   create_table "studies", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -103,18 +119,6 @@ ActiveRecord::Schema.define(version: 20150228155104) do
   add_index "study_streams", ["admin_stream_id"], name: "index_study_streams_on_admin_stream_id", using: :btree
   add_index "study_streams", ["data_stream_id"], name: "index_study_streams_on_data_stream_id", using: :btree
   add_index "study_streams", ["study_id"], name: "index_study_streams_on_study_id", using: :btree
-
-  create_table "study_surveys", force: true do |t|
-    t.integer  "survey_id"
-    t.integer  "study_id"
-    t.integer  "admin_survey_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "study_surveys", ["admin_survey_id"], name: "index_study_surveys_on_admin_survey_id", using: :btree
-  add_index "study_surveys", ["study_id"], name: "index_study_surveys_on_study_id", using: :btree
-  add_index "study_surveys", ["survey_id"], name: "index_study_surveys_on_survey_id", using: :btree
 
   create_table "surveys", force: true do |t|
     t.string   "name"

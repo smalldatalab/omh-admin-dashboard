@@ -8,8 +8,8 @@ class AdminUser < ActiveRecord::Base
   has_many :studies, through: :study_owners
 
   has_many :users, through: :studies
-  has_many :admin_surveys, through: :studies, class_name: 'Survey'
-  has_many :admin_streams, through: :studies, class_name: 'DataStream'
+  has_many :surveys, through: :studies
+  has_many :data_streams, through: :studies
 
   accepts_nested_attributes_for :studies
   

@@ -7,7 +7,7 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
       when normalized(DataStream)
         false
       when normalized(Survey)
-        false
+        action == :read
   		when normalized(AdminUser)
   			false 
   		else
@@ -34,18 +34,12 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
       else 
         collection
       end
-    # when 'DataStream'
-    #   if user.researcher
-    #      user.admin_streams
-    #   else 
-    #     collection
-    #   end
-    # when 'Survey'
-    #   if user.researcher
-    #     user.admin_surveys
-    #   else 
-    #     collection 
-
+    when 'Survey'
+      if user.researcher
+        user.surveys
+      else 
+        collection 
+      end 
   	else
   	  collection
   	end
