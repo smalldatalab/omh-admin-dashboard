@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150303012146) do
+ActiveRecord::Schema.define(version: 20150303033052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -125,9 +125,10 @@ ActiveRecord::Schema.define(version: 20150303012146) do
     t.string   "version"
     t.string   "description"
     t.text     "definition"
-    t.boolean  "public_survey", default: false
+    t.boolean  "public_survey",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "public_to_all_users", default: false
   end
 
   create_table "user_streams", force: true do |t|
