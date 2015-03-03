@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base 
 	# use_connection_ninja(:sdl_admin_dashboard_development)
   # params.require(:user).permit(:study_name_ids => [])
-# attr_accessible : studies_attributes  
+  # attr_accessible : studies_attributes  
   # attr_accessible :study_ids
 
   has_many :study_participants
@@ -31,11 +31,27 @@ class User < ActiveRecord::Base
     if pam_user.nil? 
       return nil 
     else 
-      if pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').last.nil? 
+      if pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').last.nil?
         return nil 
       else 
-        pam_data =  pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').map! { |i| DateTime.parse(i.header.creation_date_time) }
-        pam_data.sort.last.to_formatted_s(:long_ordinal)
+        # pam_data =  pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').order('header.schema_id.creation_date_time_epoch_milli')
+        # pam_data.last.header.creation_date_time.to_formatted_s(:long_ordinal)
+
+        # .map! { |i| DateTime.parse(i.header.creation_date_time) }
+        # pam_data.sort.last.to_formatted_s(:long_ordinal)
+
+        pam_data_date = []
+
+        pam_data = pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
+
+        pam_data.each do |i|
+          pam_data_date.push({'creation_date_time' => i.header.creation_date_time, 'creation_date_time_epoch_milli' => i.header.creation_date_time_epoch_milli})
+        end 
+
+        pam_data_last_updated_date = pam_data_date.sort_by { |k| k['creation_date_time_epoch_milli'] }
+
+        DateTime.parse(pam_data_last_updated_date.last['creation_date_time']).to_formatted_s(:long_ordinal)
+
       end
     end
 	end
@@ -346,23 +362,16 @@ class User < ActiveRecord::Base
       return nil 
     else 
       all_calendar_data_points.each do |data_point| 
-    
-
         json_data[:users][:c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c][:daily][data_point.body.date + 'T00:00:00.000Z'] = {
-          max_gait_speed_in_meter_per_second:  data_point.body.max_gait_speed_in_meter_per_second.ceil.round(1),
+          max_gait_speed_in_meter_per_second:  data_point.body.max_gait_speed_in_meter_per_second.ceil,
           active_time_in_seconds: data_point.body.active_time_in_seconds,
           time_not_at_home_in_seconds:  data_point.body.time_not_at_home_in_seconds
           
         }   
       end
     end
-
     return JSON.parse(json_data.to_json)
   end  
-
-  def conversion_to_hour(second)
-    return second / 3600.00
-  end 
 
   def escape_nil_location(data, attribute)
     data.body.location.nil? ? nil : data.body.location.send(attribute)
@@ -376,11 +385,8 @@ class User < ActiveRecord::Base
     data.body.activities.nil? ? nil : data.body.activities[0][attribute]
   end
 
-
   def get_calendar_data_url(u)
     u.all_calendar_data_points.to_json
   end 
-# // <div id="calendar_data_points" data-url="http://localhost:3000/users/2/calendar_data_points.json"></div>
-# // <div id="calendar_data_points" data-url="http://localhost:3000/users/<%= @user.id %>/calendar_data_points.json"></div>
-# // <div id="calendar_data_points" data-url="http://localhost:3000/users/<%= @user.id %>/calendar_data_points.json?startdate=YYYY-MM-DD&enddate=YYYY-MM-DD"></div>
+
 end
