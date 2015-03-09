@@ -34,24 +34,8 @@ class User < ActiveRecord::Base
       if pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').last.nil?
         return nil 
       else 
-        # pam_data =  pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').order('header.schema_id.creation_date_time_epoch_milli')
-        # pam_data.last.header.creation_date_time.to_formatted_s(:long_ordinal)
-
-        # .map! { |i| DateTime.parse(i.header.creation_date_time) }
-        # pam_data.sort.last.to_formatted_s(:long_ordinal)
-
-        pam_data_date = []
-
-        pam_data = pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
-
-        pam_data.each do |i|
-          pam_data_date.push({'creation_date_time' => i.header.creation_date_time, 'creation_date_time_epoch_milli' => i.header.creation_date_time_epoch_milli})
-        end 
-
-        pam_data_last_updated_date = pam_data_date.sort_by { |k| k['creation_date_time_epoch_milli'] }
-
-        DateTime.parse(pam_data_last_updated_date.last['creation_date_time']).to_formatted_s(:long_ordinal)
-
+        pam_data =  pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time
+        DateTime.parse(pam_data).to_formatted_s(:long_ordinal)
       end
     end
 	end
@@ -65,8 +49,8 @@ class User < ActiveRecord::Base
       if mobility_user.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').last.nil?
         return nil
       else 
-        mobility_data = mobility_user.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').map! { |i| DateTime.parse(i.header.creation_date_time) }
-        mobility_data.sort.last.to_formatted_s(:long_ordinal)
+        mobility_data = mobility_user.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time
+        DateTime.parse(mobility_data).to_formatted_s(:long_ordinal)
       end
     end
   end
@@ -80,8 +64,8 @@ class User < ActiveRecord::Base
       if ohmage_user.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey').last.nil?
         return nil 
       else 
-        ohmage_data = ohmage_user.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey').map! { |i| DateTime.parse(i.header.creation_date_time) }
-        ohmage_data.sort.last.to_formatted_s(:long_ordinal)
+        ohmage_data = ohmage_user.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey').order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time
+        DateTime.parse(ohmage_data).to_formatted_s(:long_ordinal)
       end
     end
   end 
