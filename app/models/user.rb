@@ -1,9 +1,4 @@
 class User < ActiveRecord::Base 
-	# use_connection_ninja(:sdl_admin_dashboard_development)
-  # params.require(:user).permit(:study_name_ids => [])
-  # attr_accessible : studies_attributes  
-  # attr_accessible :study_ids
-
   has_many :study_participants
   has_many :studies, through: :study_participants
 
@@ -15,7 +10,7 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :studies
   
-  validates :studies, presence: true
+  validates :studies, :gmail, presence: true
 
   def user_record
     if PamUser.where('email_address' => {'address' => self.gmail}).blank? 
@@ -25,99 +20,30 @@ class User < ActiveRecord::Base
     end 
   end
 
-  def most_recent_pam_data_point
-    pam_user = user_record
-
-    if pam_user.nil? 
-      return nil 
-    else 
-      if pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').last.nil?
-        return nil 
-      else 
-        pam_data =  pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time
-        # DateTime.parse(pam_data).to_formatted_s(:long_ordinal)
-      end
-    end
-	end
-
-  def most_recent_mobility_data_point
-    mobility_user = user_record
-
-    if mobility_user.nil?
-      return nil 
-    else  
-      if mobility_user.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').last.nil?
-        return nil
-      else 
-        mobility_data = mobility_user.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time
-        # DateTime.parse(mobility_data).to_formatted_s(:long_ordinal)
-      end
-    end
-  end
-  
-  def most_recent_ohmage_data_point
-    ohmage_user = user_record
-
-    if ohmage_user.nil?
-      return nil 
-    else 
-      if ohmage_user.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey').last.nil?
-        return nil 
-      else 
-        ohmage_data = ohmage_user.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey').order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time
-        # DateTime.parse(ohmage_data).to_formatted_s(:long_ordinal)
-      end
-    end
-  end 
-
-  def all_pam_data_points
-    if user_record.nil?
-      return nil 
-    else 
-      if user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').last.nil?
-        return nil 
-      else 
-        return user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
-      end
-    end 
-  end
-  
-  def all_mobility_data_points
+  def most_recent_data_point_date(data_stream)
     if user_record.nil? 
       return nil 
     else 
-      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').last.nil?
+      if user_record.pam_data_points.where('header.schema_id.name' => data_stream).last.nil? 
         return nil 
       else 
-        return user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS')
+        DateTime.parse(user_record.pam_data_points.where('header.schema_id.name' => data_stream).order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
       end 
     end
-  end
-
-  def all_ohmage_data_points 
-    if user_record.nil?
-      return nil 
-    else 
-      if user_record.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey').last.nil?
-        return nil 
-      else 
-        return user_record.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey')
-      end
-    end 
   end 
 
 
-  def all_calendar_data_points 
+  def all_data_points(stream)
     if user_record.nil? 
       return nil 
-    else
-      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary').last.nil? 
-        return nil   
-      else  
-        calendar_data = user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary')
-      end 
-    end 
-  end
+    else 
+      if user_record.pam_data_points('header.schema_id.name' => stream).last.nil? 
+        return nil 
+      else 
+        data_points = user_record.pam_data_points('header.schema_id.name' => stream)
+      end
+    end
+  end 
 
   def pam_data_csv
     CSV.generate do |csv|
@@ -139,10 +65,10 @@ class User < ActiveRecord::Base
               'affect valence',
               'mood'
              ]
-        if all_pam_data_points.nil?
+        if all_data_points('photographic-affect-meter-scores').nil?
           return nil
         else  
-          all_pam_data_points.each do |data_point|
+          all_data_points('photographic-affect-meter-scores').each do |data_point|
             csv << [
                   data_point._id,
                   data_point._class,
@@ -154,20 +80,20 @@ class User < ActiveRecord::Base
                   data_point.header.creation_date_time,
                   data_point.header.acquisition_provenance.source_name,
                   data_point.header.acquisition_provenance.modality,
-                  data_point.body.affect_arousal,
-                  data_point.body.negative_affect,
-                  data_point.body.positive_affect,
-                  data_point.body.effective_time_frame.date_time,
-                  data_point.body.affect_valence,
-                  data_point.body.mood
+                  escape_nil_body(data_point, :affect_arousal),
+                  escape_nil_body(data_point, :negative_affect),
+                  escape_nil_body(data_point, :positive_affect),
+                  data_point.body.effective_time_frame.nil? ? nil : data_point.body.effective_time_frame.date_time,
+                  escape_nil_body(data_point, :affect_valence),
+                  escape_nil_body(data_point, :mood)
                  ] 
         
+          end
         end
-      end
     end
   end
 
-   def mobility_data_csv
+  def mobility_data_csv
     CSV.generate do |csv|
       csv << [
               'id',
@@ -190,10 +116,10 @@ class User < ActiveRecord::Base
               'vertical accuracy', 
               'altitude' 
              ]
-      if all_mobility_data_points.nil?
+      if all_data_points('mobility-stream-iOS').nil?
         return nil 
       else 
-        all_mobility_data_points.each do |data_point|
+        all_data_points('mobility-stream-iOS').each do |data_point|
           csv << [
                 data_point._id,
                 data_point._class,
@@ -242,10 +168,10 @@ class User < ActiveRecord::Base
               'socks',
               'squatting'
              ]
-      if all_ohmage_data_points.nil?
+      if all_data_points('Knee Function Survey').nil?
         return nil 
       else 
-        all_ohmage_data_points.each do |data_point|
+        all_data_points('Knee Function Survey').each do |data_point|
           csv << [
                   data_point._id,
                   data_point._class,
@@ -257,14 +183,14 @@ class User < ActiveRecord::Base
                   data_point.header.creation_date_time,
                   data_point.header.acquisition_provenance.source_name,
                   data_point.header.acquisition_provenance.modality,
-                  data_point.body.data.RisefromSitting,
-                  data_point.body.data.TwistPivot,
-                  data_point.body.data.KneePainSeverity,
-                  data_point.body.data.Bed,
-                  data_point.body.data.Bending,
-                  data_point.body.data.Kneeling,
-                  data_point.body.data.Socks, 
-                  data_point.body.data.Squatting
+                  escape_nil_data(data_point, :RisefromSitting),
+                  escape_nil_data(data_point, :TwistPivot),
+                  escape_nil_data(data_point, :KneePainSeverity),
+                  escape_nil_data(data_point, :Bed),
+                  escape_nil_data(data_point, :Bending),
+                  escape_nil_data(data_point, :Kneeling),
+                  escape_nil_data(data_point, :Socks), 
+                  escape_nil_data(data_point, :Squatting)
                  ] 
         end
       end
@@ -296,10 +222,10 @@ class User < ActiveRecord::Base
               'time not at home in seconds',
               'coverage'
              ]
-      if all_calendar_data_points.nil?
+      if all_data_points('mobility-daily-summary').nil?
         return nil 
       else 
-        all_calendar_data_points.each do |data_point|
+        all_data_points('mobility-daily-summary').each do |data_point|
           csv << [
                   data_point._id,
                   data_point.user_id, 
@@ -312,16 +238,16 @@ class User < ActiveRecord::Base
                   data_point.header.creation_date_time_epoch_milli, 
                   data_point.header.acquisition_provenance.source_name,
                   data_point.header.acquisition_provenance.modality,
-                  data_point.body.date,
-                  data_point.body.device,
-                  data_point.body.active_time_in_seconds,
-                  data_point.body.walking_distance_in_km, 
-                  data_point.body.geodiameter_in_km, 
-                  data_point.body.max_gait_speed_in_meter_per_second,
-                  data_point.body.leave_home_time,
-                  data_point.body.return_home_time, 
-                  data_point.body.time_not_at_home_in_seconds,
-                  data_point.body.coverage
+                  escape_nil_body(data_point, :date),
+                  escape_nil_body(data_point, :device),
+                  escape_nil_body(data_point, :active_time_in_seconds),
+                  escape_nil_body(data_point, :walking_distance_in_km), 
+                  escape_nil_body(data_point, :geodiameter_in_km), 
+                  escape_nil_body(data_point, :max_gait_speed_in_meter_per_second),
+                  escape_nil_body(data_point, :leave_home_time),
+                  escape_nil_body(data_point, :return_home_time), 
+                  escape_nil_body(data_point, :time_not_at_home_in_seconds),
+                  escape_nil_body(data_point, :coverage)
                   ] 
         end
       end
@@ -342,10 +268,10 @@ class User < ActiveRecord::Base
                     }                  
                   }
                 }
-    if all_calendar_data_points.nil? 
+    if all_data_points('mobility-daily-summary').nil? 
       return nil 
     else 
-      all_calendar_data_points.each do |data_point| 
+      all_data_points('mobility-daily-summary').each do |data_point| 
         json_data[:users][:c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c][:daily][data_point.body.date + 'T00:00:00.000Z'] = {
           max_gait_speed_in_meter_per_second:  data_point.body.max_gait_speed_in_meter_per_second.ceil,
           active_time_in_seconds: data_point.body.active_time_in_seconds,
@@ -369,8 +295,11 @@ class User < ActiveRecord::Base
     data.body.activities.nil? ? nil : data.body.activities[0][attribute]
   end
 
-  def get_calendar_data_url(u)
-    u.all_calendar_data_points.to_json
+  def escape_nil_data(data, attribute)
+    data.body.data.nil? ? nil : data.body.data.send(attribute)
   end 
 
+  def escape_nil_body(data, attribute)
+    data.body.nil? ? nil : data.body.send(attribute)
+  end 
 end

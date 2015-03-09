@@ -44,9 +44,9 @@ ActiveAdmin.register User  do
         
       end 
     end 
-    # column("Pam Data Last Uploaded") { |user| user.most_recent_pam_data_point }
-    # column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
-    # column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}
+    column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores') }
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-stream-iOS')}
+    column("ohmage Data Last Uploaded") { |user| user.most_recent_data_point_date('Knee Function Survey')}
   
     actions
   end
@@ -82,9 +82,9 @@ ActiveAdmin.register User  do
           
         end 
       end 
-      row("PAM Data Last Uploaded") { |user| user.most_recent_pam_data_point }
-      row("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
-      row("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}
+      row("PAM Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores') }
+      row("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-stream-iOS')}
+      row("ohmage Data Last Uploaded") { |user| user.most_recent_data_point_date('Knee Function Survey')}
       row :created_at
       row :updated_at
     end
@@ -135,9 +135,9 @@ ActiveAdmin.register User  do
     column("Studies") {|user| user.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
     column("Data Streams") {|user| user.data_streams.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
     column("Surveys") {|user| user.surveys.all.map {|a| a.name.inspect}.join(', ').gsub /"/, ''}
-    column("PAM Data Last Uploaded") { |user| user.most_recent_pam_data_point }
-    column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
-    column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}
+    column("PAM Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores') }
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-stream-iOS')}
+    column("ohmage Data Last Uploaded") { |user| user.most_recent_data_point_date('Knee Function Survey')}
     column (:created_at) { |time| time.created_at.to_formatted_s(:long_ordinal)} 
     column (:updated_at) { |time| time.updated_at.to_formatted_s(:long_ordinal)}
   end
