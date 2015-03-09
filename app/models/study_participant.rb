@@ -4,6 +4,5 @@ class StudyParticipant < ActiveRecord::Base
 
   validates_presence_of :study
   validates_presence_of :user
-
-  # accepts_nested_attributes_for :studies
+  
 end

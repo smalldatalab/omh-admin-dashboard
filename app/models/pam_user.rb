@@ -4,7 +4,6 @@ class PamUser
 
   field :_id, type: Object
 
-  # embeds_one :email_address
   has_many :pam_data_points
 
   embeds_one :email_address

@@ -3,9 +3,7 @@
         <%= stylesheet_link_tag "fullcalendar", "calendar"%>
 
         <%= javascript_include_tag "d3.min", "jquery.min", "bootstrap.min", "moment.min", "fullcalendar", "gcal", "fullcalendar_implementation"%>
-
-        <!-- omit bootstrap.min.css -->
-
+        
         <style>
         .day_viz {
             position: absolute; top: 50%; left: 3px; right: 3px; bottom: 3px; opacity: 0.5;
@@ -26,34 +24,6 @@
         </style>
 
  <body>
-       <!--  <nav class="navbar navbar-inverse navbar-static-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-calendar" style="position: relative; top: 3px;" aria-hidden="true"></span> Calendar DVU</a>
-                </div>
-                <div id="navbar" class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Patients</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>     
-            </div>
-        </nav> -->
-
-       <!--  <ol class="breadcrumb" style="margin-top: -20px; border-radius: 0; box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);">
-            <li><a href="#">Calendar DVU</a></li>
-            <li><a href="#">Patients</a></li>
-            <li><a href="#">Faisal Alquaddoomi</a></li>
-            <li class="active">Daily Statistics</li>
-        </ol> -->
-
         <div id="calendar_data_points" data-url="http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json"></div>
         <!-- http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json -->
 
@@ -61,17 +31,9 @@
 
         <!-- http://ohmage-omh.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json -->
 
-        <!-- <div>
-          <ul style="display: block;">  
-            <li class="stat_label">Hours Away from Home<span class="legend time_not_at_home_in_seconds"></span></li>
-            <li class="stat_label">Minutes Ambulatory<span class="legend active_time_in_seconds"></span></li>  
-            <li class="stat_label">Max Gait Speed<span class="legend max_gait_speed_in_meter_per_second"></li>
-          </ul>
-        </div> -->
-
         <div class="fc-toolbar"> 
             <div class="fc-center">
-                <button id="max_gait_speed_in_meter_per_second_button" class="fc-button fc-state-default"  type="button">Max Gait Speed In Meter Per Second</button>
+                <button id="max_gait_speed_in_meter_per_second_button" class="fc-button fc-state-default"  type="button">Max Walking Speed</button>
                 <button id="active_time_in_seconds_button" class="fc-button fc-state-default" type="button">Active Time In Seconds</button>
                  <button id="time_not_at_home_in_seconds_button" class="fc-button fc-state-default" type="button">Time Not At Home In Seconds</button>
                 <button id="all_three_bars" class="fc-button fc-state-default"  type="button">View All</button>
@@ -96,7 +58,7 @@
                             <table id="stats">
                                 <tr>
                                     <td><span class="legend max_gait_speed_in_meter_per_second"></span></td>
-                                    <td class="stat_label">Max Gait Speed In Meter Per Second:</td>
+                                    <td class="stat_label">Max Walking Speed:</td>
                                     <td><span id="info_max_gait_speed_in_meter_per_second" data-field="max_gait_speed_in_meter_per_second" class="stat_value"></span></td>
                             
                                 </tr>
@@ -118,44 +80,11 @@
                                     </td>
                                 </tr>
                             </table>
-
-                            <!-- <div id="info_notes">
-                                <h3>Notes</h3>
-                                
-                                    <textarea style="width: 100%; height: 150px; resize: vertical;">   
-                                    </textarea>
-                                    <div style="text-align: right;">
-                                        <button>Save Notes</button>
-                                       
-                                    </div>
-                            </div> -->
-                           <!--  <div id="info_notes">
-                                <fieldset class="inputs">
-
-                                </fieldset>
-                                <fieldset class="actions">
-                                    <ol>
-                                        <li class="action input_action">
-                                            <input type="submit" value="Add Comment" name="commit"></input>
-                                        </li>
-                                    </ol>
-                                </fieldset>
-                            </div>
- -->
-
-
-
                         </div>
                     </div>
                 </div>
             </div>
-        </div><!-- /.container -->
-
-        <!--
-        ========================================
-        === land of hidden scripts
-        ========================================
-        -->
+        </div>
     </body>
 
 

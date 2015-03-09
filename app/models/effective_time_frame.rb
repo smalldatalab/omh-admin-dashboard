@@ -6,6 +6,5 @@ class EffectiveTimeFrame
   field :date_time, type: String
 
   embedded_in :body
-  # , :inverse_of => :effective_time_frame
 
 end
