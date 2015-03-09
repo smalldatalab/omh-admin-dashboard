@@ -44,9 +44,9 @@ ActiveAdmin.register User  do
         
       end 
     end 
-    column("Pam Data Last Uploaded") { |user| user.most_recent_pam_data_point }
-    column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
-    column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}
+    # column("Pam Data Last Uploaded") { |user| user.most_recent_pam_data_point }
+    # column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point}
+    # column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point}
   
     actions
   end
