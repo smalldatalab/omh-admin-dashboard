@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
         return nil 
       else 
         pam_data =  pam_user.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time
-        DateTime.parse(pam_data).to_formatted_s(:long_ordinal)
+        # DateTime.parse(pam_data).to_formatted_s(:long_ordinal)
       end
     end
 	end
@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
         return nil
       else 
         mobility_data = mobility_user.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time
-        DateTime.parse(mobility_data).to_formatted_s(:long_ordinal)
+        # DateTime.parse(mobility_data).to_formatted_s(:long_ordinal)
       end
     end
   end
@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
         return nil 
       else 
         ohmage_data = ohmage_user.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey').order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time
-        DateTime.parse(ohmage_data).to_formatted_s(:long_ordinal)
+        # DateTime.parse(ohmage_data).to_formatted_s(:long_ordinal)
       end
     end
   end 
