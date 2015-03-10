@@ -28,9 +28,9 @@ ActiveAdmin.register User  do
       end 
     end 
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores') }
-    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-stream-iOS')}
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-stream-iOS')  }
     column("ohmage Data Last Uploaded") { |user| user.most_recent_data_point_date('Knee Function Survey')}
-  
+    tracer_bullet 
     actions
   end
   
@@ -65,9 +65,9 @@ ActiveAdmin.register User  do
           
         end 
       end 
-      row("PAM Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores') }
-      row("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-stream-iOS')}
-      row("ohmage Data Last Uploaded") { |user| user.most_recent_data_point_date('Knee Function Survey')}
+      # row("PAM Data Last Uploaded") { |user| user.most_recent_data_point_date[0] }
+      # row("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date[1]}
+      # row("ohmage Data Last Uploaded") { |user| user.most_recent_data_point_date[2]}
       row :created_at
       row :updated_at
     end

@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base 
+  
+  
   has_many :study_participants
   has_many :studies, through: :study_participants
 
@@ -20,18 +22,19 @@ class User < ActiveRecord::Base
     end 
   end
 
+
+
   def most_recent_data_point_date(data_stream)
     if user_record.nil? 
-      return nil 
-    else 
+      return ''
+    else  
       if user_record.pam_data_points.where('header.schema_id.name' => data_stream).last.nil? 
-        return nil 
+        return '' 
       else 
         DateTime.parse(user_record.pam_data_points.where('header.schema_id.name' => data_stream).order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
       end 
     end
   end 
-
 
   def all_data_points(stream)
     if user_record.nil? 

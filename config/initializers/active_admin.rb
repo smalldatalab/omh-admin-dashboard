@@ -21,13 +21,14 @@ ActiveAdmin.setup do |config|
     end
 
 
-    # class User < ActiveRecord::Base 
-    #   after_create :consent_email 
+    class User < ActiveRecord::Base 
+      # after_create :consent_email 
 
-    #   def consent_email 
-    #     UserMailer.user_created(self.id).deliver
-    #   end 
-    # end 
+      # def consent_email 
+      #   UserMailer.user_created(self.id).deliver
+      # end 
+
+    end 
   end
   
  
@@ -122,6 +123,7 @@ ActiveAdmin.setup do |config|
   #   namespaced.authentication_method = :current_user
   # end
 
+
   # config.namespace :user do |user|
   #   user.root_to :user
   # end 
@@ -182,7 +184,8 @@ ActiveAdmin.setup do |config|
   # You can add before, after and around filters to all of your
   # Active Admin resources and pages from here.
   #
-  # config.before_filter :do_something_awesome
+   
+  
 
   # == Setting a Favicon
   #
