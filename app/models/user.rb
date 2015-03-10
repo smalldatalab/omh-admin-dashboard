@@ -34,17 +34,54 @@ class User < ActiveRecord::Base
     end
   end 
 
-  def all_data_points(stream)
+  def all_pam_data_points
     if user_record.nil? 
       return nil 
     else 
-      if user_record.pam_data_points.where('header.schema_id.name' => stream).last.nil? 
+      if user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').last.nil? 
         return nil 
       else 
-        user_record.pam_data_points.where('header.schema_id.name' => stream)
+        user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
       end
     end
   end 
+
+  def all_mobility_data_points
+    if user_record.nil? 
+      return nil 
+    else 
+      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').last.nil? 
+        return nil 
+      else 
+        user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS')
+      end
+    end
+  end 
+
+  def all_ohmage_data_points
+    if user_record.nil? 
+      return nil 
+    else 
+      if user_record.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey').last.nil? 
+        return nil 
+      else 
+        user_record.pam_data_points.where('header.schema_id.name' => 'Knee Function Survey')
+      end
+    end
+  end 
+
+  def all_calendar_data_points
+    if user_record.nil? 
+      return nil 
+    else 
+      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary').last.nil? 
+        return nil 
+      else 
+        user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary')
+      end
+    end
+  end 
+  
 
   def pam_data_csv
     CSV.generate do |csv|
@@ -66,10 +103,10 @@ class User < ActiveRecord::Base
               'affect valence',
               'mood'
              ]
-        if all_pam_data_points('photographic-affect-meter-scores').nil?
+        if all_pam_data_points.nil?
           return nil
         else  
-          all_pam_data_points('photographic-affect-meter-scores').each do |data_point|
+          all_pam_data_points.each do |data_point|
             csv << [
                   data_point._id,
                   data_point._class,
@@ -117,10 +154,10 @@ class User < ActiveRecord::Base
               'vertical accuracy', 
               'altitude' 
              ]
-      if all_mobility_data_points('mobility-stream-iOS').nil?
+      if all_mobility_data_points.nil?
         return nil 
       else 
-        all_mobility_data_points('mobility-stream-iOS').each do |data_point|
+        all_mobility_data_points.each do |data_point|
           csv << [
                 data_point._id,
                 data_point._class,
@@ -169,10 +206,10 @@ class User < ActiveRecord::Base
               'socks',
               'squatting'
              ]
-      if all_ohmage_data_points('Knee Function Survey').nil?
+      if all_ohmage_data_points.nil?
         return nil 
       else 
-        all_ohmage_data_points('Knee Function Survey').each do |data_point|
+        all_ohmage_data_points.each do |data_point|
           csv << [
                   data_point._id,
                   data_point._class,
@@ -223,10 +260,10 @@ class User < ActiveRecord::Base
               'time not at home in seconds',
               'coverage'
              ]
-      if all_data_points('mobility-daily-summary').nil?
+      if all_calendar_data_points.nil?
         return nil 
       else 
-        all_data_points('mobility-daily-summary').each do |data_point|
+        all_calendar_data_points.each do |data_point|
           csv << [
                   data_point._id,
                   data_point.user_id, 
@@ -253,8 +290,6 @@ class User < ActiveRecord::Base
         end
       end
     end
-
-
   end 
 
 
@@ -269,10 +304,10 @@ class User < ActiveRecord::Base
                     }                  
                   }
                 }
-    if all_data_points('mobility-daily-summary').nil? 
+    if all_calendar_data_points.nil? 
       return nil 
     else 
-      all_data_points('mobility-daily-summary').each do |data_point| 
+      all_calendar_data_points.each do |data_point| 
         json_data[:users][:c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c][:daily][data_point.body.date + 'T00:00:00.000Z'] = {
           max_gait_speed_in_meter_per_second:  data_point.body.max_gait_speed_in_meter_per_second.ceil,
           active_time_in_seconds: data_point.body.active_time_in_seconds,
