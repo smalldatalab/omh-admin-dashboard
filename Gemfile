@@ -50,7 +50,7 @@ gem 'connection_ninja'
 
 gem 'cancan'
 
-gem 'foreman',                   '~> 0.63.0'
+gem 'foreman',  '~> 0.63.0'
 
 group :development do
   gem "binding_of_caller"
