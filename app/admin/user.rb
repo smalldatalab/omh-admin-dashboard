@@ -1,6 +1,7 @@
 ActiveAdmin.register User  do
   permit_params :first_name, :last_name, :gmail, :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name] 
   
+
   index do
     selectable_column
     id_column
@@ -8,24 +9,13 @@ ActiveAdmin.register User  do
     column :first_name
     column :last_name
     column :studies do |user|
-      if user.studies.present?
-       study_name = user.studies.all.map {|a| a.name.inspect}.join(', ')
-       study_name = study_name.gsub /"/, ''
-      end 
+      user.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, ''
     end
     column :data_streams do |user|
-      if user.data_streams.present? 
-        data_stream_name = user.data_streams.all.uniq.map { |a| a.name.inspect}.join(', ')
-        data_stream_name = data_stream_name.gsub /"/, ''
-        
-      end 
+      user.data_streams.all.uniq.map { |a| a.name.inspect}.join(', ').gsub /"/, ''   
     end 
     column :surveys do |user|
-      if user.surveys.present? 
-        survey_name = user.surveys.all.uniq.map { |a| a.name.inspect}.join(', ')
-        survey_name = survey_name.gsub /"/, ''
-        
-      end 
+      user.surveys.all.uniq.map { |a| a.name.inspect}.join(', ').gsub /"/, '' 
     end 
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
     column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-stream-iOS')  }
@@ -46,24 +36,13 @@ ActiveAdmin.register User  do
       row :last_name
       row :gmail
       row :studies do |user|
-        if user.studies.present?
-          study_name = user.studies.all.map {|a| a.name.inspect}.join(', ')
-          study_name = study_name.gsub /"/, ''
-        end 
+        user.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, ''
       end
       row :data_streams do |user|
-        if user.data_streams.present? 
-          data_stream_name = user.data_streams.all.map { |a| a.name.inspect}.join(', ')
-          data_stream_name = data_stream_name.gsub /"/, ''
-          
-        end 
+        user.data_streams.all.map { |a| a.name.inspect}.join(', ').gsub /"/, ''
       end 
       row :surveys do |user|
-        if user.surveys.present? 
-          survey_name = user.surveys.all.map { |a| a.name.inspect}.join(', ')
-          survey_name = survey_name.gsub /"/, ''
-          
-        end 
+        user.surveys.all.map { |a| a.name.inspect}.join(', ').gsub /"/, ''
       end 
       row("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
       row("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-stream-iOS')  }

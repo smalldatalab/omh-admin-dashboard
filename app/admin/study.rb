@@ -6,16 +6,10 @@ ActiveAdmin.register Study do
     id_column
     column :name
     column :surveys do |q|
-      if q.surveys.present?
-       survey_name = q.surveys.all.map {|a| a.name.inspect}.join(', ')
-       survey_name = survey_name.gsub /"/, ''
-      end 
+      q.surveys.all.map {|a| a.name.inspect}.join(', ').gsub /"/, ''
     end
     column :data_streams do |user|
-      if user.data_streams.present? 
-        data_stream_name = user.data_streams.all.map { |a| a.name.inspect}.join(', ')
-        data_stream_name = data_stream_name.gsub /"/, ''
-      end 
+      user.data_streams.all.map { |a| a.name.inspect}.join(', ').gsub /"/, ''
     end 
 
     actions
@@ -30,16 +24,10 @@ ActiveAdmin.register Study do
     attributes_table do 
       row :name
       row :surveys do |q|
-        if q.surveys.present?
-         survey_name = q.surveys.all.map {|a| a.name.inspect}.join(', ')
-         survey_name = survey_name.gsub /"/, ''
-        end 
+        q.surveys.all.map {|a| a.name.inspect}.join(', ').gsub /"/, ''
       end
       row :data_streams do |user|
-        if user.data_streams.present? 
-          data_stream_name = user.data_streams.all.map { |a| a.name.inspect}.join(', ')
-          data_stream_name = data_stream_name.gsub /"/, ''
-        end 
+        user.data_streams.all.map { |a| a.name.inspect}.join(', ').gsub /"/, ''
       end 
     end
     active_admin_comments

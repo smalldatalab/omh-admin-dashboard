@@ -22,8 +22,6 @@ class User < ActiveRecord::Base
     end 
   end
 
-
-
   def most_recent_data_point_date(data_stream)
     if user_record.nil? 
       return ''
