@@ -38,10 +38,10 @@ class User < ActiveRecord::Base
     if user_record.nil? 
       return nil 
     else 
-      if user_record.pam_data_points('header.schema_id.name' => stream).last.nil? 
+      if user_record.pam_data_points.where('header.schema_id.name' => stream).last.nil? 
         return nil 
       else 
-        data_points = user_record.pam_data_points('header.schema_id.name' => stream)
+        user_record.pam_data_points.where('header.schema_id.name' => stream)
       end
     end
   end 
@@ -66,10 +66,10 @@ class User < ActiveRecord::Base
               'affect valence',
               'mood'
              ]
-        if all_data_points('photographic-affect-meter-scores').nil?
+        if all_pam_data_points('photographic-affect-meter-scores').nil?
           return nil
         else  
-          all_data_points('photographic-affect-meter-scores').each do |data_point|
+          all_pam_data_points('photographic-affect-meter-scores').each do |data_point|
             csv << [
                   data_point._id,
                   data_point._class,
@@ -117,10 +117,10 @@ class User < ActiveRecord::Base
               'vertical accuracy', 
               'altitude' 
              ]
-      if all_data_points('mobility-stream-iOS').nil?
+      if all_mobility_data_points('mobility-stream-iOS').nil?
         return nil 
       else 
-        all_data_points('mobility-stream-iOS').each do |data_point|
+        all_mobility_data_points('mobility-stream-iOS').each do |data_point|
           csv << [
                 data_point._id,
                 data_point._class,
@@ -169,10 +169,10 @@ class User < ActiveRecord::Base
               'socks',
               'squatting'
              ]
-      if all_data_points('Knee Function Survey').nil?
+      if all_ohmage_data_points('Knee Function Survey').nil?
         return nil 
       else 
-        all_data_points('Knee Function Survey').each do |data_point|
+        all_ohmage_data_points('Knee Function Survey').each do |data_point|
           csv << [
                   data_point._id,
                   data_point._class,
