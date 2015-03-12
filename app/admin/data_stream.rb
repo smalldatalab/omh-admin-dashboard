@@ -1,5 +1,6 @@
 ActiveAdmin.register DataStream do
   permit_params :name
+  menu priority: 6
   
   index do
     selectable_column

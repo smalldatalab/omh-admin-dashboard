@@ -1,5 +1,6 @@
 ActiveAdmin.register AdminUser do
   permit_params :email, :password, :password_confirmation, :researcher, :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name] 
+  menu priority: 2
 
   index do
     selectable_column

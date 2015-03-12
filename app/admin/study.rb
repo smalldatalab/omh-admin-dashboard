@@ -1,6 +1,7 @@
 ActiveAdmin.register Study do 
   permit_params :name, :survey_ids => [], surveys_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name] 
-  
+  menu priority: 5
+
   index do
     selectable_column
     id_column

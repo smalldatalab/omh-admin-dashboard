@@ -1,5 +1,6 @@
 ActiveAdmin.register Survey do
   permit_params :name, :version, :public_to_all_users, :description, :definition
+  menu priority: 7
 
   index do
     selectable_column
