@@ -6,6 +6,9 @@ ActiveAdmin.register DataStream do
     selectable_column
     id_column
     column :name
+    column :studies do |q|
+      q.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, ''
+    end
     
     actions
   end

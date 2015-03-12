@@ -7,9 +7,11 @@ ActiveAdmin.register Survey do
     id_column
     column :name
     column :version
-    column :description
     column :public_to_all_users
-    # column :definition
+    column :description
+    column :studies do |q|
+      q.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, ''
+    end
    
     actions
   end
