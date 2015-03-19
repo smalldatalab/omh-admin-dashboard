@@ -34,6 +34,18 @@ class User < ActiveRecord::Base
     end
   end 
 
+  def most_recent_ohmage_data_point_date 
+    if user_record.nil? 
+      return ''
+    else  
+      if user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).last.nil? 
+        return '' 
+      else 
+        DateTime.parse(user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
+      end 
+    end
+  end 
+
   def all_pam_data_points
     if user_record.nil? 
       return nil 
