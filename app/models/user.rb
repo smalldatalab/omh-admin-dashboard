@@ -62,10 +62,10 @@ class User < ActiveRecord::Base
     if user_record.nil? 
       return nil 
     else 
-      if user_record.pam_data_points.where('header.schema_id.name' => /^Ohmage/).last.nil? 
+      if user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).last.nil? 
         return nil 
       else 
-        user_record.pam_data_points.where('header.schema_id.name' => /^Ohmage/)
+        user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/)
       end
     end
   end 
