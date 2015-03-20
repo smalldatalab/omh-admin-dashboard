@@ -13,12 +13,15 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :studies
   
   validates :studies, :gmail, presence: true
+  validates_format_of :gmail, without: /\s/, message: "can't have space"
+  validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? }
+
 
   def user_record
-    if PamUser.where('email_address' => {'address' => self.gmail}).blank? 
+    if PamUser.where('email_address' => {'address' => self.gmail.gsub(/\s+/, "").downcase}).blank? 
       return nil
     else 
-      return PamUser.find_by('email_address' => {'address' => self.gmail})
+      return PamUser.find_by('email_address' => {'address' => self.gmail.gsub(/\s+/, "").downcase})
     end 
   end
 
