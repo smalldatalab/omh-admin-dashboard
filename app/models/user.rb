@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base 
-  
-  
+  # after_create :check_data_points
+
   has_many :study_participants
   has_many :studies, through: :study_participants
 
@@ -14,8 +14,14 @@ class User < ActiveRecord::Base
   
   validates :studies, :gmail, presence: true
   validates_format_of :gmail, without: /\s/, message: "can't have space"
-  validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? }
+  validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? } 
+  
 
+  def check_data_points 
+    if PamUser.where('email_address' => {'address' => self.gmail.gsub(/\s+/, "").downcase}).blank? 
+      flash[:message] = "OOps Something went wrong"
+    end 
+  end
 
   def user_record
     if PamUser.where('email_address' => {'address' => self.gmail.gsub(/\s+/, "").downcase}).blank? 

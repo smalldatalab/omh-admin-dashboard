@@ -65,13 +65,13 @@ ActiveAdmin.register User  do
 
   form do |f|
     f.inputs "User Details" do
-      f.input :gmail 
+      f.input :gmail
       f.input :first_name
       f.input :last_name
       f.input :studies, as: :check_boxes, collection: Study.all
      
     end
-    f.actions  
+    f.actions 
   end
   
   action_item :only => :show do
