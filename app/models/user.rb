@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   
   validates :studies, :gmail, presence: true
   validates_format_of :gmail, without: /\s/, message: "can't have space"
-  validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? } 
+  # validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? } 
   
 
   def check_data_points 
@@ -205,56 +205,44 @@ class User < ActiveRecord::Base
     end
   end
 
-  def ohmage_data_csv
-    CSV.generate do |csv|
-      csv << [
-              'id',
-              'class',
-              'user id', 
-              'name space',
-              'name', 
-              'version major', 
-              'version minor', 
-              'creation date time', 
-              'source name',
-              'modality',
-              'rise from sitting',
-              'twist pivot',
-              'knee pain severity',
-              'bed', 
-              'bending',
-              'kneeling',
-              'socks',
-              'squatting'
-             ]
-      if all_ohmage_data_points.nil?
-        return nil 
-      else 
-        all_ohmage_data_points.each do |data_point|
-          csv << [
-                  data_point._id,
-                  data_point._class,
-                  data_point.user_id, 
-                  data_point.header.schema_id.namespace,
-                  data_point.header.schema_id.name,
-                  data_point.header.schema_id.version.major,
-                  data_point.header.schema_id.version.minor,
-                  data_point.header.creation_date_time,
-                  data_point.header.acquisition_provenance.source_name,
-                  data_point.header.acquisition_provenance.modality,
-                  escape_nil_data(data_point, :RisefromSitting),
-                  escape_nil_data(data_point, :TwistPivot),
-                  escape_nil_data(data_point, :KneePainSeverity),
-                  escape_nil_data(data_point, :Bed),
-                  escape_nil_data(data_point, :Bending),
-                  escape_nil_data(data_point, :Kneeling),
-                  escape_nil_data(data_point, :Socks), 
-                  escape_nil_data(data_point, :Squatting)
-                 ] 
-        end
-      end
-    end
-  end
+  # def ohmage_data_csv
+  #   CSV.generate do |csv|
+  #     csv << [
+  #             'id',
+  #             'user', 
+  #             'creation date time', 
+  #             'survey namespace', 
+  #             'survey name', 
+  #             'survey version',
+  #             'survey item id', 
+  #             'response'
+  #            ]
+  #     if all_ohmage_data_points.nil?
+  #       return nil 
+  #     else 
+  #       all_ohmage_data_points.each do |data_point|
+  #         csv << [
+  #                 data_point._id,
+  #                 data_point.user_id, 
+  #                 data_point.creation_date_time,
+  #                 data_point.header.schema_id.namespace,
+  #                 data_point.header.schema_id.name,
+  #                 data_point.header.schema_id.version.major + '.' + data_point.header.schema_id.version.minor,
+  #                 data_point.body.data[key],
+  #                 data_point.body.data[value]
+  #                 # escape_nil_data(data_point, :RisefromSitting),
+  #                 # escape_nil_data(data_point, :TwistPivot),
+  #                 # escape_nil_data(data_point, :KneePainSeverity),
+  #                 # escape_nil_data(data_point, :Bed),
+  #                 # escape_nil_data(data_point, :Bending),
+  #                 # escape_nil_data(data_point, :Kneeling),
+  #                 # escape_nil_data(data_point, :Socks), 
+  #                 # escape_nil_data(data_point, :Squatting)
+  #                ] 
+  #       end
+  #     end
+  #   end
+  # end
 
   def mobility_daily_summary_data_csv
      CSV.generate do |csv|
