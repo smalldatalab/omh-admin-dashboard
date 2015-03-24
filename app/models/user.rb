@@ -17,11 +17,11 @@ class User < ActiveRecord::Base
   # validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? } 
   
 
-  def check_data_points 
-    if PamUser.where('email_address' => {'address' => self.gmail.gsub(/\s+/, "").downcase}).blank? 
-      flash[:message] = "OOps Something went wrong"
-    end 
-  end
+  # def check_data_points 
+  #   if PamUser.where('email_address' => {'address' => self.gmail.gsub(/\s+/, "").downcase}).blank? 
+  #     flash[:message] = "OOps Something went wrong"
+  #   end 
+  # end
 
   def user_record
     if PamUser.where('email_address' => {'address' => self.gmail.gsub(/\s+/, "").downcase}).blank? 
