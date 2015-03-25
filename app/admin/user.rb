@@ -1,7 +1,7 @@
 ActiveAdmin.register User  do
   permit_params :first_name, :last_name, :gmail, :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name] 
   
-  menu priority: 3
+  menu priority: 3, label: "Participants"
 
   index do
     selectable_column
@@ -68,8 +68,7 @@ ActiveAdmin.register User  do
       f.input :gmail
       f.input :first_name
       f.input :last_name
-      f.input :studies, as: :check_boxes, collection: Study.all
-     
+      f.input :studies, as: :check_boxes, collection: current_admin_user.studies
     end
     f.actions 
   end

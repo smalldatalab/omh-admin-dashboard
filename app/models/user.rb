@@ -14,7 +14,6 @@ class User < ActiveRecord::Base
   
   validates :studies, :gmail, presence: true
   validates_format_of :gmail, without: /\s/, message: "can't have space"
-  # validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? } 
   
 
   # def check_data_points 
