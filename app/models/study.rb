@@ -14,7 +14,7 @@ class Study < ActiveRecord::Base
   accepts_nested_attributes_for :data_streams
   accepts_nested_attributes_for :surveys 
 
-  validates :data_streams, presence: true
-  validates :surveys, presence: true
+  # validates :data_streams, presence: true
+  # validates :surveys, presence: true
   
 end
