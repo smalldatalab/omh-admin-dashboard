@@ -10,6 +10,8 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
         action == :read
   		when normalized(AdminUser)
   			false 
+      when normalized(User)
+        action == :read
   		else
   			true
   		end
