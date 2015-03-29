@@ -17,7 +17,7 @@ ActiveAdmin.register User  do
     end 
     column :surveys do |user|
       user.surveys.all.uniq.map { |a| a.name.inspect}.join(', ').gsub /"/, '' 
-    end 
+    end
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
     column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-stream-iOS')  }
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date}
