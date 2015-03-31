@@ -351,5 +351,8 @@ class User < ActiveRecord::Base
     data.body.data.nil? ? nil : data.body.data.send(attribute)
   end 
 
+  def escape_nil_body(data, attribute)
+    data.body.nil? ? nil : data.body.send(attribute)
+  end 
   
 end
