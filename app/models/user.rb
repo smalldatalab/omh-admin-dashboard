@@ -332,7 +332,7 @@ class User < ActiveRecord::Base
   end  
 
   def escape_and_round(data)
-    data ? data.round : 0
+    data ? data.round(1) : 0
   end
 
   def escape_nil_location(data, attribute)
