@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   validates :studies, :gmail, presence: true
   validates_format_of :gmail, without: /\s/, message: "can't have space"
   validates_uniqueness_of :gmail
-   # validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? }
+  # validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? }
 
   def registrated_in_database 
     if PamUser.where('email_address' => {'address' => self.gmail.gsub(/\s+/, "").downcase}).blank? 
@@ -148,10 +148,9 @@ class User < ActiveRecord::Base
                   data_point.body.effective_time_frame.nil? ? nil : data_point.body.effective_time_frame.date_time,
                   escape_nil_body(data_point, :affect_valence),
                   escape_nil_body(data_point, :mood)
-                 ] 
-        
-          end
+                 ]         
         end
+      end
     end
   end
 
@@ -208,44 +207,44 @@ class User < ActiveRecord::Base
     end
   end
 
-  # def ohmage_data_csv
-  #   CSV.generate do |csv|
-  #     csv << [
-  #             'id',
-  #             'user', 
-  #             'creation date time', 
-  #             'survey namespace', 
-  #             'survey name', 
-  #             'survey version',
-  #             'survey item id', 
-  #             'response'
-  #            ]
-  #     if all_ohmage_data_points.nil?
-  #       return nil 
-  #     else 
-  #       all_ohmage_data_points.each do |data_point|
-  #         csv << [
-  #                 data_point._id,
-  #                 data_point.user_id, 
-  #                 data_point.creation_date_time,
-  #                 data_point.header.schema_id.namespace,
-  #                 data_point.header.schema_id.name,
-  #                 data_point.header.schema_id.version.major + '.' + data_point.header.schema_id.version.minor,
-  #                 data_point.body.data[key],
-  #                 data_point.body.data[value]
-  #                 # escape_nil_data(data_point, :RisefromSitting),
-  #                 # escape_nil_data(data_point, :TwistPivot),
-  #                 # escape_nil_data(data_point, :KneePainSeverity),
-  #                 # escape_nil_data(data_point, :Bed),
-  #                 # escape_nil_data(data_point, :Bending),
-  #                 # escape_nil_data(data_point, :Kneeling),
-  #                 # escape_nil_data(data_point, :Socks), 
-  #                 # escape_nil_data(data_point, :Squatting)
-  #                ] 
-  #       end
-  #     end
-  #   end
-  # end
+  def get_all_survey_question_keys 
+    if user_record.nil? 
+      return nil
+    else
+      if user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).last.nil? 
+        return nil
+      else 
+        survey_keys = []
+        user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).body.each do |key, value| 
+          survey_keys.push(key) unless survey_keys.include? key 
+        end
+        return survey_keys
+      end 
+    end 
+  end 
+
+  def ohmage_data_csv
+    CSV.generate do |csv|
+      keys = get_all_survey_question_keys
+      if keys
+        csv << keys
+        if all_ohmage_data_points.nil?
+          return nil 
+        else 
+          all_ohmage_data_points.each do |data_point|
+            csv << get_all_survey_question_values(keys, data_point)
+          end
+        end
+      end
+    end 
+  end
+
+  def get_all_survey_question_values(survey_keys, data_point)
+    survey_values = []
+    data_point.body.each do |key, value|
+      survey_values.push(survey_keys.include?(key) ? value : '')
+    end 
+  end
 
   def mobility_daily_summary_data_csv
      CSV.generate do |csv|

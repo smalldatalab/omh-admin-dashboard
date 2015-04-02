@@ -15,7 +15,7 @@ ActiveAdmin.register DataStream do
 
   filter :name
 
-
+  
   form do |f|
     f.inputs "Data Stream Details" do
       f.input :name

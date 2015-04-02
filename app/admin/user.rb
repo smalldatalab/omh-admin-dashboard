@@ -19,7 +19,7 @@ ActiveAdmin.register User  do
       user.surveys.all.uniq.map { |a| a.name.inspect}.join(', ').gsub /"/, '' 
     end
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
-    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-stream-iOS')  }
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date}
 
     actions
@@ -46,7 +46,7 @@ ActiveAdmin.register User  do
         user.surveys.all.map { |a| a.name.inspect}.join(', ').gsub /"/, ''
       end 
       row("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
-      row("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-stream-iOS')  }
+      row("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
       row("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date}
 
       row :created_at
@@ -100,7 +100,7 @@ ActiveAdmin.register User  do
     column("Data Streams") {|user| user.data_streams.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
     column("Surveys") {|user| user.surveys.all.map {|a| a.name.inspect}.join(', ').gsub /"/, ''}
     column("PAM Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores') }
-    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-stream-iOS')}
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date}
     column (:created_at) { |time| time.created_at.to_formatted_s(:long_ordinal)} 
     column (:updated_at) { |time| time.updated_at.to_formatted_s(:long_ordinal)}
