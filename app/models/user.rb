@@ -225,18 +225,26 @@ class User < ActiveRecord::Base
     end
   end
 
+
+  def test_zero(abc)
+    zero_array = []
+    abc.length.times {|i| zero_array << i }
+  end
+
   def ohmage_data_csv
     CSV.generate do |csv|
       keys = get_all_survey_question_keys
       if keys
         csv << keys
-        if all_ohmage_data_points.nil?
-          return nil
-        else
-          all_ohmage_data_points.each do |data_point|
-            csv << get_all_survey_question_values(keys, data_point)
-          end
-        end
+        # if all_ohmage_data_points.nil?
+        #   return nil
+        # else
+        #   all_ohmage_data_points.each do |data_point|
+        #     csv << get_all_survey_question_values(keys, data_point)
+        #   end
+        # end
+
+        csv << test_zero(keys)
       end
     end
   end
