@@ -72,11 +72,18 @@ class User < ActiveRecord::Base
   def all_mobility_data_points
     if user_record.nil?
       return nil
+    elsif
+      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS', 'header.schema_id.namespace'=>'cornell').last.nil?
+        return nil
+
+      else
+        user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS', 'header.schema_id.namespace'=>'cornell')
+      end
     else
-      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').last.nil?
+      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream', 'header.schema_id.namespace'=>'io.smalldata.lab').last.nil?
         return nil
       else
-        user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS')
+        user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream', 'header.schema_id.namespace'=>'io.smalldata.lab')
       end
     end
   end
@@ -225,36 +232,30 @@ class User < ActiveRecord::Base
     end
   end
 
-
-  def test_zero(abc)
-    zero_array = []
-    abc.length.times {|i| zero_array << i }
-  end
-
-  def ohmage_data_csv
-    CSV.generate do |csv|
-      keys = get_all_survey_question_keys
-      if keys
-        csv << keys
-        # if all_ohmage_data_points.nil?
-        #   return nil
-        # else
-        #   all_ohmage_data_points.each do |data_point|
-        #     csv << get_all_survey_question_values(keys, data_point)
-        #   end
-        # end
-
-        csv << test_zero(keys)
-      end
-    end
-  end
-
   def get_all_survey_question_values(survey_keys, data_point)
     survey_values = []
     data_point.body.data do |key, value|
       survey_values.push(survey_keys.include?(key) ? value : '')
     end
   end
+
+
+  def ohmage_data_csv
+    CSV.generate do |csv|
+      keys = get_all_survey_question_keys
+      if keys
+        csv << keys
+        if all_ohmage_data_points.nil?
+          return nil
+        else
+          all_ohmage_data_points.each do |data_point|
+            csv << get_all_survey_question_values(keys, data_point)
+          end
+        end
+      end
+    end
+  end
+
 
   def mobility_daily_summary_data_csv
      CSV.generate do |csv|
