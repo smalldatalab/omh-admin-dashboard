@@ -72,14 +72,14 @@ class User < ActiveRecord::Base
   def all_mobility_data_points
     if user_record.nil?
       return nil
-      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS', 'header.schema_id.namespace'=>'cornell').last.nil?
-        if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream', 'header.schema_id.namespace'=>'io.smalldata.lab').last.nil?
+      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').where('header.schema_id.namespace'=>'cornell').last.nil?
+        if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream').where('header.schema_id.namespace'=>'io.smalldata.lab').last.nil?
           return nil
         else
-          user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream', 'header.schema_id.namespace'=>'io.smalldata.lab')
+          user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream').where('header.schema_id.namespace'=>'io.smalldata.lab')
         end
       else
-        user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS', 'header.schema_id.namespace'=>'cornell')
+        user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').where('header.schema_id.namespace'=>'cornell')
       end
     end
   end
