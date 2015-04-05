@@ -4,7 +4,7 @@ class Body
   store_in collection: 'dataPoint', database: 'omh'
 
   embedded_in :pam_data_point, :inverse_of => :body
-  
+
   field :activities, type: Array
   field :affect_arousal, type: Float
   field :negative_affect, type: Float
@@ -12,7 +12,7 @@ class Body
   field :affect_valence, type: Float
   field :mood, type: String
 
-# For the mobility daily summary data points 
+# For the mobility daily summary data points
   field :date, type: String
   field :device, type: String
   field :active_time_in_seconds, type: Float
@@ -23,6 +23,7 @@ class Body
   field :coverage, type: Float
   field :max_gait_speed_in_meter_per_second, type: Float
   field :time_not_at_home_in_seconds, type: Float
+  field :step, type: Float
 
   embeds_one :location
 
