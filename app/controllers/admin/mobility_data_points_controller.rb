@@ -4,5 +4,5 @@ class Admin::MobilityDataPointsController < ApplicationController
   	respond_to do |format|
       format.csv {render text: @user.mobility_data_csv }
     end
-  end 
+  end
 end

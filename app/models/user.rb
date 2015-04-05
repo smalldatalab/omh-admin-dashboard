@@ -19,9 +19,9 @@ class User < ActiveRecord::Base
 
   def registrated_in_database
     if PamUser.where('email_address' => {'address' => self.gmail.gsub(/\s+/, "").downcase}).blank?
-      return "Yes"
-    else
       return "No"
+    else
+      return "Yes"
     end
   end
 
@@ -72,14 +72,14 @@ class User < ActiveRecord::Base
   def all_mobility_data_points
     if user_record.nil?
       return nil
-      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').where('header.schema_id.namespace'=>'cornell').last.nil?
-        if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream').where('header.schema_id.namespace'=>'io.smalldata.lab').last.nil?
+      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').last.nil?
+        if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream').last.nil?
           return nil
         else
-          user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream').where('header.schema_id.namespace'=>'io.smalldata.lab')
+          user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream')
         end
       else
-        user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').where('header.schema_id.namespace'=>'cornell')
+        user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS')
       end
     end
   end
@@ -157,58 +157,58 @@ class User < ActiveRecord::Base
     end
   end
 
-  def mobility_data_csv
-    CSV.generate do |csv|
-      csv << [
-              'id',
-              'class',
-              'user id',
-              'name space',
-              'name',
-              'version major',
-              'version minor',
-              'creation date time',
-              'source name',
-              'modality',
-              'activity',
-              'confidence',
-              'speed',
-              'longitude',
-              'bearing',
-              'latitude',
-              'horizontal accuracy',
-              'vertical accuracy',
-              'altitude'
-             ]
-      if all_mobility_data_points.nil?
-        return nil
-      else
-        all_mobility_data_points.each do |data_point|
-          csv << [
-                data_point._id,
-                data_point._class,
-                data_point.user_id,
-                data_point.header.schema_id.namespace,
-                data_point.header.schema_id.name,
-                data_point.header.schema_id.version.major,
-                data_point.header.schema_id.version.minor,
-                data_point.header.creation_date_time,
-                data_point.header.acquisition_provenance.source_name,
-                data_point.header.acquisition_provenance.modality,
-                escape_nil_activities(data_point, 'activity'),
-                escape_nil_activities(data_point, 'confidence'),
-                escape_nil_location(data_point, :speed),
-                escape_nil_location(data_point, :longitude),
-                escape_nil_location(data_point, :bearing),
-                escape_nil_location(data_point, :latitude),
-                escape_nil_location(data_point, :horizontal_accuracy),
-                escape_nil_location(data_point, :vertical_accuracy),
-                escape_nil_location(data_point, :altitude)
-               ]
-        end
-      end
-    end
-  end
+  # def mobility_data_csv
+  #   CSV.generate do |csv|
+  #     csv << [
+  #             'id',
+  #             'class',
+  #             'user id',
+  #             'name space',
+  #             'name',
+  #             'version major',
+  #             'version minor',
+  #             'creation date time',
+  #             'source name',
+  #             'modality',
+  #             'activity',
+  #             'confidence',
+  #             'speed',
+  #             'longitude',
+  #             'bearing',
+  #             'latitude',
+  #             'horizontal accuracy',
+  #             'vertical accuracy',
+  #             'altitude'
+  #            ]
+  #     if all_mobility_data_points.nil?
+  #       return nil
+  #     else
+  #       all_mobility_data_points.each do |data_point|
+  #         csv << [
+  #               data_point._id,
+  #               data_point._class,
+  #               data_point.user_id,
+  #               data_point.header.schema_id.namespace,
+  #               data_point.header.schema_id.name,
+  #               data_point.header.schema_id.version.major,
+  #               data_point.header.schema_id.version.minor,
+  #               data_point.header.creation_date_time,
+  #               data_point.header.acquisition_provenance.source_name,
+  #               data_point.header.acquisition_provenance.modality,
+  #               escape_nil_activities(data_point, 'activity'),
+  #               escape_nil_activities(data_point, 'confidence'),
+  #               escape_nil_location(data_point, :speed),
+  #               escape_nil_location(data_point, :longitude),
+  #               escape_nil_location(data_point, :bearing),
+  #               escape_nil_location(data_point, :latitude),
+  #               escape_nil_location(data_point, :horizontal_accuracy),
+  #               escape_nil_location(data_point, :vertical_accuracy),
+  #               escape_nil_location(data_point, :altitude)
+  #              ]
+  #       end
+  #     end
+  #   end
+  # end
 
   def get_all_survey_question_keys
     if user_record.nil?

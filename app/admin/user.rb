@@ -18,6 +18,7 @@ ActiveAdmin.register User  do
     column :surveys do |user|
       user.surveys.all.uniq.map { |a| a.name.inspect}.join(', ').gsub /"/, ''
     end
+    column("Registered in Database") { |user| user.registrated_in_database }
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
     column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date}
@@ -45,6 +46,7 @@ ActiveAdmin.register User  do
       row :surveys do |user|
         user.surveys.all.map { |a| a.name.inspect}.join(', ').gsub /"/, ''
       end
+      row("Registered in Database") { |user| user.registrated_in_database }
       row("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
       row("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
       row("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date}
@@ -78,9 +80,9 @@ ActiveAdmin.register User  do
     link_to 'PAM Data CSV File', admin_user_pam_data_points_path(user, format: 'csv')
   end
 
-  action_item :only => :show do
-    link_to 'Mobility Data csv File', admin_user_mobility_data_points_path(user, format: 'csv')
-  end
+  # action_item :only => :show do
+  #   link_to 'Mobility Data csv File', admin_user_mobility_data_points_path(user, format: 'csv')
+  # end
 
   action_item :only => :show do
     link_to 'Mobility Daily Summary Data csv File', admin_user_mobility_daily_summary_data_points_path(user, format: 'csv')
