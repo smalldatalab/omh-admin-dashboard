@@ -23,7 +23,7 @@ class Body
   field :coverage, type: Float
   field :max_gait_speed_in_meter_per_second, type: Float
   field :time_not_at_home_in_seconds, type: Float
-  field :step, type: Float
+  field :steps, type: Float
 
   embeds_one :location
 
