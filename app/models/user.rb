@@ -219,7 +219,7 @@ class User < ActiveRecord::Base
       else
         survey_keys = []
         user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).each do |a|
-          a.body.data do |key, value|
+          a.body.data.each do |key, value|
             survey_keys.push(key) unless survey_keys.include? key
           end
         end
@@ -230,7 +230,7 @@ class User < ActiveRecord::Base
 
   def get_all_survey_question_values(survey_keys, data_point)
     survey_values = []
-    data_point.body.data do |key, value|
+    data_point.body.data.each do |key, value|
       survey_values.push(survey_keys.include?(key) ? value : '')
     end
   end
