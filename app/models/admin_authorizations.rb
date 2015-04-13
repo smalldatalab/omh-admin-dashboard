@@ -8,6 +8,8 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
         false
       when normalized(Survey)
         action == :read || action == :create
+      when normalized(AdminUser)
+        action == :read || action == :update
       when normalized(User)
         action == :read
   		else
