@@ -88,9 +88,9 @@ ActiveAdmin.register User  do
     link_to 'Mobility Daily Summary Data csv File', admin_user_mobility_daily_summary_data_points_path(user, format: 'csv')
   end
 
-  action_item :only => :show do
-    link_to 'ohmage Data csv File', admin_user_ohmage_data_points_path(user, format: 'csv')
-  end
+  # action_item :only => :show do
+  #   link_to 'ohmage Data csv File', admin_user_ohmage_data_points_path(user, format: 'csv')
+  # end
 
 
 

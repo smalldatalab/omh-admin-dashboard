@@ -7,9 +7,7 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
       when normalized(DataStream)
         false
       when normalized(Survey)
-        action == :read
-  		when normalized(AdminUser)
-  			false 
+        action == :read || action == :create
       when normalized(User)
         action == :read
   		else
@@ -22,6 +20,12 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
 
   def scope_collection(collection, action = Auth::READ)
   	case collection.name
+    when 'AdminUser'
+      if user.researcher
+        collection.where(:id => user.id)
+      else
+        AdminUser
+      end
   	when 'User'
   	  if user.researcher
   	  	user.users
@@ -31,17 +35,17 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
   	when 'ActiveAdmin::Comment'
   	  collection.where(:author_id => user.id)
     when 'Study'
-      if user.researcher 
+      if user.researcher
         user.studies
-      else 
+      else
         collection
       end
     when 'Survey'
       if user.researcher
         user.surveys
-      else 
-        collection 
-      end 
+      else
+        collection
+      end
   	else
   	  collection
   	end
