@@ -157,59 +157,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  # def mobility_data_csv
-  #   CSV.generate do |csv|
-  #     csv << [
-  #             'id',
-  #             'class',
-  #             'user id',
-  #             'name space',
-  #             'name',
-  #             'version major',
-  #             'version minor',
-  #             'creation date time',
-  #             'source name',
-  #             'modality',
-  #             'activity',
-  #             'confidence',
-  #             'speed',
-  #             'longitude',
-  #             'bearing',
-  #             'latitude',
-  #             'horizontal accuracy',
-  #             'vertical accuracy',
-  #             'altitude'
-  #            ]
-  #     if all_mobility_data_points.nil?
-  #       return nil
-  #     else
-  #       all_mobility_data_points.each do |data_point|
-  #         csv << [
-  #               data_point._id,
-  #               data_point._class,
-  #               data_point.user_id,
-  #               data_point.header.schema_id.namespace,
-  #               data_point.header.schema_id.name,
-  #               data_point.header.schema_id.version.major,
-  #               data_point.header.schema_id.version.minor,
-  #               data_point.header.creation_date_time,
-  #               data_point.header.acquisition_provenance.source_name,
-  #               data_point.header.acquisition_provenance.modality,
-  #               escape_nil_activities(data_point, 'activity'),
-  #               escape_nil_activities(data_point, 'confidence'),
-  #               escape_nil_location(data_point, :speed),
-  #               escape_nil_location(data_point, :longitude),
-  #               escape_nil_location(data_point, :bearing),
-  #               escape_nil_location(data_point, :latitude),
-  #               escape_nil_location(data_point, :horizontal_accuracy),
-  #               escape_nil_location(data_point, :vertical_accuracy),
-  #               escape_nil_location(data_point, :altitude)
-  #              ]
-  #       end
-  #     end
-  #   end
-  # end
-
   def get_all_survey_question_keys
     if user_record.nil?
       return nil
@@ -219,8 +166,10 @@ class User < ActiveRecord::Base
       else
         survey_keys = []
         user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).each do |a|
-          a.body.data do |key, value|
-            survey_keys.push(key) unless survey_keys.include? key
+          if a.body.data
+            a.body.data.attributes.each do |key, value|
+              survey_keys.push(key) unless survey_keys.include? key
+            end
           end
         end
         return survey_keys
@@ -230,28 +179,30 @@ class User < ActiveRecord::Base
 
   def get_all_survey_question_values(survey_keys, data_point)
     survey_values = []
-    data_point.body.data do |key, value|
-      survey_values.push(survey_keys.include?(key) ? value : '')
+    if data_point.body.data
+      survey_keys.each do |key|
+        survey_values << data_point.body.data[key] ? data_point.body.data[key] : nil
+      end
     end
-
+    return survey_values
   end
 
 
-  # def ohmage_data_csv
-  #   CSV.generate do |csv|
-  #     keys = get_all_survey_question_keys
-  #     if keys
-  #       csv << keys
-  #       if all_ohmage_data_points.nil?
-  #         return nil
-  #       else
-  #         all_ohmage_data_points.each do |data_point|
-  #           csv << get_all_survey_question_values(keys, data_point)
-  #         end
-  #       end
-  #     end
-  #   end
-  # end
+  def ohmage_data_csv
+    CSV.generate do |csv|
+      keys = get_all_survey_question_keys
+      if keys
+        csv << keys
+        if all_ohmage_data_points.nil?
+          return nil
+        else
+          all_ohmage_data_points.each do |data_point|
+            csv << get_all_survey_question_values(keys, data_point) if data_point.body.data
+          end
+        end
+      end
+    end
+  end
 
 
   def mobility_daily_summary_data_csv
