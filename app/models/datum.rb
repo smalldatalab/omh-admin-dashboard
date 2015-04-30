@@ -46,6 +46,7 @@ class Datum
   field :OstomyOutput, type: String
   field :MealPercentReason, type: String
   field :Vomiting, type: Integer
+  field :ProviderContactOstomy, type: Integer
 
 
 ## For RA
@@ -63,14 +64,16 @@ class Datum
 
 ## For compliance
   field :HoursWithPhoneOn, type: String
-  field :ReasonToTurnOffAppOther, type: String
-  field :ActivityDuringPhoneOffOther, type: String
   field :ActivityDuringPhoneOff, type: String
-  field :PhonePhysicallyOther, type: String
-  field :ReasonToTurnOffApp, type: String
-  field :PhonePhysicallyOn, type: String
-  field :PhoneIsPhysicallyOnHours, type: String
+  field :ActivityDuringPhoneOffOther, type: String
   field :TurnOffApp, type: Integer
+  field :ReasonToTurnOffApp, type: String
+  field :ReasonToTurnOffAppOther, type: String
+  field :PhoneIsPhysicallyOnHours, type: String
+  field :PhonePhysicallyOn, type: String
+  field :PhonePhysicallyOther, type: String
+  field :PhoneNotPhysicallyOnAct, type: String
+  field :PhoneNotPhysicallyOnActivityOther, type: String
 
 
 ## For non-stoma

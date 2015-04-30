@@ -3,7 +3,7 @@
         <%= stylesheet_link_tag "fullcalendar", "calendar"%>
 
         <%= javascript_include_tag "d3.min", "jquery.min", "bootstrap.min", "moment.min", "fullcalendar", "gcal", "fullcalendar_implementation"%>
-        
+
         <style>
         .day_viz {
             position: absolute; top: 50%; left: 3px; right: 3px; bottom: 3px; opacity: 0.5;
@@ -18,7 +18,7 @@
         .legend.active_time_in_seconds { background-color: #FFAC46; }
         .legend.time_not_at_home_in_seconds { background-color: #46D1FF; }
         .legend.max_gait_speed_in_meter_per_second { background-color: #6EEDA5; }
-       
+
 
         #filter_controls { padding: 3px; }
         </style>
@@ -31,13 +31,13 @@
 
         <!-- http://ohmage-omh.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json -->
 
-        <div class="fc-toolbar"> 
+        <div class="fc-toolbar">
             <div class="fc-center">
-                <button id="max_gait_speed_in_meter_per_second_button" class="fc-button fc-state-default"  type="button">Max Walking Speed</button>
-                <button id="active_time_in_seconds_button" class="fc-button fc-state-default" type="button">Active Time In Seconds</button>
-                 <button id="time_not_at_home_in_seconds_button" class="fc-button fc-state-default" type="button">Time Not At Home In Seconds</button>
+                <button id="max_gait_speed_in_meter_per_second_button" class="fc-button fc-state-default"  type="button">Max Walking Speed(m/s)</button>
+                <button id="active_time_in_seconds_button" class="fc-button fc-state-default" type="button">Active Time In Minutes</button>
+                 <button id="time_not_at_home_in_seconds_button" class="fc-button fc-state-default" type="button">Time Not At Home In Minutes</button>
                 <button id="all_three_bars" class="fc-button fc-state-default"  type="button">View All</button>
-            </div>          
+            </div>
         </div>
 
         <div class="container-fluid">
@@ -58,20 +58,20 @@
                             <table id="stats">
                                 <tr>
                                     <td><span class="legend max_gait_speed_in_meter_per_second"></span></td>
-                                    <td class="stat_label">Max Walking Speed:</td>
+                                    <td class="stat_label">Max Walking Speed (m/s):</td>
                                     <td><span id="info_max_gait_speed_in_meter_per_second" data-field="max_gait_speed_in_meter_per_second" class="stat_value"></span></td>
-                            
+
                                 </tr>
                                 <tr>
                                     <td><span class="legend active_time_in_seconds"></span></td>
-                                    <td class="stat_label">Active Time In Seconds:</td>
+                                    <td class="stat_label">Active Time In Minutes:</td>
                                     <td><span id="info_active_time_in_seconds" data-field="active_time_in_seconds" class="stat_value"></span></td>
                                 </tr>
                                 <tr>
                                     <td><span class="legend time_not_at_home_in_seconds"></span></td>
-                                    <td class="stat_label">TIme Not At Home In Seconds:</td>
+                                    <td class="stat_label">TIme Not At Home In Minutes:</td>
                                     <td><span id="info_time_not_at_home_in_seconds" data-field="time_not_at_home_in_seconds" class="stat_value"></span></td>
-                                
+
                                 </tr>
 
                                 <tr>

@@ -4,5 +4,5 @@ class Admin::MobilityDailySummaryDataPointsController < ApplicationController
     respond_to do |format|
        format.csv {render text: @user.mobility_daily_summary_data_csv }
     end
-  end 
+  end
 end

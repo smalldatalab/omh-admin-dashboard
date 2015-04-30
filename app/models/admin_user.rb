@@ -3,7 +3,7 @@ class AdminUser < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :study_owners 
+  has_many :study_owners
   has_many :studies, through: :study_owners
 
   has_many :users, through: :studies
@@ -15,5 +15,5 @@ class AdminUser < ActiveRecord::Base
   validates :email, presence: true
   validates :password, :password_confirmation, presence: true, on: :create
   validates :password, confirmation: true
-  
+
 end

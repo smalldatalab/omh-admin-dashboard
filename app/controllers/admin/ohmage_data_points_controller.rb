@@ -6,4 +6,5 @@ class Admin::OhmageDataPointsController < ApplicationController
        format.csv {render text: @user.ohmage_data_csv }
     end
   end
+
 end

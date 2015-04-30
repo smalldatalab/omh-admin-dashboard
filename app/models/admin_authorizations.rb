@@ -30,7 +30,7 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
       end
   	when 'User'
   	  if user.researcher
-  	  	user.users
+        user.users
   	  else
   	  	collection
   	  end

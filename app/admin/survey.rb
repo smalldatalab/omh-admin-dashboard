@@ -1,5 +1,5 @@
 ActiveAdmin.register Survey do
-  permit_params :name, :version, :public_to_all_users, :description, :definition
+  permit_params :name, :version, :public_to_all_users, :description, :definition, :study_ids => [], studies_attributes: [:id, :name]
   menu priority: 7
 
   index do
@@ -10,9 +10,9 @@ ActiveAdmin.register Survey do
     column :public_to_all_users
     column :description
     column :studies do |q|
-      q.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, ''
+      q.studies.all.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
     end
-   
+
     actions
   end
 
@@ -20,28 +20,33 @@ ActiveAdmin.register Survey do
   filter :version
 
 
-  show do 
-     attributes_table do 
-      row :id 
+  show do
+     attributes_table do
+      row :id
       row :version
       row :description
       row :definition
-      row :created_at 
+      row :created_at
       row :updated_at
       bool_row :public_to_all_users
 
     end
     active_admin_comments
-  end 
+  end
 
   form do |f|
     f.inputs "Survey Details" do
       f.input :name
-      f.input :version 
+      f.input :version
       f.input :description
-      f.input :public_to_all_users, as: :boolean
+      if !current_admin_user.researcher?
+        f.input :public_to_all_users, as: :boolean
+      end
+      if current_admin_user.researcher?
+        f.input :studies, as: :check_boxes, collection: current_admin_user.studies
+      end
       f.input :definition, as: :text, validates: true, size: nil
     end
   f.actions
   end
-end 
+end

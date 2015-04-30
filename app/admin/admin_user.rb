@@ -11,7 +11,7 @@ ActiveAdmin.register AdminUser do
 
     column :studies do |q|
       if q.studies.present?
-       study_name = q.studies.all.map {|a| a.name.inspect}.join(', ')
+       study_name = q.studies.all.map {|a| a.name.inspect}.uniq.join(', ')
        study_name = study_name.gsub /"/, ''
       end
     end
@@ -30,7 +30,7 @@ ActiveAdmin.register AdminUser do
       bool_row :researcher
       row :studies do |q|
         if q.studies.present?
-         study_name = q.studies.all.map {|a| a.name.inspect}.join(', ')
+         study_name = q.studies.all.map {|a| a.name.inspect}.uniq.join(', ')
          study_name = study_name.gsub /"/, ''
         end
       end

@@ -9,15 +9,39 @@ ActiveAdmin.register User  do
     column :gmail
     column :first_name
     column :last_name
-    column :studies do |user|
-      user.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, ''
+
+    if !current_admin_user.researcher?
+      column :studies do |user|
+        user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+      end
+    else
+      column :studies do |user|
+        a = user.studies & current_admin_user.studies
+        a.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+      end
     end
-    column :data_streams do |user|
-      user.data_streams.all.uniq.map { |a| a.name.inspect}.join(', ').gsub /"/, ''
+    if !current_admin_user.researcher?
+      column :data_streams do |user|
+        user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+      end
+    else
+      column :data_streams do |user|
+        common_elements = user.data_streams & current_admin_user.data_streams
+        common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+      end
     end
-    column :surveys do |user|
-      user.surveys.all.uniq.map { |a| a.name.inspect}.join(', ').gsub /"/, ''
+
+    if !current_admin_user.researcher?
+      column :surveys do |user|
+        user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+      end
+    else
+      column :surveys do |user|
+        common_elements = user.surveys & current_admin_user.surveys
+        common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+      end
     end
+
     column("Registered in Database") { |user| user.registrated_in_database }
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
     column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
@@ -37,14 +61,37 @@ ActiveAdmin.register User  do
       row :first_name
       row :last_name
       row :gmail
-      row :studies do |user|
-        user.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, ''
+      if !current_admin_user.researcher?
+        row :studies do |user|
+          user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
+      else
+        row :studies do |user|
+          common_elements = user.studies & current_admin_user.studies
+          common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
       end
-      row :data_streams do |user|
-        user.data_streams.all.map { |a| a.name.inspect}.join(', ').gsub /"/, ''
+
+      if !current_admin_user.researcher?
+        row :data_streams do |user|
+          user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
+      else
+        row :data_streams do |user|
+          common_elements = user.data_streams & current_admin_user.data_streams
+          common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
       end
-      row :surveys do |user|
-        user.surveys.all.map { |a| a.name.inspect}.join(', ').gsub /"/, ''
+
+      if !current_admin_user.researcher?
+        row :surveys do |user|
+          user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
+      else
+        row :surveys do |user|
+          common_elements = user.surveys & current_admin_user.surveys
+          common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
       end
       row("Registered in Database") { |user| user.registrated_in_database }
       row("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
@@ -80,10 +127,6 @@ ActiveAdmin.register User  do
     link_to 'PAM Data CSV File', admin_user_pam_data_points_path(user, format: 'csv')
   end
 
-  # action_item :only => :show do
-  #   link_to 'Mobility Data csv File', admin_user_mobility_data_points_path(user, format: 'csv')
-  # end
-
   action_item :only => :show do
     link_to 'Mobility Daily Summary Data csv File', admin_user_mobility_daily_summary_data_points_path(user, format: 'csv')
   end
@@ -98,9 +141,9 @@ ActiveAdmin.register User  do
     column :gmail
     column :first_name
     column :last_name
-    column("Studies") {|user| user.studies.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
-    column("Data Streams") {|user| user.data_streams.all.map {|a| a.name.inspect}.join(', ').gsub /"/, '' }
-    column("Surveys") {|user| user.surveys.all.map {|a| a.name.inspect}.join(', ').gsub /"/, ''}
+    column("Studies") {|user| user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
+    column("Data Streams") {|user| user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
+    column("Surveys") {|user| user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''}
     column("PAM Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores') }
     column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date}
@@ -108,5 +151,11 @@ ActiveAdmin.register User  do
     column (:updated_at) { |time| time.updated_at.to_formatted_s(:long_ordinal)}
   end
 
+
+  controller do
+    def self.get_common_surveys
+      current_admin_user.studies
+    end
+  end
 end
 

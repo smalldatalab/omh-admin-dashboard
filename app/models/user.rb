@@ -84,7 +84,17 @@ class User < ActiveRecord::Base
     end
   end
 
+  # def self.get_the_current_user_surveys
+  #   sslfjkdsj
+  #   survey_names = []
+  #   current_admin_user.surveys.each do |a|
+  #     survey_names.push(a.name)
+  #   end
+  #   return survey_names
+  # end
+
   def all_ohmage_data_points
+    # self.get_common_surveys
     if user_record.nil?
       return nil
     else
@@ -164,7 +174,14 @@ class User < ActiveRecord::Base
       if user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).last.nil?
         return nil
       else
-        survey_keys = []
+        survey_keys = [
+                      'id',
+                      'user_id',
+                      'creation_date_time',
+                      'survey_namespace',
+                      'survey_name',
+                      'survey_version'
+                      ]
         user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).each do |a|
           if a.body.data
             a.body.data.attributes.each do |key, value|
@@ -178,10 +195,20 @@ class User < ActiveRecord::Base
   end
 
   def get_all_survey_question_values(survey_keys, data_point)
-    survey_values = []
+    survey_values = [
+                    data_point._id,
+                    data_point.user_id,
+                    data_point.header.creation_date_time,
+                    data_point.header.schema_id.namespace,
+                    data_point.header.schema_id.name,
+                    data_point.header.schema_id.version.major.to_s + '.' + data_point.header.schema_id.version.minor.to_s
+                    ]
+    fixed_survey_values_count = survey_values.length
     if data_point.body.data
-      survey_keys.each do |key|
-        survey_values << data_point.body.data[key] ? data_point.body.data[key] : nil
+      survey_keys.each_with_index do |key, index|
+        if index >= fixed_survey_values_count
+          survey_values << data_point.body.data[key] ? data_point.body.data[key] : nil
+        end
       end
     end
     return survey_values
@@ -191,16 +218,16 @@ class User < ActiveRecord::Base
   def ohmage_data_csv
     CSV.generate do |csv|
       keys = get_all_survey_question_keys
-      if keys
-        csv << keys
-        if all_ohmage_data_points.nil?
-          return nil
-        else
-          all_ohmage_data_points.each do |data_point|
-            csv << get_all_survey_question_values(keys, data_point) if data_point.body.data
+        if keys
+          csv << keys
+          if all_ohmage_data_points.nil?
+            return nil
+          else
+            all_ohmage_data_points.each do |data_point|
+              csv << get_all_survey_question_values(keys, data_point) if data_point.body.data
+            end
           end
         end
-      end
     end
   end
 
