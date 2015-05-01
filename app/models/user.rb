@@ -248,14 +248,14 @@ class User < ActiveRecord::Base
               'modality',
               'date',
               'device',
-              'active time in seconds',
+              'active time in minutes',
               'walking distance in km',
               'steps',
               'geodiameter in km',
               'max gait speed in meter per second',
               'leaving home time',
               'return home time',
-              'time not at home in seconds',
+              'time not at home in minutes',
               'coverage'
              ]
       if all_calendar_data_points.nil?
@@ -276,14 +276,14 @@ class User < ActiveRecord::Base
                   data_point.header.acquisition_provenance.modality,
                   escape_nil_body(data_point, :date),
                   escape_nil_body(data_point, :device),
-                  escape_nil_body(data_point, :active_time_in_seconds),
+                  escape_nil_body(data_point, :active_time_in_seconds).nil? ? nil : (data_point.body.active_time_in_seconds / 60.00),
                   escape_nil_body(data_point, :walking_distance_in_km),
                   escape_nil_body(data_point, :steps),
                   escape_nil_body(data_point, :geodiameter_in_km),
                   escape_nil_body(data_point, :max_gait_speed_in_meter_per_second),
                   escape_nil_body(data_point, :leave_home_time),
                   escape_nil_body(data_point, :return_home_time),
-                  escape_nil_body(data_point, :time_not_at_home_in_seconds),
+                  escape_nil_body(data_point, :time_not_at_home_in_seconds).nil? ? nil : (data_point.body.time_not_at_home_in_seconds / 60.00),
                   escape_nil_body(data_point, :coverage)
                   ]
         end
@@ -341,5 +341,6 @@ class User < ActiveRecord::Base
   def escape_nil_body(data, attribute)
     data.body.nil? ? nil : data.body.send(attribute)
   end
+
 
 end
