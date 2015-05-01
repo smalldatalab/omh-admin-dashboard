@@ -59,9 +59,9 @@ function bindDay(today, ranges, target) {
                 width: "32%", height: (v/ranges[k] * 100) + "%",
                 background: metric_colors[k]
             })
-            .appendTo(target); 
+            .appendTo(target);
 
-        $bar.addClass(metric_class_names[k]);     
+        $bar.addClass(metric_class_names[k]);
 
         // add a label to the bar
         $("<div />")
@@ -78,22 +78,22 @@ function bindDay(today, ranges, target) {
         i += 1;
     });
 
-   
+
     // $("<div />").append($("<b />").text("time_not_at_home_in_seconds: ")).append($("<span />").text(today['time_not_at_home_in_seconds']))
     //     .appendTo(target);
     // $("<div />").append($("<b />").text("max_gait_speed_in_meter_per_second: ")).append($("<span />").text(today['max_gait_speed_in_meter_per_second']))
     //     .appendTo(target);
     // $("<div />").append($("<b />").text("active_time_in_seconds: ")).append($("<span />").text(today['active_time_in_seconds']))
     //     .appendTo(target);
-    
+
 }
 
 $(document).ready(function() {
     var my_daily_data = null;
     var ranges = null;
-    var metrics = [ 'max_gait_speed_in_meter_per_second', 'active_time_in_seconds','time_not_at_home_in_seconds'];
+    var metrics = ['max_gait_speed_in_meter_per_second', 'active_time_in_seconds','time_not_at_home_in_seconds'];
     var calendar_data = $('#calendar_data_points').data('url');
-    
+
     // get the dummy data we created
     $.getJSON(calendar_data)
         .done(function(data) {
@@ -106,7 +106,7 @@ $(document).ready(function() {
 
 
             var my_daily_array = Object.keys(my_daily_data).map(function(k) { return my_daily_data[k] });
-            
+
             // determine the maximum value for each metric so we can scale it
             // 'ranges' is an object with a key for each metric and its value being the max for that metric
             ranges = metrics.reduce(function(result, m) {
@@ -123,7 +123,7 @@ $(document).ready(function() {
             // means = metrics.reduce(function(result, m) {
             //     result[m] = d3.mean(my_daily_array, function(d) {return d[m]});
             //     return result;
-            // }, {}); 
+            // }, {});
 
             // console.log("Test 1: ", deviations);
             // console.log("Test 2: ", means);
@@ -140,7 +140,7 @@ $(document).ready(function() {
         .fail(function() {
             alert("User does not have mobility daily data!");
         });
-    
+
     // create the main calendar widget
     $('#calendar').fullCalendar({
         /*
@@ -183,7 +183,7 @@ $(document).ready(function() {
             $("#info_content").stop().slideDown(300);
 
             var end_inclusive = end.clone().subtract(1, 'day');
-            
+
             var $info = $("#info");
 
             // get data for all selected days, if available
@@ -197,7 +197,7 @@ $(document).ready(function() {
                         return {date: d.toJSON(), values: my_daily_data[d.toJSON()]};
                     });
             }
-            
+
 
             console.log("Data for selected days: ", days_data);
 
@@ -246,25 +246,25 @@ $(document).ready(function() {
         }
     });
 
-    
+
     $('#max_gait_speed_in_meter_per_second_button').click(function() {
         $('div.day_viz div.time_not_at_home_in_seconds_bar').hide();
         $('div.day_viz div.active_time_in_seconds_bar').hide();
         $('div.day_viz div.max_gait_speed_in_meter_per_second_bar').show();
-    }); 
-   
+    });
+
 
     $('#time_not_at_home_in_seconds_button').click(function() {
         $('div.day_viz div.max_gait_speed_in_meter_per_second_bar').hide();
         $('div.day_viz div.active_time_in_seconds_bar').hide();
         $('div.day_viz div.time_not_at_home_in_seconds_bar').show();
-    }); 
+    });
 
     $('#active_time_in_seconds_button').click(function() {
         $('div.day_viz div.time_not_at_home_in_seconds_bar').hide();
         $('div.day_viz div.max_gait_speed_in_meter_per_second_bar').hide();
         $('div.day_viz div.active_time_in_seconds_bar').show();
-    }); 
+    });
 
     $('#all_three_bars').click(function() {
         $('div.day_viz div.active_time_in_seconds_bar').show();
