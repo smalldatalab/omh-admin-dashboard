@@ -84,7 +84,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def all_ohmage_data_points(admin_id)
+  def all_ohmage_data_points(admin_id=nil)
     if user_record.nil?
       return nil
     else
@@ -166,7 +166,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def get_all_survey_question_keys(admin_id)
+  def get_all_survey_question_keys(admin_id=nil)
     ohmage_data_points = all_ohmage_data_points(admin_id)
     if user_record.nil?
       return nil
@@ -215,7 +215,7 @@ class User < ActiveRecord::Base
   end
 
 
-  def ohmage_data_csv(admin_id)
+  def ohmage_data_csv(admin_id=nil)
     CSV.generate do |csv|
       keys = get_all_survey_question_keys(admin_id)
 
