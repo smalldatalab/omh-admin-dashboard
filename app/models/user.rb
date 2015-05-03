@@ -84,24 +84,23 @@ class User < ActiveRecord::Base
     end
   end
 
-  # def self.get_the_current_user_surveys
-  #   sslfjkdsj
-  #   survey_names = []
-  #   current_admin_user.surveys.each do |a|
-  #     survey_names.push(a.name)
-  #   end
-  #   return survey_names
-  # end
-
-  def all_ohmage_data_points
-    # self.get_common_surveys
+  def all_ohmage_data_points(admin_id)
     if user_record.nil?
       return nil
     else
-      if user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).last.nil?
+      ohmage_data_points = user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/)
+      if ohmage_data_points.last.nil?
         return nil
       else
-        user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/)
+        if AdminUser.find(admin_id).researcher?
+          admin_surveys = []
+          AdminUser.find(admin_id).surveys.each do |a|
+            admin_surveys.push(a.name)
+          end
+          user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/, 'header.schema_id.name' => { '$in' => admin_surveys})
+        else
+          ohmage_data_points
+        end
       end
     end
   end
@@ -167,11 +166,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  def get_all_survey_question_keys
+  def get_all_survey_question_keys(admin_id)
+    ohmage_data_points = all_ohmage_data_points(admin_id)
     if user_record.nil?
       return nil
     else
-      if user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).last.nil?
+      if ohmage_data_points.last.nil?
         return nil
       else
         survey_keys = [
@@ -182,7 +182,7 @@ class User < ActiveRecord::Base
                       'survey_name',
                       'survey_version'
                       ]
-        user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).each do |a|
+        ohmage_data_points.each do |a|
           if a.body.data
             a.body.data.attributes.each do |key, value|
               survey_keys.push(key) unless survey_keys.include? key
@@ -215,19 +215,22 @@ class User < ActiveRecord::Base
   end
 
 
-  def ohmage_data_csv
+  def ohmage_data_csv(admin_id)
     CSV.generate do |csv|
-      keys = get_all_survey_question_keys
-        if keys
-          csv << keys
-          if all_ohmage_data_points.nil?
-            return nil
-          else
-            all_ohmage_data_points.each do |data_point|
-              csv << get_all_survey_question_values(keys, data_point) if data_point.body.data
-            end
+      keys = get_all_survey_question_keys(admin_id)
+
+      if keys
+        csv << keys
+        data_points = all_ohmage_data_points(admin_id)
+
+        if data_points.nil?
+          return nil
+        else
+          data_points.each do |data_point|
+            csv << get_all_survey_question_values(keys, data_point) if data_point.body.data
           end
         end
+      end
     end
   end
 
