@@ -84,7 +84,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def all_ohmage_data_points(admin_id=nil)
+  def all_ohmage_data_points(admin_id)
     if user_record.nil?
       return nil
     else
@@ -166,7 +166,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def get_all_survey_question_keys(admin_id=nil)
+  def get_all_survey_question_keys(admin_id)
     ohmage_data_points = all_ohmage_data_points(admin_id)
     if user_record.nil?
       return nil
