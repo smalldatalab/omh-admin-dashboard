@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return ''
     else
-      if user_record.pam_data_points.where('header.schema_id.name' => data_stream).nil?
+      if user_record.pam_data_points.where('header.schema_id.name' => data_stream).last.nil?
         return ''
       else
         DateTime.parse(user_record.pam_data_points.where('header.schema_id.name' => data_stream).order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return ''
     else
-      if user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).nil?
+      if user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).last.nil?
         return ''
       else
         DateTime.parse(user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
@@ -61,7 +61,7 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return nil
     else
-      if user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').nil?
+      if user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').last.nil?
         return nil
       else
         user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
@@ -72,8 +72,8 @@ class User < ActiveRecord::Base
   def all_mobility_data_points
     if user_record.nil?
       return nil
-      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').nil?
-        if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream').nil?
+      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS').last.nil?
+        if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream').last.nil?
           return nil
         else
           user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream')
@@ -84,12 +84,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  def all_ohmage_data_points(admin_id)
+  def all_ohmage_data_points(admin_id=nil)
     if user_record.nil?
       return nil
     else
       ohmage_data_points = user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/)
-      if ohmage_data_points.nil?
+      if ohmage_data_points.last.nil?
         return nil
       else
         if AdminUser.find(admin_id).researcher?
@@ -109,7 +109,7 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return nil
     else
-      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary').nil?
+      if user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary').last.nil?
         return nil
       else
         user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary')
@@ -166,7 +166,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def get_all_survey_question_keys(admin_id)
+  def get_all_survey_question_keys(admin_id=nil)
     ohmage_data_points = all_ohmage_data_points(admin_id)
     if user_record.nil?
       return nil
@@ -221,7 +221,6 @@ class User < ActiveRecord::Base
 
       if keys
         csv << keys
-
         data_points = all_ohmage_data_points(admin_id)
 
         if data_points.nil?
