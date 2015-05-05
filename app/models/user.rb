@@ -215,7 +215,7 @@ class User < ActiveRecord::Base
   end
 
 
-  def ohmage_data_csv(admin_id=nil)
+  def ohmage_data_csv(admin_id)
     CSV.generate do |csv|
       keys = get_all_survey_question_keys(admin_id)
 
