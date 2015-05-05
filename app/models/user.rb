@@ -171,7 +171,7 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return nil
     else
-      if ohmage_data_points.last.nil?
+      if ohmage_data_points.nil?
         return nil
       else
         survey_keys = [
