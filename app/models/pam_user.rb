@@ -7,9 +7,9 @@ class PamUser
   has_many :pam_data_points
 
   embeds_one :email_address
-   
 
-  
 
- 
+
+
+
 end

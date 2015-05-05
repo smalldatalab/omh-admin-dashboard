@@ -227,7 +227,7 @@ class User < ActiveRecord::Base
           return nil
         else
           data_points.each do |data_point|
-            csv << get_all_survey_question_values(keys, data_point, admin_id) if data_point.body.data
+            csv << get_all_survey_question_values(keys, data_point) if data_point.body.data
           end
         end
       end
