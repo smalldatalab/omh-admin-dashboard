@@ -1,4 +1,4 @@
-class Admin::OhmageDataPointsController < ActionController::Base
+class Admin::OhmageDataPointsController < ApplicationController
   def index
     @user   = User.find(params[:user_id])
     respond_to do |format|
