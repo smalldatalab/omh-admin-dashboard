@@ -84,7 +84,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def all_ohmage_data_points(admin_id)
+  def all_ohmage_data_points(admin_user_id)
     if user_record.nil?
       return nil
     else
@@ -92,11 +92,9 @@ class User < ActiveRecord::Base
       if ohmage_data_points.last.nil?
         return nil
       else
-        p "fhjsdhfkjahdfkahdskhfkjasdhfkashdfjadshfakjhfakjh"
-        p admin_id
-        if AdminUser.find(admin_id).researcher?
+        if AdminUser.find(admin_user_id).researcher?
           admin_surveys = []
-          AdminUser.find(admin_id).surveys.each do |a|
+          AdminUser.find(admin_user_id).surveys.each do |a|
             admin_surveys.push(a.name)
           end
           user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/, 'header.schema_id.name' => { '$in' => admin_surveys})
@@ -168,8 +166,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def get_all_survey_question_keys(admin_id)
-    ohmage_data_points = all_ohmage_data_points(admin_id)
+  def get_all_survey_question_keys(admin_user_id)
+    ohmage_data_points = all_ohmage_data_points(admin_user_id)
     if user_record.nil?
       return nil
     else
@@ -217,13 +215,13 @@ class User < ActiveRecord::Base
   end
 
 
-  def ohmage_data_csv(admin_id=nil)
+  def ohmage_data_csv(admin_user_id=nil)
     CSV.generate do |csv|
-      keys = get_all_survey_question_keys(admin_id)
+      keys = get_all_survey_question_keys(admin_user_id)
 
       if keys
         csv << keys
-        data_points = all_ohmage_data_points(admin_id)
+        data_points = all_ohmage_data_points(admin_user_id)
 
         if data_points.nil?
           return nil
