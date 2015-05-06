@@ -60,6 +60,9 @@ ActiveRecord::Schema.define(version: 20150506170355) do
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
+  create_table "common_surveys", force: true do |t|
+  end
+
   create_table "data_streams", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -87,6 +90,14 @@ ActiveRecord::Schema.define(version: 20150506170355) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "study_common_surveys", force: true do |t|
+    t.integer "common_survey_id"
+    t.integer "study_id"
+  end
+
+  add_index "study_common_surveys", ["common_survey_id"], name: "index_study_common_surveys_on_common_survey_id", using: :btree
+  add_index "study_common_surveys", ["study_id"], name: "index_study_common_surveys_on_study_id", using: :btree
 
   create_table "study_owners", force: true do |t|
     t.integer  "admin_user_id"
