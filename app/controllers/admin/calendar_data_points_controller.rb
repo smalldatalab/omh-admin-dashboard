@@ -1,4 +1,4 @@
-class CalendarDataPointsController < ApplicationController
+class Admin::CalendarDataPointsController < ApplicationController
   def index
     @user = User.find(params[:user_id])
     respond_to do |format|
