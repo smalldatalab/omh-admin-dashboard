@@ -95,7 +95,7 @@ class User < ActiveRecord::Base
         if AdminUser.find(admin_user_id).researcher?
           admin_surveys = []
           AdminUser.find(admin_user_id).surveys.each do |a|
-            admin_surveys.push(a.name)
+            admin_surveys.push(a.search_key_name)
           end
           user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/, 'header.schema_id.name' => { '$in' => admin_surveys})
         else

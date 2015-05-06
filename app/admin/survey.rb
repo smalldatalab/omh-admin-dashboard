@@ -1,5 +1,5 @@
 ActiveAdmin.register Survey do
-  permit_params :name, :version, :public_to_all_users, :description, :definition, :study_ids => [], studies_attributes: [:id, :name]
+  permit_params :name, :search_key_name, :version, :public_to_all_users, :description, :definition, :study_ids => [], studies_attributes: [:id, :name]
   menu priority: 7
 
   index do
@@ -23,6 +23,8 @@ ActiveAdmin.register Survey do
   show do
      attributes_table do
       row :id
+      row :name
+      row :search_key_name
       row :version
       row :description
       row :definition
@@ -37,6 +39,7 @@ ActiveAdmin.register Survey do
   form do |f|
     f.inputs "Survey Details" do
       f.input :name
+      f.input :search_key_name
       f.input :version
       f.input :description
       if !current_admin_user.researcher?
