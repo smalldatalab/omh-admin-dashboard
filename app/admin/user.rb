@@ -151,11 +151,5 @@ ActiveAdmin.register User  do
     column (:updated_at) { |time| time.updated_at.to_formatted_s(:long_ordinal)}
   end
 
-
-  controller do
-    def self.get_common_surveys
-      current_admin_user.studies
-    end
-  end
 end
 
