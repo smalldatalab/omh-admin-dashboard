@@ -92,6 +92,8 @@ class User < ActiveRecord::Base
       if ohmage_data_points.last.nil?
         return nil
       else
+        p "fhjsdhfkjahdfkahdskhfkjasdhfkashdfjadshfakjhfakjh"
+        p admin_id
         if AdminUser.find(admin_id).researcher?
           admin_surveys = []
           AdminUser.find(admin_id).surveys.each do |a|

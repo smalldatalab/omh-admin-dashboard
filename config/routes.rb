@@ -2,9 +2,9 @@ Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   # devise_for :users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  
 
-  namespace :admin do 
+
+  namespace :admin do
     resources :users do
       resources :pam_data_points
       resources :mobility_data_points
@@ -13,14 +13,14 @@ Rails.application.routes.draw do
       resources :mobility_daily_summary_data_points
     end
   end
-  
-  # namespace :users do 
+
+  # namespace :users do
   #   # resources :pam_data_points
   #   # resources :mobility_data_points
   #   # resources :ohmage_data_points
   #   # resources :calendar_data_points, :format => :json
 
-  # end 
+  # end
 
 
 
