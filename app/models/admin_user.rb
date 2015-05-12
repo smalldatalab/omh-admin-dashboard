@@ -15,6 +15,5 @@ class AdminUser < ActiveRecord::Base
   validates :email, presence: true
   validates :password, :password_confirmation, presence: true, on: :create
   validates :password, confirmation: true
-  validates :password, length: { minimum: 8 }
 
 end
