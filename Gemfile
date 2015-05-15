@@ -52,6 +52,17 @@ gem 'cancan'
 
 gem 'foreman',  '~> 0.63.0'
 
+#### Assets ####
+gem 'haml',             '~> 4.0'
+gem 'morrisjs-rails'
+gem 'raphael-rails'
+gem 'simple_form',      '~> 3.1'
+
+
+### Foundation ###
+gem 'foundation-rails'
+gem 'foundation-icons-sass-rails'
+
 group :development do
   gem "binding_of_caller"
   gem "better_errors"

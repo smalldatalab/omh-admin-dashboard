@@ -102,6 +102,14 @@ GEM
     formtastic (3.1.2)
       actionpack (>= 3.2.13)
     formtastic_i18n (0.1.1)
+    foundation-icons-sass-rails (3.0.0)
+      railties (>= 3.1.1)
+      sass-rails (>= 3.1.1)
+    foundation-rails (5.5.0.0)
+      railties (>= 3.1.0)
+      sass (>= 3.2.0, < 3.4)
+    haml (4.0.6)
+      tilt
     has_scope (0.6.0.rc)
       actionpack (>= 3.2, < 5)
       activesupport (>= 3.2, < 5)
@@ -144,6 +152,8 @@ GEM
       bson (~> 2.2)
       connection_pool (~> 2.0)
       optionable (~> 0.2.0)
+    morrisjs-rails (0.5.1)
+      railties (> 3.1, < 5)
     multi_json (1.10.1)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -186,6 +196,7 @@ GEM
       activesupport (>= 3.0)
       i18n
       polyamorous (~> 1.1)
+    raphael-rails (2.1.2)
     rdoc (4.1.2)
       json (~> 1.4)
     responders (1.1.2)
@@ -203,6 +214,9 @@ GEM
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     sequel (3.20.0)
+    simple_form (3.1.0)
+      actionpack (~> 4.0)
+      activemodel (~> 4.0)
     sinatra (1.0)
       rack (>= 1.0)
     spring (1.2.0)
@@ -258,16 +272,22 @@ DEPENDENCIES
   d3-rails (~> 3.5.2)
   devise (~> 3.4.1)
   foreman (~> 0.63.0)
+  foundation-icons-sass-rails
+  foundation-rails
+  haml (~> 4.0)
   jbuilder (~> 2.0)
   jquery-rails
   json (= 1.8.2)
   mongoid (= 4.0.0)
   mongoid_rails_migrations
+  morrisjs-rails
   pg
   quiet_assets
   rails (= 4.1.4)
+  raphael-rails
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
+  simple_form (~> 3.1)
   spring
   taps
   thin

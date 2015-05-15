@@ -93,6 +93,13 @@ $(document).ready(function() {
     var ranges = null;
     var metrics = ['max_gait_speed_in_meter_per_second', 'active_time_in_seconds','time_not_at_home_in_seconds'];
     var calendar_data = $('#calendar_data_points').data('url');
+    var one_day_pam_data = $('#one_day_pam_data').data('url');
+    var one_day_ohmage_data = $('#one_day_ohmage_data').data('url');
+    var ohmage_events_array = $('#ohmage_events_array').data('attribute');
+    var pam_events_array = $('#pam_events_array').data('attribute');
+    var events_array = $.merge( $.merge( [], pam_events_array ), ohmage_events_array );
+
+
 
     // get the dummy data we created
     $.getJSON(calendar_data)
@@ -102,8 +109,6 @@ $(document).ready(function() {
             my_daily_data = data['users']['c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c']['daily'];
 
             console.log("User data!: ", my_daily_data);
-
-
 
             var my_daily_array = Object.keys(my_daily_data).map(function(k) { return my_daily_data[k] });
 
@@ -155,9 +160,20 @@ $(document).ready(function() {
         unselectAuto: false,
         aspectRatio: 1.65,
         // googleCalendarApiKey: 'AIzaSyCZ3nNL96uCWFPKLPkSIzfxdRqg24vmTlE',
-        // events: {
-        //     googleCalendarId: '9r8k1mbgg9ehm9i91pp9esuv5o@group.calendar.google.com'
-        // },
+
+        events: events_array,
+
+        eventClick: function(event) {
+            if (event.title == 'ohmage') {
+                window.open(one_day_ohmage_data + event.start);
+
+            }
+            else {
+                window.open(one_day_pam_data + event.start);
+
+            }
+        },
+
         viewRender: function() {
             if ($("#show_bar_numbers").is(":checked")) { $(".bar_label").show(); } else { $(".bar_label").hide(); }
 

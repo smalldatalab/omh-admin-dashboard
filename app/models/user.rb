@@ -64,10 +64,90 @@ class User < ActiveRecord::Base
       if user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').last.nil?
         return nil
       else
-        user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
+        return user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
       end
     end
   end
+
+  def one_day_pam_data_points(date)
+    if user_record.nil?
+      return nil
+    else
+      if user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').last.nil?
+        return nil
+      else
+        user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores', 'header.creation_date_time' => date)
+      end
+    end
+  end
+
+  def one_day_ohmage_data_points(admin_user_id, date)
+    if user_record.nil?
+      return nil
+    else
+      ohmage_data_points = user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/, 'header.creation_date_time' => date)
+      if ohmage_data_points.last.nil?
+        return nil
+      else
+        if AdminUser.find(admin_user_id).researcher?
+          admin_surveys = []
+          AdminUser.find(admin_user_id).surveys.each do |a|
+            admin_surveys.push(a.search_key_name)
+          end
+          user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/, 'header.schema_id.name' => { '$in' => admin_surveys}, 'header.creation_date_time' => date)
+        else
+          ohmage_data_points
+        end
+      end
+    end
+  end
+
+
+  def calendar_pam_events_array
+    pam_events_array = []
+    pam_events_date = []
+
+    if  all_pam_data_points.nil?
+      return nil
+    else
+      all_pam_data_points.each do |pam_data|
+        pam_events_date << pam_data.header.creation_date_time[0..9]
+        pam_events_date = pam_events_date.uniq
+      end
+    end
+
+    pam_events_date.each do |pam_date|
+      pam_events_array.push({
+        title: 'PAM',
+        start: pam_date
+      })
+    end
+
+    return pam_events_array.to_json
+  end
+
+  def calendar_ohmage_events_array(admin_user_id)
+    ohmage_events_array = []
+    ohamge_events_date = []
+
+    if all_ohmage_data_points(admin_user_id).nil?
+      return nil
+    else
+      all_ohmage_data_points(admin_user_id).each do |ohmage_data|
+        ohamge_events_date << ohmage_data.header.creation_date_time[0..9]
+        ohamge_events_date = ohamge_events_date.uniq
+      end
+    end
+
+    ohamge_events_date.each do |ohmage_date|
+      ohmage_events_array << {
+        title: 'ohmage',
+        start: ohmage_date
+      }
+    end
+    return ohmage_events_array.to_json
+  end
+
 
   def all_mobility_data_points
     if user_record.nil?
@@ -300,9 +380,9 @@ class User < ActiveRecord::Base
                   users: {
                     c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c: {
                       fullname: "",
-                        givenname: "",
-                        familyname: "",
-                        daily: {}
+                      givenname: "",
+                      familyname: "",
+                      daily: {}
                     }
                   }
                 }
@@ -314,12 +394,14 @@ class User < ActiveRecord::Base
           max_gait_speed_in_meter_per_second: escape_and_round(data_point.body.max_gait_speed_in_meter_per_second),
           active_time_in_seconds: (escape_and_round(data_point.body.active_time_in_seconds) / 60),
           time_not_at_home_in_seconds:  (escape_and_round(data_point.body.time_not_at_home_in_seconds) / 60)
-
         }
       end
     end
     return JSON.parse(json_data.to_json)
   end
+
+
+
 
   def escape_and_round(data)
     data ? data.round : 0

@@ -1,0 +1,45 @@
+.ohmage-data-points-display
+  .top-area
+    %h1 ohmage survey
+
+  .survey-area
+    - url_var = request.original_url
+    - a = url_var.split(//).last(13).join.to_i
+    - a = Time.zone.at(a / 1000.0).to_s[0..9]
+
+    - if @user.one_day_ohmage_data_points(current_admin_user.id, /#{a}/).nil?
+      - return "NO Surveys!"
+    - else
+      - survey_name = []
+      - @user.one_day_ohmage_data_points(current_admin_user.id, /#{a}/).each do |data_point|
+        - survey_name = survey_name.push(data_point.header.schema_id.name).uniq
+
+      - survey_name.each do |name|
+        .single-survey-group
+          %h3= name
+          %table
+            - survey_keys = []
+            - @user.one_day_ohmage_data_points(current_admin_user.id, /#{a}/).each do |data_point|
+              - if data_point.body.data
+                - if data_point.header.schema_id.name == name
+                  - data_point.body.data.attributes.each do |key, value|
+                    - survey_keys = survey_keys.push(key).uniq
+              - else
+                - return 'No display for surveys!'
+
+            %tr
+            - survey_keys.each do |key_name|
+              %th= key_name
+
+            - @user.one_day_ohmage_data_points(current_admin_user.id, /#{a}/).each do |data_point|
+              %tr
+              - i = 0
+              - if data_point.body.data
+                - data_point.body.data.attributes.each do |key, value|
+                  - if i <= survey_keys.length
+                    - key = survey_keys[i]
+                    %td= data_point.body.data[key]
+                    - i += 1
+
+              - else
+                %td= 'No display for surveys!'

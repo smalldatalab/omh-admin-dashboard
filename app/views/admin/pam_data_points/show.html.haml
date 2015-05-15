@@ -1,0 +1,43 @@
+.pam-data-display-page
+  .top-area
+    %h1 PAM Data Points
+
+  .bottom-area
+    %table
+      %tr
+        %th Date Time
+        %th Affect Arousal
+        %th Negative Affect
+        %th Positive Affect
+        %th Effective Time Frame
+        %th Affect Valence
+        %th Mood
+
+      - url_var = request.original_url
+      - a = url_var.split(//).last(13).join.to_i
+      - a = Time.zone.at(a/1000.0).to_s[0..9]
+
+      - if @user.one_day_pam_data_points(/#{a}/).nil?
+        %tr
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+
+      - else
+        - @user.one_day_pam_data_points(/#{a}/).each do |data_point|
+          %tr
+            %td=data_point.header.creation_date_time
+            %td=data_point.body.affect_arousal
+            %td=data_point.body.negative_affect
+            %td=data_point.body.positive_affect
+            %td=data_point.body.effective_time_frame.date_time
+            %td=data_point.body.affect_valence
+            %td=data_point.body.mood
+
+
+
+
