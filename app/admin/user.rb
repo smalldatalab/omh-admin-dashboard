@@ -42,9 +42,9 @@ ActiveAdmin.register User  do
       end
     end
 
-    # column("Registered in Database") { |user| user.registrated_in_database }
-    # column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
-    # column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
+    column("Registered in Database") { |user| user.registrated_in_database }
+    column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
     # column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
 
     actions
