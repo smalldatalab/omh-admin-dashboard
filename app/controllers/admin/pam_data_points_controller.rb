@@ -3,7 +3,7 @@ class Admin::PamDataPointsController < ApplicationController
      @user = User.find(params[:user_id])
      respond_to do |format|
         format.csv {render text: @user.pam_data_csv }
-        format.html {render action: 'show', method: @user.calendar_pam_events_array}
+        format.html {render partial: 'show', method: @user.calendar_pam_events_array}
      end
   end
 end
