@@ -15,13 +15,13 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :gmail
   # validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? }
 
-  # def registrated_in_database
-  #   if PamUser.where('email_address' => {'address' => self.gmail.gsub(/\s+/, "").downcase}).blank?
-  #     return "No"
-  #   else
-  #     return "Yes"
-  #   end
-  # end
+  def registrated_in_database
+    if PamUser.where('email_address' => {'address' => self.gmail.gsub(/\s+/, "").downcase}).blank?
+      return "No"
+    else
+      return "Yes"
+    end
+  end
 
   def user_record
     if PamUser.where('email_address' => {'address' => self.gmail.gsub(/\s+/, "").downcase}).blank?
