@@ -56,10 +56,6 @@ ActiveAdmin.register User  do
       render partial: 'calendar_view', locals: { users: @user}
     end
 
-    # panel "Mobility User Interface" do
-    #   render partial: 'mobility_user_interface', locals: { users: @user }
-    # end
-
     attributes_table do
       row :id
       row :first_name

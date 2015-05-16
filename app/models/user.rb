@@ -1,6 +1,4 @@
 class User < ActiveRecord::Base
-  # after_create :check_data_points
-
   has_many :study_participants
   has_many :studies, through: :study_participants
 
