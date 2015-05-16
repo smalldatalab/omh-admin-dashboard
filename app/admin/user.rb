@@ -42,7 +42,7 @@ ActiveAdmin.register User  do
       end
     end
 
-    column("Registered in Database") { |user| user.registrated_in_database }
+    # column("Registered in Database") { |user| user.registrated_in_database }
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
     column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
@@ -93,7 +93,7 @@ ActiveAdmin.register User  do
           common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
         end
       end
-      row("Registered in Database") { |user| user.registrated_in_database }
+      # row("Registered in Database") { |user| user.registrated_in_database }
       row("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
       row("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
       row("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
