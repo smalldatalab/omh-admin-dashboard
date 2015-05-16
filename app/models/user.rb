@@ -44,28 +44,6 @@ class User < ActiveRecord::Base
     end
   end
 
-
-  def all_ohmage_data_points(admin_user_id)
-    if user_record.nil?
-      return nil
-    else
-      ohmage_data_points = user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/)
-      if ohmage_data_points.last.nil?
-        return nil
-      else
-        if AdminUser.find(admin_user_id).researcher?
-          admin_surveys = []
-          AdminUser.find(admin_user_id).surveys.each do |a|
-            admin_surveys.push(a.search_key_name)
-          end
-          ohmage_data_points.where('header.schema_id.name' => { '$in' => admin_surveys})
-        else
-          ohmage_data_points
-        end
-      end
-    end
-  end
-
   def most_recent_ohmage_data_point_date(admin_user_id)
     if user_record.nil?
       return ''
@@ -88,19 +66,6 @@ class User < ActiveRecord::Base
         else
           DateTime.parse(ohmage_data_points.order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
         end
-      end
-    end
-  end
-
-  def all_pam_data_points
-    if user_record.nil?
-      return nil
-    else
-      pam_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
-      if pam_data_points.last.nil?
-        return nil
-      else
-        return pam_data_points
       end
     end
   end
@@ -185,6 +150,19 @@ class User < ActiveRecord::Base
     return ohmage_events_array.to_json
   end
 
+
+  def all_pam_data_points
+    if user_record.nil?
+      return nil
+    else
+      pam_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
+      if pam_data_points.last.nil?
+        return nil
+      else
+        return pam_data_points
+      end
+    end
+  end
 
   def all_mobility_data_points
     if user_record.nil?
@@ -440,8 +418,6 @@ class User < ActiveRecord::Base
   end
 
 
-
-
   def escape_and_round(data)
     data ? data.round : 0
   end
@@ -465,6 +441,4 @@ class User < ActiveRecord::Base
   def escape_nil_body(data, attribute)
     data.body.nil? ? nil : data.body.send(attribute)
   end
-
-
 end
