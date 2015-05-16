@@ -3,7 +3,7 @@ staging:
     default:
       database: omh
       hosts:
-        - localhost: 0.0.0.0:27017
+        - localhost:27017
       options:
   options:
 
