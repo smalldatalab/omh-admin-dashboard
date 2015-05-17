@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
 
   def registrated_in_database
     gmail = self.gmail.gsub(/\s+/, "").downcase
-    if user_email.('email_address' => {'address' => gmail}).blank?
+    if PamUser.where('email_address' => {'address' => gmail}).blank?
       return "No"
     else
       return "Yes"
