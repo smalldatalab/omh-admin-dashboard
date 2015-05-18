@@ -9,7 +9,7 @@ ActiveAdmin.register_page "Dashboard" do
   #     end
   #   end
   # end
-  # content do 
+  # content do
   #   columns do
   #     column do
   #       panel "Recent Users" do
@@ -29,7 +29,7 @@ ActiveAdmin.register_page "Dashboard" do
   #   end
   # end
 
-  content do 
+  content do
     render partial: 'intro_view'
-  end 
-end 
+  end
+end
