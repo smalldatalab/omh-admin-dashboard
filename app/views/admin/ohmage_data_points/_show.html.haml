@@ -56,7 +56,9 @@
                     - data_point.body.data.attributes.each do |key, value|
                       - survey_keys = survey_keys.push(key).uniq
                 - else
-                  - return 'No display for surveys!'
+                  - if data_point.header.schema_id.name == name
+                    - data_point.body.attributes.each do |key, value|
+                      - survey_keys = survey_keys.push(key).uniq
 
               %tr
               - survey_keys.each do |key_name|
