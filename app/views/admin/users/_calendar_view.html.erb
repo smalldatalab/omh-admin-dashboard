@@ -24,16 +24,15 @@
         </style>
 
  <body>
-        <div id="calendar_data_points" data-url="http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json"></div>
+        <div id="calendar_data_points" data-url="http://ohmage-omh.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json"></div>
         <!-- http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json -->
 
         <!-- http://localhost:3000/admin/users/<%= @user.id %>/calendar_data_points.json -->
 
         <!-- http://ohmage-omh.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json -->
 
-
-        <div id="one_day_pam_data" data-url="http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/pam_data_points?date="></div>
-        <div id="one_day_ohmage_data" data-url="http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/ohmage_data_points?date="></div>
+        <div id="one_day_pam_data" data-url="http://ohmage-omh.smalldata.io/admin/users/<%= @user.id %>/pam_data_points?date="></div>
+        <div id="one_day_ohmage_data" data-url="http://ohmage-omh.smalldata.io/admin/users/<%= @user.id %>/ohmage_data_points?date="></div>
         <div id="pam_events_array" data-attribute="<%= @user.calendar_pam_events_array %>"></div>
         <div id="ohmage_events_array" data-attribute="<%= @user.calendar_ohmage_events_array(current_admin_user.id) %>"></div>
 
