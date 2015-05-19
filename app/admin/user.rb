@@ -44,7 +44,7 @@ ActiveAdmin.register User  do
 
     column("Registered in Database") { |user| user.registrated_in_database }
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
-    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary') }
+    column("Mobility/Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary') }
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
 
     actions
@@ -95,7 +95,7 @@ ActiveAdmin.register User  do
       end
       row("Registered in Database") { |user| user.registrated_in_database }
       row("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
-      row("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
+      row("Mobility/Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
       row("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
 
       row :created_at
@@ -145,7 +145,7 @@ ActiveAdmin.register User  do
     column("Data Streams") {|user| user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
     column("Surveys") {|user| user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''}
     column("PAM Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores') }
-    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')}
+    column("Mobility/Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
     column (:created_at) { |time| time.created_at.to_formatted_s(:long_ordinal)}
     column (:updated_at) { |time| time.updated_at.to_formatted_s(:long_ordinal)}
