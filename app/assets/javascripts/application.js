@@ -14,5 +14,6 @@
 //= require jquery_ujs
 //= require foundation
 //= require turbolinks
+//= require hamlcoffee
 
 $(function(){ $(document).foundation(); });

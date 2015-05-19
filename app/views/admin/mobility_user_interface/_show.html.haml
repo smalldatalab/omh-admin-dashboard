@@ -1,0 +1,88 @@
+:javascript
+  $('.testing').click(function() {
+    $('.testing').addClass('red');
+  });
+
+:sass
+  .red
+    color: red
+
+
+.home-page
+  .nav-area
+    .row
+      .large-12.columns
+        .name
+          %h1.text-left Mobility-omh
+
+      %hr
+
+  .date-area
+    .row
+      .large-6.large-centered.columns
+        %ul.pagination
+          - current_date = Time.now
+          - previous_date = current_date.yesterday
+          - next_date = current_date.tomorrow
+
+          %li.arrow
+            %a.testing{href: ''} &laquo; Previous Day
+            = previous_date
+
+          %li.current
+            %a.testing{href: ' '} Today
+            = current_date
+
+          %li.arrow.unavailable
+            %a.testing{href:' '} Next Day &raquo;
+            = next_date
+
+
+
+
+  .footer-area
+    .row
+      .large-12.columns
+        %hr
+        %h5 CONTACTS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

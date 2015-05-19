@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :users do
+      resources :mobility_user_interface
       resources :pam_data_points
       resources :mobility_data_points
       resources :ohmage_data_points
