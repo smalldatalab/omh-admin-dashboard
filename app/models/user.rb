@@ -169,16 +169,12 @@ class User < ActiveRecord::Base
   def all_mobility_data_points
     if user_record.nil?
       return nil
-      ios_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'mobility-stream-iOS')
-      if ios_data_points.last.nil?
-        android_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'mobility-android-activity-stream')
-        if android_data_points.last.nil?
-          return nil
-        else
-          android_data_points
-        end
+    else
+      mobility_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary')
+      if mobility_data_points.last.nil?
+        return nil
       else
-        ios_data_points
+        mobility_data_points
       end
     end
   end
@@ -364,10 +360,10 @@ class User < ActiveRecord::Base
               'time not at home in minutes',
               'coverage'
              ]
-      if all_calendar_data_points.nil?
+      if all_mobility_data_points.nil?
         return nil
       else
-        all_calendar_data_points.each do |data_point|
+        all_mobility_data_points.each do |data_point|
           csv << [
                   data_point._id,
                   data_point.user_id,
