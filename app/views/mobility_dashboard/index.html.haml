@@ -27,8 +27,10 @@
 
 
 
-  #user_name
-  #selected_date
+    #user_name
+    -
+
+    #selected_date
 
   .row
     .col-md-8.col-md-offset-2
@@ -63,7 +65,7 @@
                 $('#user_name').html(username);
                 var device = url("#device") || "android";
                 var date = url("#date")? moment(url("#date")).toDate() : new Date();
-                 $('#selected_date').html(date);
+                $('#selected_date').html(date);
                 var redraw = function(){
                     $("#map, #timeline").html("Loading...");
                     drawDate(username, moment(date).format('YYYY-MM-DD'), device);
@@ -78,6 +80,7 @@
                 });
                 datepicker.on("changeDate", function(e){
                     date = e.date;
+                    $('#selected_date').html(date);
                     redraw();
                 });
                 $('.date').datepicker("setDate", date);
@@ -91,28 +94,29 @@
         }
         } );
 
-    var dsu = "https://ohmage-omh.smalldata.io/dsu/";
+        var dsu = "https://ohmage-omh.smalldata.io/dsu/";
 
-    function getSummaryDatapointId(username, date, device){
-        return  ["mobility-daily-summary", username, date, device.toLowerCase()].join("-");
-    }
+        function getSummaryDatapointId(username, date, device){
+            return  ["mobility-daily-summary", username, date, device.toLowerCase()].join("-");
+        }
 
-    function showSummary(username, date, device) {
-        $.ajax({
-            type: 'GET',
-            url: dsu + "dataPoints/"+getSummaryDatapointId(username, date, device),
-            headers: {
-                "Authorization": "Bearer " + token
-            },
-            success : function(data) {
-                console.log(data);
-                $("#walking-distance").html((data.body["walking_distance_in_km"]*0.621371192).toFixed(2) + " miles");
-                $("#gait-speed").html(data.body["max_gait_speed_in_meter_per_second"]);
-                $("#away-from-home").html(moment.duration(data.body["time_not_at_home_in_seconds"], 'seconds').humanize());
-            },
-            error: function(data){
-                $("#walking-distance, #gait-speed, #away-from-home").html("No data");
-            }
+        function showSummary(username, date, device) {
+            $.ajax({
+                type: 'GET',
+                url: dsu + "dataPoints/"+getSummaryDatapointId(username, date, device),
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                success : function(data) {
+                    console.log(data);
+                    alert(data);
+                    $("#walking-distance").html((data.body["walking_distance_in_km"]*0.621371192).toFixed(2) + " miles");
+                    $("#gait-speed").html(data.body["max_gait_speed_in_meter_per_second"]);
+                    $("#away-from-home").html(moment.duration(data.body["time_not_at_home_in_seconds"], 'seconds').humanize());
+                },
+                error: function(data){
+                    $("#walking-distance, #gait-speed, #away-from-home").html("No data");
+                }
 
-        });
-    }
+            });
+        }
