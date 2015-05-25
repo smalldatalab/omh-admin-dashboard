@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :mobility_dashboard, only: :index
+
   # namespace :users do
   #   # resources :pam_data_points
   #   # resources :mobility_data_points

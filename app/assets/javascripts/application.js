@@ -13,6 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require foundation
+//= require dsu
+//= require draw
 //= require turbolinks
 
 $(function(){ $(document).foundation(); });
