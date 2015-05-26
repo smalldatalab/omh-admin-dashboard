@@ -1,4 +1,5 @@
 :sass
+
   .row
     vertical-align: middle
 
@@ -11,37 +12,41 @@
   .unselected
     opacity: 0.3
 
-.mobility-page
-  .col-md-2
-    .btn-group
-      %button.btn.btn-primary.btn-device.selected{type: 'button', data: 'android'} Android
-      %button.btn.btn-success.btn-device.unselected{type: 'button', data: 'ios'} iPhone
-      %button.btn.btn-device.unselected{type: 'button', data: 'moves-app'} Moves
-
-  .row
-    .col-md-4.col-md-offset-2
-      .input-group.date
-        %input.form-control
-          %span.input-group-addon
-            %i.glyphicon.glyphicon-th
 
 
 
-    #user_name
-    -
+%body
+  .mobility-page
+    .row
+      .col-md-6.col-md-offset-4
+        .btn-group
+          %button.btn.btn-primary.btn-device.selected{type: 'button', data: 'android'} Android
+          %button.btn.btn-success.btn-device.unselected{type: 'button', data: 'ios'} iPhone
+          %button.btn.btn-device.unselected{type: 'button', data: 'moves-app'} Moves
 
-    #selected_date
+    .row
+      .col-md-4.col-md-offset-4
+        .input-group.date
+          %input.form-control
+            %span.input-group-addon
+              %i.glyphicon.glyphicon-th
 
-  .row
-    .col-md-8.col-md-offset-2
-      %h4 Walking distance:
-      %span#walking-distance
+    .row
+      .col-md-8.col-md-offset-4
+        %h4 Walking distance:
+        %span#walking-distance
 
-      %h4 Gait Speed:
-      %span#gait-speed
+        %h4 Gait Speed:
+        %span#gait-speed
 
-      %h4 Away from Home:
-      %span#away-from-home
+        %h4 Away from Home:
+        %span#away-from-home
+
+
+    .row
+      .col-md-4
+        #user_name
+        #selected_date
 
 :javascript
     $(document).ready( function() {
@@ -52,6 +57,7 @@
             });
 
         var token = url("#access_token");
+        var dsu = "https://ohmage-omh.smalldata.io/dsu/";
 
         if(!token)
         {
@@ -59,22 +65,50 @@
         }
         else
         {
-            $.getJSON(dsu + "oauth/check_token?token="+token)
+            $.getJSON(dsu + "oauth/check_token?token=" + token)
             .done(function(data) {
                 var username = data["user_name"];
                 $('#user_name').html(username);
                 var device = url("#device") || "android";
                 var date = url("#date")? moment(url("#date")).toDate() : new Date();
                 $('#selected_date').html(date);
-                var redraw = function(){
-                    $("#map, #timeline").html("Loading...");
-                    drawDate(username, moment(date).format('YYYY-MM-DD'), device);
-                    showSummary(username, moment(date).format('YYYY-MM-DD'), device);
+
+                var getSummaryDatapointId = function(username, date, device){
+                    return  ["mobility-daily-summary", username, date, device.toLowerCase()].join("-");
                 };
+
+                var showSummary = function(username, date, device) {
+                    $.ajax({
+                        type: 'GET',
+                        url: dsu + "dataPoints/" + getSummaryDatapointId(username, date, device),
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            $("#walking-distance").html((data.body["walking_distance_in_km"]*0.621371192).toFixed(2) + " miles");
+                            $("#walking-time").html(moment.duration(data.body["time_not_at_home_in_seconds"], 'seconds').humanize());
+                            $('#gait-speed').html(data.body["max_gait_speed_in_meter_per_second"]);
+                            },
+                        error: function(data){
+                            console.log("errorrrrrrrr");
+                        }
+
+                    });
+                };
+
+                var redraw = function(){
+                    // drawDate(username, moment(date).format('YYYY-MM-DD'), device);
+                    showSummary(username, moment(date).format('YYYY-MM-DD'), device);
+                    console.log('test 3');
+
+                };
+
                 $('.btn-device').click(function(e){
                     $(".btn-group button").removeClass("selected").addClass("unselected");
                     var btn = $(e.target);
                     device = btn.attr("data");
+                    console.log(device);
                     btn.removeClass("unselected").addClass("selected");
                     redraw();
                 });
@@ -94,29 +128,3 @@
         }
         } );
 
-        var dsu = "https://ohmage-omh.smalldata.io/dsu/";
-
-        function getSummaryDatapointId(username, date, device){
-            return  ["mobility-daily-summary", username, date, device.toLowerCase()].join("-");
-        }
-
-        function showSummary(username, date, device) {
-            $.ajax({
-                type: 'GET',
-                url: dsu + "dataPoints/"+getSummaryDatapointId(username, date, device),
-                headers: {
-                    "Authorization": "Bearer " + token
-                },
-                success : function(data) {
-                    console.log(data);
-                    alert(data);
-                    $("#walking-distance").html((data.body["walking_distance_in_km"]*0.621371192).toFixed(2) + " miles");
-                    $("#gait-speed").html(data.body["max_gait_speed_in_meter_per_second"]);
-                    $("#away-from-home").html(moment.duration(data.body["time_not_at_home_in_seconds"], 'seconds').humanize());
-                },
-                error: function(data){
-                    $("#walking-distance, #gait-speed, #away-from-home").html("No data");
-                }
-
-            });
-        }
