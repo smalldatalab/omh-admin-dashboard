@@ -1,0 +1,281 @@
+.home-page
+  .nav-area
+    .row
+      .large-12.columns
+        .name
+          %h1.text-left.testing-font Mobility-omh
+
+      %hr
+
+  .date-area
+    .row
+      .large-12.large-centered.columns
+        %ul.pagination
+          - current_date = Time.now
+          - previous_date = current_date.yesterday
+          - next_date = current_date.tomorrow
+
+          %li.arrow
+            %a.previous-day{href: '', data: {attribute: previous_date}} &laquo; Previous Day
+            = previous_date
+
+          %li.current
+            %a.current-day#datepicker{href: ' ', data: {attribute: current_date}} Today
+            = current_date
+
+          %li.arrow.unavailable
+            %a.next-day{href:' ', data: {attribute: next_date}} Next Day &raquo;
+            = next_date
+
+
+      .large-12.columns.location-half
+        .location-display
+          %h3.text-center Your Previous Location
+
+          .location-image-set
+            .row
+              .large-4.medium-6.small-12.columns
+                %a.th
+                  = image_tag('https://maps.googleapis.com/maps/api/staticmap?center=<%= @user. %>&zoom=14&size=400x400')
+                .time-place.text-center
+                  %p The Time : 10:00
+                  %p The Place : Park Slope
+
+
+
+              .large-4.medium-6.small-12.columns
+                %a.th
+                  = image_tag('test_map.png')
+                .time-place.text-center
+                  %p The Time : 11:47
+                  %p The Place : Brooklyn Heights
+
+
+              .large-4.medium-6.small-12.columns
+                %a.th
+                  = image_tag('test_map.png')
+                .time-place.text-center
+                  %p The Time : 12:21
+                  %p The Place : Upper East Side
+
+
+              .large-4.medium-6.small-12.columns
+                %a.th
+                  = image_tag('test_map.png')
+                .time-place.text-center
+                  %p The Time : 14:00
+                  %p The Place : Chinatown
+
+
+
+              .large-4.medium-6.small-12.columns
+                %a.th
+                  = image_tag('test_map.png')
+                .time-place.text-center
+                  %p The Time : 14:55
+                  %p The Place : Soho
+
+              .large-4.medium-6.small-12.columns
+                %a.th
+                  = image_tag('test_map.png')
+                .time-place.text-center
+                  %p The Time : 19:30
+                  %p The Place : Central Park
+
+
+
+
+
+    .row
+      .large-12.columns.variable-half
+        .data-variable-display
+          %h3.text-center Your Data
+
+          .variable-set
+            %ul
+              %li
+                %p Away From House(hrs)
+                .row
+                  .small-1.columns
+                    %i.fi-mountains
+                  .small-11.columns.variable-bar
+                    .progress.success.radius.large-12
+                      %span.meter{style:'width: 30%'}
+
+
+              %li
+                %p Walking Distanec(km)
+                .row
+                  .small-1.columns
+                    %i.fi-foot
+                  .small-11.columns.variable-bar
+                    .progress.alert.radius.large-12
+                      %span.meter{style:'width: 70%'}
+
+
+              %li
+                %p Gait Speed(m/s)
+                .row
+                  .small-1.columns
+                    %i.fi-map
+                  .small-11.columns.variable-bar
+                    .progress.radius.large-12
+                      %span.meter{style:'width: 50%'}
+
+
+  .footer-area
+    .row
+      .large-12.columns
+        %hr
+        %h5 CONTACTS
+
+
+
+<html>
+<head>
+    <link id="bs-css" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <link id="bsdp-css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker3.standalone.min.css" rel="stylesheet">
+
+    <!-- for loading google APIs -->
+    <script type="text/javascript" src="www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-url/1.8.4/url.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.min.js"></script>
+
+    <script type="text/javascript" src="mobility.js"></script>
+    <script type="text/javascript" src="draw.js"></script>
+
+<style>
+    .row div{
+        vertical-align: middle ;
+    }
+    .timeline{
+        margin-top: 20px;
+    }
+    .selected{
+        opacity: 1;
+    }
+
+    .unselected{
+        opacity: 0.3;
+    }
+</style>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-2">
+        <div class="btn-group" role="group" aria-label="...">
+            <button type="button" class="btn btn-primary btn-device selected" data="android">Android</button>
+            <button type="button" class="btn btn-success btn-device unselected" data="ios">iPhone</button>
+            <button type="button" class="btn btn-device unselected" data="moves-app">Moves</button>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="input-group date">
+            <input type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <p><h4>Walking distance: <span id="walking-distance"></span>. Walking Time: <span id="walking-time"></span></h4></p>
+    </div>
+
+</div>
+<div class="timeline" id="timeline" style="height: 40%; width: 90%">Loading...</div>
+<div id="map" style="height: 50%;">Loading...</div>
+
+
+<!--<div id="timeline-moves-app" style="width: 1200px; height: 300px;"></div>
+-->
+<script type="text/javascript">
+    // init google plot
+
+    var datepicker =
+        $('.date').datepicker({
+            format: "yyyy-mm-dd",
+            todayHighlight: true
+        });
+
+    // where is the access_token?
+    var token = url("#access_token");
+
+    if(!token)
+    {
+    // what is "oauth/authorize?client_id=mobility-viz&response_type=token"?
+        window.location.href = dsu + "oauth/authorize?client_id=mobility-viz&response_type=token";
+    }
+    else
+    {
+        $.getJSON(dsu + "oauth/check_token?token="+token)
+        .done(function(data) {
+            var username = data["user_name"];
+            var device = url("#device") || "android";
+            var date = url("#date")? moment(url("#date")).toDate() : new Date();
+            var redraw = function(){
+                $("#map, #timeline").html("Loading...");
+                drawDate(username, moment(date).format('YYYY-MM-DD'), device);
+                showSummary(username, moment(date).format('YYYY-MM-DD'), device);
+            };
+            $('.btn-device').click(function(e){
+                $(".btn-group button").removeClass("selected").addClass("unselected");
+                var btn = $(e.target);
+                device = btn.attr("data");
+                btn.removeClass("unselected").addClass("selected");
+                redraw();
+            });
+            datepicker.on("changeDate", function(e){
+                date = e.date;
+                redraw();
+            });
+            $('.date').datepicker("setDate", date);
+
+        })
+        .fail(function() {
+            window.location.href = dsu + "oauth/authorize?client_id=mobility-viz&response_type=token";
+        });
+
+    }
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

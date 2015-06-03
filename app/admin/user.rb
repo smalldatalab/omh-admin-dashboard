@@ -6,9 +6,17 @@ ActiveAdmin.register User  do
   index do
     selectable_column
     id_column
-    column :gmail
-    column :first_name
-    column :last_name
+    if current_admin_user.researcher?
+      column :gmail
+    end
+
+    if current_admin_user.researcher?
+      column :first_name
+    end
+
+    if current_admin_user.researcher?
+      column :last_name
+    end
 
     if !current_admin_user.researcher?
       column :studies do |user|
@@ -18,16 +26,6 @@ ActiveAdmin.register User  do
       column :studies do |user|
         a = user.studies & current_admin_user.studies
         a.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
-      end
-    end
-    if !current_admin_user.researcher?
-      column :data_streams do |user|
-        user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
-      end
-    else
-      column :data_streams do |user|
-        common_elements = user.data_streams & current_admin_user.data_streams
-        common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
       end
     end
 
@@ -42,10 +40,22 @@ ActiveAdmin.register User  do
       end
     end
 
-    column("Registered in Database") { |user| user.registrated_in_database }
+    if !current_admin_user.researcher?
+      column :data_streams do |user|
+        user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+      end
+    else
+      column :data_streams do |user|
+        common_elements = user.data_streams & current_admin_user.data_streams
+        common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+      end
+    end
+
+
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
     column("Mobility/Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary') }
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
+    column("Registered in Database") { |user| user.registrated_in_database }
 
     actions
   end
@@ -58,9 +68,18 @@ ActiveAdmin.register User  do
 
     attributes_table do
       row :id
-      row :first_name
-      row :last_name
-      row :gmail
+      if current_admin_user.researcher?
+        row :gmail
+      end
+
+      if current_admin_user.researcher?
+        row :first_name
+      end
+
+      if current_admin_user.researcher?
+        row :last_name
+      end
+
       if !current_admin_user.researcher?
         row :studies do |user|
           user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
@@ -68,17 +87,6 @@ ActiveAdmin.register User  do
       else
         row :studies do |user|
           common_elements = user.studies & current_admin_user.studies
-          common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
-        end
-      end
-
-      if !current_admin_user.researcher?
-        row :data_streams do |user|
-          user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
-        end
-      else
-        row :data_streams do |user|
-          common_elements = user.data_streams & current_admin_user.data_streams
           common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
         end
       end
@@ -93,10 +101,23 @@ ActiveAdmin.register User  do
           common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
         end
       end
-      row("Registered in Database") { |user| user.registrated_in_database }
+
+
+      if !current_admin_user.researcher?
+        row :data_streams do |user|
+          user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
+      else
+        row :data_streams do |user|
+          common_elements = user.data_streams & current_admin_user.data_streams
+          common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
+      end
+
       row("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
       row("Mobility/Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
       row("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
+      row("Registered in Database") { |user| user.registrated_in_database }
 
       row :created_at
       row :updated_at
