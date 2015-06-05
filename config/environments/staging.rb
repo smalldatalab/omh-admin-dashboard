@@ -82,16 +82,16 @@ Rails.application.configure do
 
 
   config.action_mailer.default_url_options = {:host => 'http://lifestreams.smalldata.io'}
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address:                 'lifestreams.smalldata.io',
-    port:                     587,
-    domain:                  'gmail.com',
-    user_name:               'jaoshinu@gmail.com',
-    password:                '2015Garden',
-    authentication:          'plain',
-    enable_starttls_auto:     true
-  }
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  #   address:                 'smtp.sendgrid.net',
+  #   port:                     587,
+  #   domain:                  'gmail',
+  #   user_name:               'jaoshinu@gmail.com',
+  #   password:                '2015Garden',
+  #   authentication:          'plain',
+  #   enable_starttls_auto:     true
+  # }
 
 
 
