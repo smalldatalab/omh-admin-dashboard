@@ -13,7 +13,12 @@ class AdminUser < ActiveRecord::Base
   accepts_nested_attributes_for :studies
 
   validates :email, presence: true
-  validates :password, :password_confirmation, presence: true, on: :create
-  validates :password, confirmation: true
+  # validates :password, :password_confirmation, presence: true, on: :create
+  # validates :password, confirmation: true
 
+  after_create { |admin| admin.send_reset_password_instructions }
+
+  def password_required?
+    new_record? ? false : super
+  end
 end
