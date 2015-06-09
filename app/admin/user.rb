@@ -6,17 +6,17 @@ ActiveAdmin.register User  do
   index do
     selectable_column
     id_column
-    if current_admin_user.researcher?
-      column :gmail
-    end
+    # if current_admin_user.researcher?
+    #   column :gmail
+    # end
 
-    if current_admin_user.researcher?
-      column :first_name
-    end
+    # if current_admin_user.researcher?
+    #   column :first_name
+    # end
 
-    if current_admin_user.researcher?
-      column :last_name
-    end
+    # if current_admin_user.researcher?
+    #   column :last_name
+    # end
 
     if !current_admin_user.researcher?
       column :studies do |user|
@@ -53,7 +53,8 @@ ActiveAdmin.register User  do
 
 
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
-    column("Mobility/Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary') }
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary') }
+    column("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
     column("Registered in Database") { |user| user.registrated_in_database }
 
@@ -61,24 +62,25 @@ ActiveAdmin.register User  do
   end
 
 
-  show :title => proc {|user| (user.first_name.blank? && user.last_name.blank?) ? user.gmail : ( user.first_name.blank? ? user.last_name : user.first_name ) }  do
+  show do
+  # :title => proc {|user| (user.first_name.blank? && user.last_name.blank?) ? user.gmail : ( user.first_name.blank? ? user.last_name : user.first_name ) }  do
     panel "Calendar View" do
       render partial: 'calendar_view', locals: { users: @user}
     end
 
     attributes_table do
       row :id
-      if current_admin_user.researcher?
-        row :gmail
-      end
+      # if current_admin_user.researcher?
+      #   row :gmail
+      # end
 
-      if current_admin_user.researcher?
-        row :first_name
-      end
+      # if current_admin_user.researcher?
+      #   row :first_name
+      # end
 
-      if current_admin_user.researcher?
-        row :last_name
-      end
+      # if current_admin_user.researcher?
+      #   row :last_name
+      # end
 
       if !current_admin_user.researcher?
         row :studies do |user|
@@ -126,9 +128,9 @@ ActiveAdmin.register User  do
   end
 
 
-  filter :gmail
-  filter :first_name
-  filter :last_name
+  # filter :gmail
+  # filter :first_name
+  # filter :last_name
   filter :studies, collection: Study.all
   filter :data_streams, collection: DataStream.all
   filter :surveys, collection: Survey.all
@@ -159,9 +161,9 @@ ActiveAdmin.register User  do
 
 
   csv do
-    column :gmail
-    column :first_name
-    column :last_name
+    # column :gmail
+    # column :first_name
+    # column :last_name
     column("Studies") {|user| user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
     column("Data Streams") {|user| user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
     column("Surveys") {|user| user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''}
