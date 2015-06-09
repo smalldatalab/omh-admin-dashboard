@@ -53,7 +53,7 @@ ActiveAdmin.register User  do
 
 
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
-    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary') }
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'ios' || 'android')}
     column("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
     column("Registered in Database") { |user| user.registrated_in_database }
