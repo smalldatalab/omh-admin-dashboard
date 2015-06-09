@@ -208,14 +208,14 @@ class User < ActiveRecord::Base
       if mobility_data_points.last.nil?
         return nil
       else
-        if mobility_data_points.where('body.device' => 'iOS').last.nil?
-          if mobility_data_points.where('body.device' => 'Android').last.nil?
-            mobility_data_points.where('body.device' => 'Moves-App')
+        if mobility_data_points.where('body.device' => 'ios').last.nil?
+          if mobility_data_points.where('body.device' => 'android').last.nil?
+            mobility_data_points.where('body.device' => 'moves-app')
           else
-            mobility_data_points.where('body.device' => 'Android')
+            mobility_data_points.where('body.device' => 'android')
           end
         else
-          mobility_data_points.where('body.device' => 'iOS')
+          mobility_data_points.where('body.device' => 'ios')
         end
       end
     end

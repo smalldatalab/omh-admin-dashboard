@@ -17,3 +17,6 @@
 
 # Secrets
 /config/secrets.yml
+
+# Email Addresses and Passwords
+/config/application.yml
