@@ -72,6 +72,59 @@ class User < ActiveRecord::Base
     end
   end
 
+
+  def show_data_streams
+    if user_record.nil?
+      return nil
+    else
+      mobility_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary')
+      pam_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
+      ohmage_data_points = user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/)
+
+      if mobility_data_points.last.nil?
+        return nil
+      else
+        data_streams = []
+        if !mobility_data_points.where('body.device' => 'ios' || 'android').last.nil?
+          if !mobility_data_points.where('body.device' => 'moves-app').last.nil?
+            if !pam_data_points.last.nil?
+              if !ohmage_data_points.last.nil?
+                data_streams.push('Mobility', 'Moves', 'PAM', 'ohmage')
+              else
+                data_streams.push('Mobility', 'Moves', 'PAM')
+              end
+            else
+              data_streams.push('Mobility', 'Moves')
+            end
+          else
+            data_streams.push('Mobility')
+          end
+        elsif !mobility_data_points.where('body.device' => 'moves-app').last.nil?
+          if !pam_data_points.last.nil?
+            if !ohmage_data_points.last.nil?
+              data_streams.push('Moves', 'PAM', 'ohmage')
+            else
+              data_streams.push('Moves', 'PAM')
+            end
+          else
+            data_streams.push('Moves')
+          end
+        elsif !pam_data_points.last.nil?
+          if !ohmage_data_points.last.nil?
+            data_streams.push('PAM', 'ohmage')
+          else
+            data_streams.push('PAM')
+          end
+        elsif !ohmage_data_points.last.nil?
+          data_streams.push('ohmage')
+        else
+          return nil
+        end
+      end
+    end
+  end
+
+
   def one_day_pam_data_points(date)
     if user_record.nil?
       return nil
