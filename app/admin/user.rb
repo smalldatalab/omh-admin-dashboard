@@ -1,5 +1,5 @@
 ActiveAdmin.register User  do
-  permit_params :first_name, :last_name, :gmail, :user_name_id, :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
+  permit_params :first_name, :last_name, :gmail, :user_id, :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
 
   menu priority: 3, label: "Participants"
 
@@ -140,7 +140,7 @@ ActiveAdmin.register User  do
       f.input :gmail
       f.input :first_name
       f.input :last_name
-      f.input :user_name_id
+      f.input :user_id, label: 'User ID'
       f.input :studies, as: :check_boxes, collection: Study.all
       # current_admin_user.studies
     end

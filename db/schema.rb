@@ -159,7 +159,7 @@ ActiveRecord::Schema.define(version: 20150610183913) do
     t.string   "gmail"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "user_name_id"
+    t.string   "user_id"
   end
 
 end
