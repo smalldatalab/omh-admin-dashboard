@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :studies
 
-  validates :studies, presence: true
+  validates :studies, :user_id, presence: true
   validates_format_of :user_id, without: /\s/, message: "can't have space"
   validates_uniqueness_of :user_id
 
