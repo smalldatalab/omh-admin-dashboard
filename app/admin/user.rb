@@ -1,5 +1,5 @@
 ActiveAdmin.register User  do
-  permit_params :first_name, :last_name, :gmail, :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
+  permit_params :first_name, :last_name, :gmail, :user_name_id, :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
 
   menu priority: 3, label: "Participants"
 
@@ -17,6 +17,7 @@ ActiveAdmin.register User  do
     # if current_admin_user.researcher?
     #   column :last_name
     # end
+    # column :user_name_id
 
     if !current_admin_user.researcher?
       column :studies do |user|
@@ -40,17 +41,16 @@ ActiveAdmin.register User  do
       end
     end
 
-    # if !current_admin_user.researcher?
-    #   column :data_streams do |user|
-    #     user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
-    #   end
-    # else
-    #   column :data_streams do |user|
-    #     common_elements = user.data_streams & current_admin_user.data_streams
-    #     common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
-    #   end
-    # end
-    column("Data Streams") { |user| user.show_data_streams }
+    if !current_admin_user.researcher?
+      column :data_streams do |user|
+        user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+      end
+    else
+      column :data_streams do |user|
+        common_elements = user.data_streams & current_admin_user.data_streams
+        common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+      end
+    end
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
     column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'ios' || 'android')}
     column("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
@@ -80,6 +80,7 @@ ActiveAdmin.register User  do
       # if current_admin_user.researcher?
       #   row :last_name
       # end
+      # row :user_name_id
 
       if !current_admin_user.researcher?
         row :studies do |user|
@@ -104,16 +105,16 @@ ActiveAdmin.register User  do
       end
 
 
-      # if !current_admin_user.researcher?
-      #   row :data_streams do |user|
-      #     user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
-      #   end
-      # else
-      #   row :data_streams do |user|
-      #     common_elements = user.data_streams & current_admin_user.data_streams
-      #     common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
-      #   end
-      # end
+      if !current_admin_user.researcher?
+        row :data_streams do |user|
+          user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
+      else
+        row :data_streams do |user|
+          common_elements = user.data_streams & current_admin_user.data_streams
+          common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
+      end
 
       row("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
       row("Mobility/Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
@@ -139,6 +140,7 @@ ActiveAdmin.register User  do
       f.input :gmail
       f.input :first_name
       f.input :last_name
+      f.input :user_name_id
       f.input :studies, as: :check_boxes, collection: Study.all
       # current_admin_user.studies
     end
