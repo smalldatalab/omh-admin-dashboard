@@ -140,7 +140,7 @@ ActiveAdmin.register User  do
       f.input :gmail
       f.input :first_name
       f.input :last_name
-      # f.input :user_id, label: 'User ID'
+      f.input :user_id, label: 'User ID'
       f.input :studies, as: :check_boxes, collection: Study.all
       # current_admin_user.studies
     end
