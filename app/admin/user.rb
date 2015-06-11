@@ -118,10 +118,11 @@ ActiveAdmin.register User  do
       end
 
       row("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
-      row("Mobility/Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
+      row("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'ios' || 'android')}
+      row("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
       row("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
+      row("Fitbit Data Last Uploaded") { |user| user.most_recent_data_point_date('step_count')}
       row("Registered in Database") { |user| user.registrated_in_database }
-      row("Fitbit Data Last Uploaded") { |user| user.most_recent_data_point_date('step_count', nil, 'omh')}
 
       row :created_at
       row :updated_at
@@ -173,9 +174,11 @@ ActiveAdmin.register User  do
     column("Studies") {|user| user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
     column("Data Streams") {|user| user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
     column("Surveys") {|user| user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''}
-    column("PAM Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores') }
-    column("Mobility/Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')}
+    column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'ios' || 'android')}
+    column("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
+    column("Fitbit Data Last Uploaded") { |user| user.most_recent_data_point_date('step_count')}
     column (:created_at) { |time| time.created_at.to_formatted_s(:long_ordinal)}
     column (:updated_at) { |time| time.updated_at.to_formatted_s(:long_ordinal)}
   end
