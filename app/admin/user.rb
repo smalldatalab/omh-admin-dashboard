@@ -6,9 +6,9 @@ ActiveAdmin.register User  do
   index do
     selectable_column
     id_column
-    # if current_admin_user.researcher?
-    #   column :gmail
-    # end
+    if current_admin_user.researcher?
+      column :gmail
+    end
 
     # if current_admin_user.researcher?
     #   column :first_name
