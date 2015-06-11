@@ -10,9 +10,9 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :studies
 
-  validates :studies, :user_id, presence: true
-  validates_format_of :user_id, without: /\s/, message: "can't have space"
-  validates_uniqueness_of :user_id
+  validates :studies, :username, presence: true
+  validates_format_of :username, without: /\s/, message: "can't have space"
+  validates_uniqueness_of :username
 
   # validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? }
   def registrated_in_database
