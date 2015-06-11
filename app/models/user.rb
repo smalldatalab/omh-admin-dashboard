@@ -10,8 +10,8 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :studies
 
-  validates :studies, :username, presence: true
-  validates_format_of :username, without: /\s/, message: "can't have space"
+  validates :studies, presence: true
+  # validates_format_of :username, without: /\s/, message: "can't have space"
   validates_uniqueness_of :username
 
   # validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? }
@@ -33,11 +33,11 @@ class User < ActiveRecord::Base
     end
   end
 
-  def most_recent_data_point_date(data_stream, device=nil)
+  def most_recent_data_point_date(data_stream, device=nil, namespace=nil)
     if user_record.nil?
       return ''
     else
-      recent_data_point = user_record.pam_data_points.where('header.schema_id.name' => data_stream, 'body.device' => device)
+      recent_data_point = user_record.pam_data_points.where('header.schema_id.name' => data_stream, 'body.device' => device, 'header.schema_id.namespace' => namespace)
       if recent_data_point.last.nil?
         return ''
       else
@@ -73,28 +73,7 @@ class User < ActiveRecord::Base
   end
 
 
-  # def show_data_streams(admin_user_id)
-  #   data_streams = []
-  #   if all_pam_data_points.nil?
-  #     if all_ohmage_data_points(admin_user_id).nil?
-  #       if all_mobility_data_points.nil?
-  #         return nil
-  #       else
-  #         data_streams.push('Mobility')
-  #       end
 
-  #     else
-  #       data_streams.push('ohmage')
-  #     end
-  #   elsif all_ohmage_data_points(admin_user_id).nil?
-  #     data_streams.push('PAM', 'ohmage')
-  #   elsif
-
-  #   else
-  #     data_streams.push('PAM')
-  #   end
-
-  # end
 
 
   def one_day_pam_data_points(date)
@@ -246,6 +225,19 @@ class User < ActiveRecord::Base
     end
   end
 
+
+  def all_fitbit_data_points
+    if user_record.nil?
+      return nil
+    else
+      fitbit_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'step_count', 'header.schema_id.namespace' => 'omh')
+      if fitbit_data_points.last.nil?
+        return nil
+      else
+        fitbit_data_points
+      end
+    end
+  end
 
   def pam_data_csv
     CSV.generate do |csv|
@@ -417,6 +409,29 @@ class User < ActiveRecord::Base
                   escape_nil_body(data_point, :time_not_at_home_in_seconds).nil? ? nil : (data_point.body.time_not_at_home_in_seconds / 60.00),
                   escape_nil_body(data_point, :coverage)
                   ]
+        end
+      end
+    end
+  end
+
+  def fitbit_data_csv
+    CSV.generate do |csv|
+      csv << [
+              'id',
+              'user_id',
+              'date',
+              'steps'
+      ]
+      if all_fitbit_data_points.nil?
+        return nil
+      else
+        all_fitbit_data_points.each do |data_point|
+        csv << [
+                 data_point._id,
+                 data_point.user_id,
+                 data_point.header.creation_date_time,
+                 data_point.body.step_count
+        ]
         end
       end
     end

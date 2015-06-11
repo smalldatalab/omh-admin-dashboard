@@ -25,6 +25,9 @@ class Body
   field :time_not_at_home_in_seconds, type: Float
   field :steps, type: Float
 
+# For Fitbit
+  field :step_count, type: Integer
+
   embeds_one :location
 
   embeds_one :effective_time_frame

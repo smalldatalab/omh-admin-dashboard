@@ -56,6 +56,7 @@ ActiveAdmin.register User  do
     column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'ios' || 'android')}
     column("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
+    column("Fitbit Data Last Uploaded") { |user| user.most_recent_data_point_date('step_count', nil, 'omh')}
     column("Registered in Database") { |user| user.registrated_in_database }
 
     actions
@@ -121,6 +122,7 @@ ActiveAdmin.register User  do
       row("Mobility/Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')  }
       row("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
       row("Registered in Database") { |user| user.registrated_in_database }
+      row("Fitbit Data Last Uploaded") { |user| user.most_recent_data_point_date('step_count', nil, 'omh')}
 
       row :created_at
       row :updated_at
@@ -160,6 +162,9 @@ ActiveAdmin.register User  do
     link_to 'ohmage Data csv File', admin_user_ohmage_data_points_path(user, format: 'csv')
   end
 
+  action_item :only => :show do
+    link_to 'Fitbit Data csv File', admin_user_fitbit_data_points_path(user, format: 'csv')
+  end
 
 
   csv do

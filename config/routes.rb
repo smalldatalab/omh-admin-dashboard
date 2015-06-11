@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :ohmage_data_points
       resources :calendar_data_points, :format => :json
       resources :mobility_daily_summary_data_points
+      resources :fitbit_data_points
     end
   end
 
