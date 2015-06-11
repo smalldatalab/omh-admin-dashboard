@@ -9,7 +9,6 @@ ActiveAdmin.register User  do
     # if current_admin_user.researcher?
     #   column :gmail
     # end
-    column :gmail
 
     # if current_admin_user.researcher?
     #   column :first_name
@@ -63,7 +62,7 @@ ActiveAdmin.register User  do
   end
 
 
-  show do
+  show title: :id do
   # :title => proc {|user| (user.first_name.blank? && user.last_name.blank?) ? user.gmail : ( user.first_name.blank? ? user.last_name : user.first_name ) }  do
     panel "Calendar View" do
       render partial: 'calendar_view', locals: { users: @user}
