@@ -51,11 +51,11 @@ ActiveAdmin.register User  do
         common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
       end
     end
-    column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores', nil, nil)}
-    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'ios' || 'android', nil)}
-    column("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app', nil)}
+    column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'ios' || 'android')}
+    column("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
-    column("Fitbit Data Last Uploaded") { |user| user.most_recent_data_point_date('step_count', nil, 'omh')}
+    column("Fitbit Data Last Uploaded") { |user| user.most_recent_data_point_date('step_count')}
     column("Registered in Database") { |user| user.registrated_in_database }
 
     actions

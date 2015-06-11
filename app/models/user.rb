@@ -33,11 +33,11 @@ class User < ActiveRecord::Base
     end
   end
 
-  def most_recent_data_point_date(data_stream, device=nil, namespace=nil)
+  def most_recent_data_point_date(data_stream, device=nil)
     if user_record.nil?
       return ''
     else
-      recent_data_point = user_record.pam_data_points.where('header.schema_id.name' => data_stream, 'body.device' => device, 'header.schema_id.namespace' => namespace)
+      recent_data_point = user_record.pam_data_points.where('header.schema_id.name' => data_stream, 'body.device' => device)
       if recent_data_point.last.nil?
         return ''
       else
@@ -45,6 +45,7 @@ class User < ActiveRecord::Base
       end
     end
   end
+
 
   def most_recent_ohmage_data_point_date(admin_user_id)
     if user_record.nil?
