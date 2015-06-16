@@ -87,7 +87,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address:                 'smtp.mandrillapp.com',
     port:                     587,
-    domain:                  'smalldata.io',
+    # domain:                  'gmail',
     user_name:               ENV['mandrill_username'],
     password:                ENV['mandrill_password'],
     authentication:          'plain',
