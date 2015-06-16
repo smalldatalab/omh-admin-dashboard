@@ -136,6 +136,8 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    mandrill-rails (1.2.0)
+      activesupport (>= 3.0.3)
     mime-types (1.25.1)
     minitest (5.4.3)
     mongoid (4.0.0)
@@ -278,6 +280,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   json (= 1.8.2)
+  mandrill-rails
   mongoid (= 4.0.0)
   mongoid_rails_migrations
   morrisjs-rails

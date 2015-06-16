@@ -32,6 +32,8 @@ Rails.application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
+  config.action_mailer.raise_delivery_errors = true
+
   config.to_prepare do
     Thread.current.keys.each{ |k| Thread.current[k] = nil if k.to_s =~ /_scoped_methods$/ }
   end
@@ -40,13 +42,14 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  # config.action_mailer.default_charset = 'utf-8'
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:                 'smtp.gmail.com',
+    address:                 'smtp.mandrillapp.com',
     port:                     587,
-    domain:                  'gmail',
-    user_name:               ENV['gmail_username'],
-    password:                ENV['gmail_password'],
+    # domain:                  'smalldata.io',
+    user_name:               ENV['mandrill_username'],
+    password:                ENV['mandrill_password'],
     authentication:          'plain',
     enable_starttls_auto:     true
   }
