@@ -87,8 +87,8 @@ Rails.application.configure do
     address:                 'smtp.mandrillapp.com',
     port:                     587,
     # domain:                  'smalldata.io',
-    user_name:               mandrill_username,
-    password:                mandrill_password,
+    user_name:               ENV['mandrill_username'],
+    password:                ENV['mandrill_password'],
     authentication:          'plain',
     enable_starttls_auto:     true
   }
