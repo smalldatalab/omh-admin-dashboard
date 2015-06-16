@@ -45,9 +45,9 @@ Rails.application.configure do
   config.action_mailer.default :charset => "utf-8"
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:                 'smtp.gmail.com',
+    address:                 'smtp.mandrillapp.com',
     port:                     587,
-    domain:                  'gmail',
+    # domain:                  'smalldata.io',
     user_name:               ENV['mandrill_username'],
     password:                ENV['mandrill_password'],
     authentication:          'plain',
