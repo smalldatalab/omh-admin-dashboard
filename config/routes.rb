@@ -16,8 +16,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :mobility_dashboard, only: :index
-  resources :inbox, :controller => 'inbox', :only => [:show, :create]
+  # resources :mobility_dashboard, only: :index
+  # resources :inbox, :controller => 'inbox', :only => [:show, :create]
 
   # namespace :users do
   #   # resources :pam_data_points
