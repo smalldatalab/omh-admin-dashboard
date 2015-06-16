@@ -89,7 +89,7 @@ Rails.application.configure do
     domain:                  'smalldata.io',
     user_name:               ENV['mandrill_username'],
     password:                ENV['mandrill_password'],
-    authentication:          'login',
+    authentication:          'plain',
     enable_starttls_auto:     true
   }
 end
