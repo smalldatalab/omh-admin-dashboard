@@ -82,72 +82,17 @@ Rails.application.configure do
 
 
   config.action_mailer.default_url_options = {:host => 'http://lifestreams.smalldata.io'}
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default :charset => "utf-8"
-  config.action_mailer.smtp_settings = {
-    address:                 'smtp.mandrillapp.com',
-    port:                     587,
-    domain:                  'smalldata.io',
-    user_name:               ENV['mandrill_username'],
-    password:                ENV['mandrill_password'],
-    authentication:          'plain',
-    enable_starttls_auto:    true
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.default :charset => "utf-8"
+  # config.action_mailer.smtp_settings = {
+  #   address:                 'smtp.mandrillapp.com',
+  #   port:                     587,
+  #   domain:                  'smalldata.io',
+  #   user_name:               ENV['mandrill_username'],
+  #   password:                ENV['mandrill_password'],
+  #   authentication:          'plain',
+  #   enable_starttls_auto:    true
+  # }
 
 
 end
