@@ -20,3 +20,4 @@
 
 # Email Addresses and Passwords
 /config/application.yml
+config/secrets.yml
