@@ -7,7 +7,7 @@ ActiveAdmin.register User  do
     selectable_column
     id_column
     # if current_admin_user.researcher?
-    column :gmail
+    # column :gmail
     # end
 
     # if current_admin_user.researcher?
@@ -131,8 +131,8 @@ ActiveAdmin.register User  do
   end
 
 
-  filter :gmail
-  filter :first_name
+  # filter :gmail
+  # filter :first_name
   # filter :last_name
   filter :studies, collection: Study.all
   filter :data_streams, collection: DataStream.all
