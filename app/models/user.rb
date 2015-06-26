@@ -137,7 +137,8 @@ class User < ActiveRecord::Base
     pam_events_date.each do |pam_date|
       pam_events_array.push({
         title: 'PAM',
-        start: pam_date
+        start: pam_date,
+        className: 'event_style pam_style'
       })
     end
     return pam_events_array.to_json
@@ -159,7 +160,8 @@ class User < ActiveRecord::Base
     fitbit_events_date.each do |fitbit_date|
       fitbit_events_array.push({
         title: 'Fitbit',
-        start: fitbit_date
+        start: fitbit_date,
+        className: 'event_style'
 
       })
     end
@@ -182,7 +184,8 @@ class User < ActiveRecord::Base
     ohamge_events_date.each do |ohmage_date|
       ohmage_events_array << {
         title: 'ohmage',
-        start: ohmage_date
+        start: ohmage_date,
+        className: 'event_style ohmage_style'
       }
     end
     return ohmage_events_array.to_json
