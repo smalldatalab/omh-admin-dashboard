@@ -138,7 +138,7 @@ class User < ActiveRecord::Base
       pam_events_array.push({
         title: 'PAM',
         start: pam_date,
-        className: 'event_style pam_style'
+        className: 'event_style'
       })
     end
     return pam_events_array.to_json
@@ -185,7 +185,7 @@ class User < ActiveRecord::Base
       ohmage_events_array << {
         title: 'ohmage',
         start: ohmage_date,
-        className: 'event_style ohmage_style'
+        className: 'event_style'
       }
     end
     return ohmage_events_array.to_json
