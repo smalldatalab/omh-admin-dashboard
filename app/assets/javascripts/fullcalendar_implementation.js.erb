@@ -95,9 +95,11 @@ $(document).ready(function() {
     var calendar_data = $('#calendar_data_points').data('url');
     var one_day_pam_data = $('#one_day_pam_data').data('url');
     var one_day_ohmage_data = $('#one_day_ohmage_data').data('url');
+    var one_day_fitbit_data = $('#one_day_fitbit_data').data('url');
     var ohmage_events_array = $('#ohmage_events_array').data('attribute');
     var pam_events_array = $('#pam_events_array').data('attribute');
-    var events_array = $.merge( $.merge( [], pam_events_array ), ohmage_events_array );
+    var fitbit_events_array = $('#fitbit_events_array').data('attribute');
+    var events_array = $.merge($.merge( $.merge( [], pam_events_array ), ohmage_events_array), fitbit_events_array);
 
 
 
@@ -168,9 +170,12 @@ $(document).ready(function() {
                 window.open(one_day_ohmage_data + event.start);
 
             }
-            else {
+            else if (event.title == 'PAM') {
                 window.open(one_day_pam_data + event.start);
 
+            }
+            else {
+                window.open(one_day_fitbit_data + event.start);
             }
         },
 

@@ -73,10 +73,6 @@ class User < ActiveRecord::Base
     end
   end
 
-
-
-
-
   def one_day_pam_data_points(date)
     if user_record.nil?
       return nil
@@ -86,6 +82,19 @@ class User < ActiveRecord::Base
         return nil
       else
         pam_data_points.where('header.creation_date_time' => date)
+      end
+    end
+  end
+
+  def one_day_fitbit_data_points(date)
+    if user_record.nil?
+      return nil
+    else
+      fitbit_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'step_count', 'header.schema_id.namespace' => 'omh')
+      if fitbit_data_points.last.nil?
+        return nil
+      else
+        fitbit_data_points.where('header.creation_date_time' => date)
       end
     end
   end
@@ -131,8 +140,30 @@ class User < ActiveRecord::Base
         start: pam_date
       })
     end
-
     return pam_events_array.to_json
+  end
+
+  def calendar_fitbit_events_array
+    fitbit_events_array = []
+    fitbit_events_date = []
+
+    if all_fitbit_data_points.nil?
+      return nil
+    else
+      all_fitbit_data_points.each do |fitbit_data|
+        fitbit_events_date << fitbit_data.header.creation_date_time[0..9]
+        fitbit_events_date = fitbit_events_date.uniq
+      end
+    end
+
+    fitbit_events_date.each do |fitbit_date|
+      fitbit_events_array.push({
+        title: 'Fitbit',
+        start: fitbit_date
+
+      })
+    end
+    return fitbit_events_array.to_json
   end
 
   def calendar_ohmage_events_array(admin_user_id)
@@ -463,12 +494,6 @@ class User < ActiveRecord::Base
     end
     return JSON.parse(json_data.to_json)
   end
-
-
-
-  # def mobility_gps_json
-
-  # end
 
   def escape_and_round(data)
     data ? data.round : 0

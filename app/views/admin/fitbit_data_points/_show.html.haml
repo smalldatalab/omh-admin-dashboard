@@ -1,0 +1,50 @@
+:sass
+  $navy-blue: #2c3e50
+  $light-gray: #ecf0f1
+  $font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif
+
+  %body
+    height: 100%
+    width: 100%
+
+  .fitbit-data-display-page
+    min-height: 100%
+
+  .table-area
+    th
+      border-bottom: .2em solid black
+      padding-left: 3em
+      padding-right: 3em
+      padding-bottom: 1em
+      font-family: $font-family
+
+    td
+      text-align: center
+      padding-top: 1em
+      padding-bottom: 1em
+      font-family: $font-family
+
+.fitbit-data-display-page
+  .top-area
+    %h1 Fitbit Data
+
+  .bottom-area
+    %table.table-area
+      %tr
+        %th Date Time
+        %th Steps
+
+      - url_var = request.original_url
+      - a = url_var.split(//).last(13).join.to_i
+      - a = Time.zone.at(a/1000.0).to_s[0..9]
+
+      - if @user.one_day_fitbit_data_points(/#{a}/).nil?
+        %tr
+          %td
+          %td
+
+      - else
+        - @user.one_day_fitbit_data_points(/#{a}/).each do |data_point|
+          %tr
+            %td=data_point.header.creation_date_time
+            %td=data_point.body.step_count
