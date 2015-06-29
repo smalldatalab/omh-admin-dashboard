@@ -12,7 +12,7 @@ production:
     default:
       database: omh
       hosts:
-        - localhost:27017
+        - omh-mongo:27017
       options:
   options:
 
