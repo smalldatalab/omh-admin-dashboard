@@ -25,8 +25,10 @@ staging:
 production: 
   adapter: postgresql
   encoding: utf8
-  database: <%= Rails.application.secrets.db_name %>
   pool: 5
-  username: <%= Rails.application.secrets.db_user %>
-  password: <%= Rails.application.secrets.db_password %>
+  database: <%= ENV['APP_DB_DATABASE'] %>
+  username: <%= ENV['APP_DB_USERNAME'] %>
+  password: <%= ENV['APP_DB_PASSWORD'] %>
+  host: omh-postgres
+  port: 5432
 
