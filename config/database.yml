@@ -26,9 +26,9 @@ production:
   adapter: postgresql
   encoding: utf8
   pool: 5
-  database: <%= ENV['APP_DB_DATABASE'] %>
-  username: <%= ENV['APP_DB_USERNAME'] %>
-  password: <%= ENV['APP_DB_PASSWORD'] %>
+  database: <%= ENV['APP_DB_DATABASE'] || Rails.application.secrets.db_name %>
+  username: <%= ENV['APP_DB_USERNAME'] || Rails.application.secrets.db_user%>
+  password: <%= ENV['APP_DB_PASSWORD'] || Rails.application.secrets.db_password%>
   host: omh-postgres
   port: 5432
 
