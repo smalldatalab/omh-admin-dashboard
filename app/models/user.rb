@@ -16,8 +16,9 @@ class User < ActiveRecord::Base
 
   # validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? }
   def registrated_in_database
-    gmail = self.gmail.gsub(/\s+/, "").downcase
-    if PamUser.where('email_address' => {'address' => gmail}).blank?
+    # gmail = self.gmail.gsub(/\s+/, "").downcase
+    user_name = self.username
+    if PamUser.where('_id' => user_name).blank?
       return "No"
     else
       return "Yes"
@@ -25,11 +26,11 @@ class User < ActiveRecord::Base
   end
 
   def user_record
-    gmail = self.gmail.gsub(/\s+/, "").downcase
-    if PamUser.where('email_address' => {'address' => gmail}).blank?
+    user_name = self.username
+    if PamUser.where('_id' => user_name).blank?
       return nil
     else
-      return PamUser.find_by('email_address' => {'address' => gmail})
+      return PamUser.find_by('_id' => user_name)
     end
   end
 
