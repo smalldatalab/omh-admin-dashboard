@@ -8,7 +8,7 @@ def template(from, to)
 end
 
 set :application, "sdl_admin_dashboard"
-set :repository, "git@github.com:JudyWu/sdl_admin_dashboard.git"
+set :repository, "git@github.com:smalldatalab/omh-admin-dashboard.git"
 set :stages, %w(production)
 set :use_sudo, false
 set :deploy_via, :remote_cache
