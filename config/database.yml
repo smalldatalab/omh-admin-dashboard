@@ -1,32 +1,40 @@
-development: 
+development:
   adapter: postgresql
   encoding: utf8
-  database: sdl_admin_dashboard_development 
+  database: sdl_admin_dashboard_development
   pool: 5
-  username: 
-  password: 
+  username:
+  password:
 
-test: 
+test:
   adapter: postgresql
   encoding: utf8
   database: sdl_admin_dashboard_test
   pool: 5
   username: judywu
-  password: 
+  password:
 
-staging: 
+staging:
   adapter: postgresql
   encoding: utf8
-  database: <%= Rails.application.secrets.db_name %>
+  database: <%= (ENV['db_name'] || Rails.application.secrets.db_name) %>
   pool: 5
-  username: <%= Rails.application.secrets.db_user %>
-  password: <%= Rails.application.secrets.db_password %>
+  username: <%= (ENV["db_user"] || Rails.application.secrets.db_user) %>
+  password: <%= (ENV["db_password"] || Rails.application.secrets.db_password) %>
 
-production: 
+production:
   adapter: postgresql
   encoding: utf8
-  database: <%= Rails.application.secrets.db_name %>
+
+  # database: <%= (ENV["db_name"] || Rails.application.secrets.db_name) %>
+  # pool: 5
+  # username: <%= (ENV["db_user"] || Rails.application.secrets.db_user) %>
+  # password: <%= (ENV["db_password"] || Rails.application.secrets.db_password) %>
+
   pool: 5
-  username: <%= Rails.application.secrets.db_user %>
-  password: <%= Rails.application.secrets.db_password %>
+  database: <%= ENV['APP_DB_DATABASE'] || Rails.application.secrets.db_name %>
+  username: <%= ENV['APP_DB_USERNAME'] || Rails.application.secrets.db_user%>
+  password: <%= ENV['APP_DB_PASSWORD'] || Rails.application.secrets.db_password%>
+  host: omh-postgres
+  port: 5432
 

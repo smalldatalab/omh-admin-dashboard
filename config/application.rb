@@ -42,8 +42,11 @@ module SdlAdminDashboard
       address:                 'smtp.mandrillapp.com',
       port:                     587,
       domain:                  'smalldata.io',
-      user_name:               Rails.application.secrets.mandrill_username,
-      password:                Rails.application.secrets.mandrill_password,
+      # user_name:               ENV['mandrill_username'] || Rails.application.secrets.mandrill_username,
+      # password:                ENV['mandrill_password'] || Rails.application.secrets.mandrill_password,
+
+      user_name:               ENV['MANDRILL_USERNAME'] || Rails.application.secrets.mandrill_username,
+      password:                ENV['MANDRILL_PASSWORD'] || Rails.application.secrets.mandrill_password,
       authentication:          'plain',
       enable_starttls_auto:     true
     }
