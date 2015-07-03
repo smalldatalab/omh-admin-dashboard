@@ -1,6 +1,6 @@
 server "ohmage-omh.smalldata.io", :web, :app, :worker, :db, :cache, primary: true
 
-set (:user) { "mcarroll" }
+set (:user) { "admin_dashboard" }
 set (:application) { "admindashboard" }
 set (:deploy_to) { "/home/#{user}/#{application}" }
 set (:deploy_env) { 'production' }
