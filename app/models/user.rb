@@ -275,6 +275,16 @@ class User < ActiveRecord::Base
     end
   end
 
+  # def multi_users_data(ids)
+  #   User.find(ids).each do |user|
+  #     pam_csv = user.pam_data_csv
+  #     fjlkdsjfj
+  #   end
+  # end
+
+
+
+
   def pam_data_csv
     CSV.generate do |csv|
       csv << [

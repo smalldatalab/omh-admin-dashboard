@@ -3,6 +3,47 @@ ActiveAdmin.register User  do
 
   menu priority: 3, label: "Participants"
 
+  # controller do
+  #   def batch_action
+
+  #     render text: multi_users_data(params[:collection_selection], params[:batch_action])
+
+  #   end
+  # end
+
+
+  # batch_action :pam_csv, priority: 1 do |ids|
+  #   redirect_to batch_action_admin_users_path(ids, 'pam_csv')
+  # end
+
+  # batch_action :mobility_csv, label: "Mobility CSV Download", priority: 2 do |ids|
+  #   User.find(ids).each do |user|
+  #     # redirect_to admin_user_mobility_daily_summary_data_points_path(user, format: 'csv')
+  #     if !user.mobility_daily_summary_data_csv.nil?
+  #       fitbit_data = user.mobility_daily_summary_data_csv
+  #     end
+  #   end
+  # end
+
+  # batch_action :ohmage_csv, label: "ohmage CSV Download", priority: 3 do |ids|
+  #   User.find(ids).each do |user|
+  #     # redirect_to admin_user_ohmage_data_points_path(user, format: 'csv')
+  #     if !user.ohmage_data_csv.nil?
+  #       fitbit_data = user.ohmage_data_csv
+  #     end
+  #   end
+  # end
+
+  # batch_action :fitbit_csv, label: "Fitbit CSV Download", priority: 4 do |ids|
+  #   User.find(ids).each do |user|
+  #     # redirect_to admin_user_fitbit_data_points_path(user, format: 'csv')
+  #     if !user.fitbit_data_csv.nil?
+  #       fitbit_data = user.fitbit_data_csv
+  #     end
+  #   end
+  # end
+
+
   index do
     selectable_column
     id_column
@@ -150,6 +191,7 @@ ActiveAdmin.register User  do
     f.actions
   end
 
+
   action_item :only => :show do
     link_to 'PAM Data CSV File', admin_user_pam_data_points_path(user, format: 'csv')
   end
@@ -171,16 +213,16 @@ ActiveAdmin.register User  do
     # column :gmail
     # column :first_name
     # column :last_name
-    column("Studies") {|user| user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
-    column("Data Streams") {|user| user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
-    column("Surveys") {|user| user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''}
-    column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
-    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'ios' || 'android')}
-    column("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
-    column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
-    column("Fitbit Data Last Uploaded") { |user| user.most_recent_data_point_date('step_count')}
-    column (:created_at) { |time| time.created_at.to_formatted_s(:long_ordinal)}
-    column (:updated_at) { |time| time.updated_at.to_formatted_s(:long_ordinal)}
+    # column("Studies") {|user| user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
+    # column("Data Streams") {|user| user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
+    # column("Surveys") {|user| user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''}
+    # column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
+    # column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'ios' || 'android')}
+    # column("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
+    # column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
+    # column("Fitbit Data Last Uploaded") { |user| user.most_recent_data_point_date('step_count')}
+    # column (:created_at) { |time| time.created_at.to_formatted_s(:long_ordinal)}
+    # column (:updated_at) { |time| time.updated_at.to_formatted_s(:long_ordinal)}
   end
 
 end

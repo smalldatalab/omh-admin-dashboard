@@ -1,0 +1,37 @@
+- if params[:batch_action] == 'pam_csv'
+  - pam_data = []
+  - pam_data_keys = []
+  - User.find(params[:collection_selection]).each do |u|
+    - if !u.pam_data_csv.nil?
+      - pam_data_keys = u.pam_data_csv.parse_csv
+      - pam_data << u.pam_data_csv
+  %table
+
+
+    %tr
+    - pam_data.each do |value|
+      %td=value
+
+
+- elsif params[:batch_action] == 'mobility_csv'
+  - mobility_data = []
+  - User.find(params[:collection_selection]).each do |u|
+    - if !u.mobility_daily_summary_data_csv.nil?
+      - mobility_data << u.mobility_daily_summary_data_csv
+  %p=mobility_data
+
+
+- elsif params[:batch_action] == 'ohmage_csv'
+  - ohmage_data = []
+  - User.find(params[:collection_selection]).each do |u|
+    - if !u.ohmage_data_csv.nil?
+      - ohmage_data << u.ohmage_data_csv
+  %p=ohmage_data
+
+
+- else
+  - fitbit_data = []
+  - User.find(params[:collection_selection]).each do |u|
+    - if !u.fitbit_data_csv.nil?
+      - fitbit_data << u.fitbit_data_csv
+  %p=fitbit_data
