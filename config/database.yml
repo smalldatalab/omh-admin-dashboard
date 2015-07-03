@@ -25,12 +25,6 @@ staging:
 production:
   adapter: postgresql
   encoding: utf8
-
-  # database: <%= (ENV["db_name"] || Rails.application.secrets.db_name) %>
-  # pool: 5
-  # username: <%= (ENV["db_user"] || Rails.application.secrets.db_user) %>
-  # password: <%= (ENV["db_password"] || Rails.application.secrets.db_password) %>
-
   pool: 5
   database: <%= ENV['db_name'] || Rails.application.secrets.db_name %>
   username: <%= ENV['db_user'] || Rails.application.secrets.db_user%>
