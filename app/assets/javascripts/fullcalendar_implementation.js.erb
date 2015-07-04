@@ -150,15 +150,15 @@ $(document).ready(function() {
 
     // create the main calendar widget
     $('#calendar').fullCalendar({
-        /*
         header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay'
+            right: 'prev,next,today,year,month',
+            left: 'title'
         },
-        */
+        defaultView: 'year',
+        yearColumns: 3,
         selectable: true,
         timezone: "UTC",
+        editable: true,
         unselectAuto: false,
         aspectRatio: 1.65,
         // googleCalendarApiKey: 'AIzaSyCZ3nNL96uCWFPKLPkSIzfxdRqg24vmTlE',
@@ -200,67 +200,82 @@ $(document).ready(function() {
                 bindDay(today, ranges, $day_viz);
             }
         },
-        select: function(start, end, jsEvent, view ) {
-            $("#info_content").stop().slideDown(300);
-
-            var end_inclusive = end.clone().subtract(1, 'day');
-
-            var $info = $("#info");
-
-            // get data for all selected days, if available
-            var days_data = null;
-
-            if (my_daily_data != null) {
-                days_data = d3.time.day.utc.range(start, end)
-                    .filter(function(d) {
-                        return my_daily_data.hasOwnProperty(d3.time.day.utc.floor(d).toJSON());
-                    }).map(function(d) {
-                        return {date: d.toJSON(), values: my_daily_data[d.toJSON()]};
-                    });
+        select: function(start, end) {
+            var title = prompt('Note:');
+            var eventData;
+            if (title) {
+                eventData = {
+                    title: title,
+                    start: start,
+                    end: end,
+                    color: 'gray',
+                    textColor: 'white'
+                };
+                $('#calendar').fullCalendar('renderEvent', eventData, true);
             }
+            $('#calendar').fullCalendar('unselect');
+            events_array.push(eventData);
+
+            // $("#info_content").stop().slideDown(300);
+
+            // var end_inclusive = end.clone().subtract(1, 'day');
+
+            // var $info = $("#info");
+
+            // // get data for all selected days, if available
+            // var days_data = null;
+
+            // if (my_daily_data != null) {
+            //     days_data = d3.time.day.utc.range(start, end)
+            //         .filter(function(d) {
+            //             return my_daily_data.hasOwnProperty(d3.time.day.utc.floor(d).toJSON());
+            //         }).map(function(d) {
+            //             return {date: d.toJSON(), values: my_daily_data[d.toJSON()]};
+            //         });
+            // }
 
 
-            console.log("Data for selected days: ", days_data);
+            // console.log("Data for selected days: ", days_data);
 
-            $info.find("textarea").text();
+            // $info.find("textarea").text();
 
-            if (days_data.length == 1) {
-                // only a single day is selected
-                $info.find("h2").text(start.format("MMM Do, YYYY"));
+            // if (days_data.length == 1) {
+            //     // only a single day is selected
+            //     $info.find("h2").text(start.format("MMM Do, YYYY"));
 
-                $info.find("#info_notes").show();
-                $info.find("#averaged-notice").hide();
+            //     $info.find("#info_notes").show();
+            //     $info.find("#averaged-notice").hide();
 
-                // populate the day fields
-                $info.find("span.stat_value").each(function() {
-                    $(this).text(days_data[0].values[$(this).data('field')]);
-                });
-            }
-            else if (days_data.length > 1) {
-                // multiple days are selected
-                if (start.year() == end.year())
-                    $info.find("h2").text(start.format("MMM Do") + " - " + end_inclusive.format("MMM Do, YYYY"));
-                else
-                    $info.find("h2").text(start.format("MMM Do, YYYY") + " - " + end_inclusive.format("MMM Do, YYYY"));
+            //     // populate the day fields
+            //     $info.find("span.stat_value").each(function() {
+            //         $(this).text(days_data[0].values[$(this).data('field')]);
+            //     });
+            // }
+            // else if (days_data.length > 1) {
+            //     // multiple days are selected
+            //     if (start.year() == end.year())
+            //         $info.find("h2").text(start.format("MMM Do") + " - " + end_inclusive.format("MMM Do, YYYY"));
+            //     else
+            //         $info.find("h2").text(start.format("MMM Do, YYYY") + " - " + end_inclusive.format("MMM Do, YYYY"));
 
-                $info.find("#info_notes").hide();
-                $info.find("#averaged-notice").show();
+            //     $info.find("#info_notes").hide();
+            //     $info.find("#averaged-notice").show();
 
-                // populate the day fields
-                $info.find("span.stat_value").each(function() {
-                    var field = $(this).data('field');
+            //     // populate the day fields
+            //     $info.find("span.stat_value").each(function() {
+            //         var field = $(this).data('field');
 
-                    // average the value over all days
-                    $(this).text(+d3.mean(days_data, function(d) { return d.values[field]; }).toFixed(2));
-                });
-            }
-            else {
-                $("#info_content").hide();
-            }
+            //         // average the value over all days
+            //         $(this).text(+d3.mean(days_data, function(d) { return d.values[field]; }).toFixed(2));
+            //     });
+            // }
+            // else {
+            //     $("#info_content").hide();
+            // }
         },
-        unselect: function() {
-            $("#info_content").slideUp(300);
-        },
+        // unselect: function() {
+        //     $("#info_content").slideUp(300);
+        // },
         eventDataTransform: function(eventData) {
             eventData.url = null;
             return eventData;
