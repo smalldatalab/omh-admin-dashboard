@@ -105,7 +105,7 @@ ActiveAdmin.register User  do
 
   show title: :id do
   # :title => proc {|user| (user.first_name.blank? && user.last_name.blank?) ? user.gmail : ( user.first_name.blank? ? user.last_name : user.first_name ) }  do
-    panel "Calendar View" do
+    panel "Calendar of Daily Data" do
       render partial: 'calendar_view', locals: { users: @user}
     end
 
