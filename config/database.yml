@@ -30,5 +30,5 @@ production:
   username: <%= ENV['db_user'] || Rails.application.secrets.db_user%>
   password: <%= ENV['db_password'] || Rails.application.secrets.db_password%>
   # host: omh-postgres
-  port: 5432
+  # port: 5432
 
