@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       resources :calendar_data_points, :format => :json
       resources :mobility_daily_summary_data_points
       resources :fitbit_data_points
+      resources :annotations
     end
   end
 

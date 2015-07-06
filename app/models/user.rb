@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   has_many :surveys, through: :studies
   has_many :data_streams, through: :studies
 
+  has_many :annotations
+
 
   accepts_nested_attributes_for :studies
 
@@ -168,6 +170,25 @@ class User < ActiveRecord::Base
     end
     return fitbit_events_array.to_json
   end
+
+  def calendar_annotation_events_array
+    annotations_array = []
+
+    if Annotation.all.nil?
+      return nil
+    else
+      Annotation.all.each do |anno|
+        annotations_array.push({
+          title: anno.title,
+          start: anno.start,
+          color: '#d9534f',
+          textColor: 'white'
+          })
+      end
+    end
+    return annotations_array.to_json
+  end
+
 
   def calendar_ohmage_events_array(admin_user_id)
     ohmage_events_array = []
