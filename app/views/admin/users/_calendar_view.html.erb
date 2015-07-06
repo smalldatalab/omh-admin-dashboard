@@ -30,16 +30,16 @@
         </style>
 
  <body>
-        <div id="calendar_data_points" data-url="http://localhost:3000/admin/users/<%= @user.id %>/calendar_data_points.json"></div>
+        <div id="calendar_data_points" data-url="http://ohmage-omh.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json"></div>
         <!-- http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json -->
 
         <!-- http://localhost:3000/admin/users/<%= @user.id %>/calendar_data_points.json -->
 
         <!-- http://ohmage-omh.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json -->
 
-        <div id="one_day_pam_data" data-url="http://localhost:3000/admin/users/<%= @user.id %>/pam_data_points?date="></div>
-        <div id="one_day_ohmage_data" data-url="http://localhost:3000/admin/users/<%= @user.id %>/ohmage_data_points?date="></div>
-        <div id="one_day_fitbit_data" data-url="http://localhost:3000/admin/users/<%= @user.id %>/fitbit_data_points?date="></div>
+        <div id="one_day_pam_data" data-url="http://ohmage-omh.smalldata.io/admin/users/<%= @user.id %>/pam_data_points?date="></div>
+        <div id="one_day_ohmage_data" data-url="http://ohmage-omh.smalldata.io/admin/users/<%= @user.id %>/ohmage_data_points?date="></div>
+        <div id="one_day_fitbit_data" data-url="http://ohmage-omh.smalldata.io/admin/users/<%= @user.id %>/fitbit_data_points?date="></div>
 
 
         <div id="pam_events_array" data-attribute="<%= @user.calendar_pam_events_array %>"></div>
@@ -79,8 +79,6 @@
                           </button>
                           <h4>Annotation:</h4>
                         </div>
-                        <!-- :annotation, url: admin_user_annotations_path(@user.id) -->
-                        <!-- ([@user, @user.annotations.build]) -->
                         <%= form_for :annotation, url: admin_user_annotations_path(@user.id) do |f| %>
                           <div class="modal-body">
                             <p>
