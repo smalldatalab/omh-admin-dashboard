@@ -6,6 +6,10 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :users do
+      # collection do
+      #   get 'all_users_data_points'
+      # end
+
       resources :mobility_user_interface
       resources :pam_data_points
       resources :mobility_data_points
