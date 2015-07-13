@@ -11,14 +11,10 @@ class User < ActiveRecord::Base
 
 
   accepts_nested_attributes_for :studies
-
   validates :studies, presence: true
-  # validates_format_of :username, without: /\s/, message: "can't have space"
   validates_uniqueness_of :username
 
-  # validates_acceptance_of :gmail, message: "This gmail address doesn't have any data points", :if => Proc.new { |user| user.gmail.nil? ? nil : PamUser.where('email_address' => {'address' => user.gmail.gsub(/\s+/, "").downcase}).blank? }
   def registrated_in_database
-    # gmail = self.gmail.gsub(/\s+/, "").downcase
     user_name = self.username
     if PamUser.where('_id' => user_name).blank?
       return "No"
@@ -40,11 +36,18 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return ''
     else
-      recent_data_point = user_record.pam_data_points.where('header.schema_id.name' => data_stream, 'body.device' => device)
-      if recent_data_point.last.nil?
-        return ''
+      recent_data_point = user_record.pam_data_points.where('header.schema_id.name' => data_stream)
+      if !recent_data_point.where('body.device' => 'ios').blank?
+        DateTime.parse(recent_data_point.where('body.device' => 'ios').order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
+      elsif !recent_data_point.where('body.device' => 'android').blank?
+        DateTime.parse(recent_data_point.where('body.device' => 'android').order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
       else
-        DateTime.parse(recent_data_point.order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
+        recent_data_point = user_record.pam_data_points.where('header.schema_id.name' => data_stream, 'body.device' => device)
+        if recent_data_point.last.nil?
+          return ''
+        else
+          DateTime.parse(recent_data_point.order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
+        end
       end
     end
   end
