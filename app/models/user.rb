@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return ''
     else
-      recent_data_point = user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary', 'body.device' => {'$in' => ['ios', 'android', 'iOS', 'Android']} )
+      recent_data_point = user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary', 'body.device' => {'$in' => ['ios', 'android', 'iOS', 'Android']})
       if recent_data_point.last.nil?
         return ''
       else
