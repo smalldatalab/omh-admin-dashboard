@@ -310,7 +310,7 @@ ActiveAdmin.register User  do
       end
     end
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
-    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary')}
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point_date }
     column("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
     column("Fitbit Data Last Uploaded") { |user| user.most_recent_data_point_date('step_count')}
@@ -376,7 +376,7 @@ ActiveAdmin.register User  do
       end
 
       row("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
-      row("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'ios' || 'android')}
+      row("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point_date}
       row("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
       row("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
       row("Fitbit Data Last Uploaded") { |user| user.most_recent_data_point_date('step_count')}
@@ -434,7 +434,7 @@ ActiveAdmin.register User  do
     column("Data Streams") {|user| user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
     column("Surveys") {|user| user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''}
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
-    column("Mobility Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'ios' || 'android')}
+    column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point_date }
     column("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
     column("ohmage Data Last Uploaded") { |user| user.most_recent_ohmage_data_point_date(current_admin_user.id)}
     column("Fitbit Data Last Uploaded") { |user| user.most_recent_data_point_date('step_count')}

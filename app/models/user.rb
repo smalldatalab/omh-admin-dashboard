@@ -36,18 +36,24 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return ''
     else
-      recent_data_point = user_record.pam_data_points.where('header.schema_id.name' => data_stream)
-      if !recent_data_point.where('body.device' => 'ios').blank?
-        DateTime.parse(recent_data_point.where('body.device' => 'ios').order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
-      elsif !recent_data_point.where('body.device' => 'android').blank?
-        DateTime.parse(recent_data_point.where('body.device' => 'android').order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
+      recent_data_point = user_record.pam_data_points.where('header.schema_id.name' => data_stream, 'body.device' => device)
+      if recent_data_point.last.nil?
+        return ''
       else
-        recent_data_point = user_record.pam_data_points.where('header.schema_id.name' => data_stream, 'body.device' => device)
-        if recent_data_point.last.nil?
-          return ''
-        else
-          DateTime.parse(recent_data_point.order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
-        end
+        DateTime.parse(recent_data_point.order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
+      end
+    end
+  end
+
+  def most_recent_mobility_data_point_date
+    if user_record.nil?
+      return ''
+    else
+      recent_data_point = user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary', 'body.device' => {'$in' => ['ios', 'android', 'iOS', 'Android']} )
+      if recent_data_point.last.nil?
+        return ''
+      else
+        DateTime.parse(recent_data_point.order('header.creation_date_time_epoch_milli DESC').limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
       end
     end
   end
