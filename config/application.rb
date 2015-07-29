@@ -36,14 +36,15 @@ module SdlAdminDashboard
       end)
     end
 
+    config.action_mailer.default_url_options = {:host => ENV['MANDRILL_HOST'] || Rails.application.secrets.MANDRILL_HOST}
     config.action_mailer.default :charset => "utf-8"
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
       address:                 'smtp.mandrillapp.com',
       port:                     587,
       domain:                  'smalldata.io',
-      user_name:               ENV['mandrill_username'] || Rails.application.secrets.mandrill_username,
-      password:                ENV['mandrill_password'] || Rails.application.secrets.mandrill_password,
+      user_name:               ENV['MANDRILL_USERNAME'] || Rails.application.secrets.MANDRILL_USERNAME,
+      password:                ENV['MANDRILL_PASSWORD'] || Rails.application.secrets.MANDRILL_PASSWORD,
       authentication:          'plain',
       enable_starttls_auto:     true
     }
