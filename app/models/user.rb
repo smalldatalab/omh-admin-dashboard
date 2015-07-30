@@ -373,6 +373,10 @@ class User < ActiveRecord::Base
             a.body.data.attributes.each do |key, value|
               survey_keys.push(key) unless survey_keys.include? key
             end
+          else
+             a.body.attributes.each do |key, value|
+              survey_keys.push(key) unless survey_keys.include? key
+            end
           end
         end
         return survey_keys
@@ -396,6 +400,12 @@ class User < ActiveRecord::Base
           survey_values << data_point.body.data[key] ? data_point.body.data[key] : nil
         end
       end
+    else
+      survey_keys.each_with_index do |key, index|
+        if index >= fixed_survey_values_count
+          survey_values << data_point.body[key] ? data_point.body[key] : nil
+        end
+      end
     end
     return survey_values
   end
@@ -413,7 +423,7 @@ class User < ActiveRecord::Base
           return nil
         else
           data_points.each do |data_point|
-            csv << get_all_survey_question_values(keys, data_point) if data_point.body.data
+            csv << get_all_survey_question_values(keys, data_point) if data_point.body.data || data_point.body
           end
         end
       end
