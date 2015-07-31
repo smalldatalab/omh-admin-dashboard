@@ -16,7 +16,7 @@ class AdminUser < ActiveRecord::Base
   # validates :password, :password_confirmation, presence: true, on: :create
   # validates :password, confirmation: true
 
-  after_create {|admin| admin.send_reset_password_instructions unless admin.email == 'admin@example.com'}
+  after_create {|admin| admin.send_reset_password_instructions unless admin.email == 'admin@example.com' || !admin.send_email}
 
   def password_required?
     new_record? ? false : super

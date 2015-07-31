@@ -1,5 +1,5 @@
 ActiveAdmin.register AdminUser do
-  permit_params :email, :password, :password_confirmation, :researcher, :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
+  permit_params :email, :password, :password_confirmation, :researcher, :send_email, :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
   menu priority: 2, label: "Administrators"
 
   index do
@@ -55,6 +55,7 @@ ActiveAdmin.register AdminUser do
         f.input :researcher, as: :boolean
         f.input :studies, as: :check_boxes, collection: Study.all
       end
+      f.input :send_email, as: :boolean
     end
     f.actions
   end
