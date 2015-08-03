@@ -183,10 +183,10 @@ class User < ActiveRecord::Base
   def calendar_annotation_events_array
     annotations_array = []
 
-    if Annotation.all.nil?
+    if self.annotations.nil?
       return nil
     else
-      Annotation.all.each do |anno|
+     self.annotations.all.each do |anno|
         annotations_array.push({
           title: anno.title,
           start: anno.start,
