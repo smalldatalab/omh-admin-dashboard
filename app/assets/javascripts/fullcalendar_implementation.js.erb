@@ -101,9 +101,8 @@ $(document).ready(function() {
     var fitbit_events_array = $('#fitbit_events_array').data('attribute');
     var annotation_events_array = $('#annotation_events_array').data('attribute');
     console.log(annotation_events_array);
+    var events_array = $.merge($.merge( $.merge( [], pam_events_array ), ohmage_events_array), fitbit_events_array);
     // var events_array = $.merge($.merge($.merge( $.merge( [], pam_events_array ), ohmage_events_array), fitbit_events_array), annotation_events_array);
-    var events_array = annotation_events_array;
-
 
 
     // get the dummy data we created
@@ -169,25 +168,25 @@ $(document).ready(function() {
         events: events_array,
 
 
-        // eventClick: function(event) {
-        //     if (event.title == 'ohmage') {
-        //         window.open(one_day_ohmage_data + event.start);
+        eventClick: function(event) {
+            if (event.title == 'ohmage') {
+                window.open(one_day_ohmage_data + event.start);
 
-        //     }
-        //     else if (event.title == 'PAM') {
-        //         window.open(one_day_pam_data + event.start);
+            }
+            else if (event.title == 'PAM') {
+                window.open(one_day_pam_data + event.start);
 
-        //     }
-        //     else if (event.title == 'Fitbit') {
-        //         window.open(one_day_fitbit_data + event.start);
-        //     }
-        //     else {
-        //         document.getElementById("eventTitle").setAttribute('value', event.title);
-        //         document.getElementById("eventDate").setAttribute('value', moment(event.start).format('YYYY-MM-DD'));
-        //         document.getElementById("eventButton").click();
-        //         $('#calendar').fullCalendar('updateEvent', event);
-        //     }
-        // },
+            }
+            else if (event.title == 'Fitbit') {
+                window.open(one_day_fitbit_data + event.start);
+            }
+            else {
+                document.getElementById("eventTitle").setAttribute('value', event.title);
+                document.getElementById("eventDate").setAttribute('value', moment(event.start).format('YYYY-MM-DD'));
+                document.getElementById("eventButton").click();
+                $('#calendar').fullCalendar('updateEvent', event);
+            }
+        },
 
         viewRender: function() {
             if ($("#show_bar_numbers").is(":checked")) { $(".bar_label").show(); } else { $(".bar_label").hide(); }
