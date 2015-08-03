@@ -169,25 +169,25 @@ $(document).ready(function() {
         events: events_array,
 
 
-        eventClick: function(event) {
-            if (event.title == 'ohmage') {
-                window.open(one_day_ohmage_data + event.start);
+        // eventClick: function(event) {
+        //     if (event.title == 'ohmage') {
+        //         window.open(one_day_ohmage_data + event.start);
 
-            }
-            else if (event.title == 'PAM') {
-                window.open(one_day_pam_data + event.start);
+        //     }
+        //     else if (event.title == 'PAM') {
+        //         window.open(one_day_pam_data + event.start);
 
-            }
-            else if (event.title == 'Fitbit') {
-                window.open(one_day_fitbit_data + event.start);
-            }
-            else {
-                document.getElementById("eventTitle").setAttribute('value', event.title);
-                document.getElementById("eventDate").setAttribute('value', moment(event.start).format('YYYY-MM-DD'));
-                document.getElementById("eventButton").click();
-                $('#calendar').fullCalendar('updateEvent', event);
-            }
-        },
+        //     }
+        //     else if (event.title == 'Fitbit') {
+        //         window.open(one_day_fitbit_data + event.start);
+        //     }
+        //     else {
+        //         document.getElementById("eventTitle").setAttribute('value', event.title);
+        //         document.getElementById("eventDate").setAttribute('value', moment(event.start).format('YYYY-MM-DD'));
+        //         document.getElementById("eventButton").click();
+        //         $('#calendar').fullCalendar('updateEvent', event);
+        //     }
+        // },
 
         viewRender: function() {
             if ($("#show_bar_numbers").is(":checked")) { $(".bar_label").show(); } else { $(".bar_label").hide(); }
