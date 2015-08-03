@@ -102,7 +102,7 @@ $(document).ready(function() {
     var annotation_events_array = $('#annotation_events_array').data('attribute');
     console.log(annotation_events_array);
     // var events_array = $.merge($.merge($.merge( $.merge( [], pam_events_array ), ohmage_events_array), fitbit_events_array), annotation_events_array);
-    var events_array = $.merge( $.merge( [], pam_events_array ), annotation_events_array);
+    var events_array = annotation_events_array;
 
 
 
