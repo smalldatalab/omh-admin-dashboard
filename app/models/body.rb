@@ -28,6 +28,11 @@ class Body
 # For Fitbit
   field :step_count, type: Integer
 
+# For LogIn
+  field :level, type: String
+  field :event, type: String
+  field :msg, type: String
+
   embeds_one :location
 
   embeds_one :effective_time_frame

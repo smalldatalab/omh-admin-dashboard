@@ -425,6 +425,9 @@ ActiveAdmin.register User  do
     link_to 'Fitbit Data csv File', admin_user_fitbit_data_points_path(user, format: 'csv')
   end
 
+  action_item :only => :show do
+    link_to 'Log In Data csv File', admin_user_log_in_data_points_path(user, format: 'csv')
+  end
 
   csv do
     column :gmail

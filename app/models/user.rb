@@ -305,6 +305,20 @@ class User < ActiveRecord::Base
     end
   end
 
+
+  def all_log_in_data_points
+    if user_record.nil?
+      return nil
+    else
+      log_in_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'app-log')
+      if log_in_data_points.last.nil?
+        return nil
+      else
+        log_in_data_points
+      end
+    end
+  end
+
   def pam_data_csv
     CSV.generate do |csv|
       csv << [
@@ -508,6 +522,35 @@ class User < ActiveRecord::Base
                  data_point.header.creation_date_time,
                  data_point.body.step_count
         ]
+        end
+      end
+    end
+  end
+
+  def log_in_data_csv
+    CSV.generate do |csv|
+      csv << [
+        'name',
+        'version',
+        'source name',
+        'creation date time',
+        'level',
+        'event',
+        'message'
+      ]
+      if all_log_in_data_points.nil?
+        return nil
+      else
+        all_log_in_data_points.each do |data_point|
+          csv << [
+            data_point.header.schema_id.name,
+            data_point.header.schema_id.version.major.to_s + '.' + data_point.header.schema_id.version.minor.to_s,
+            data_point.header.acquisition_provenance.source_name,
+            data_point.header.creation_date_time,
+            data_point.body.level,
+            data_point.body.event,
+            data_point.body.msg
+          ]
         end
       end
     end
