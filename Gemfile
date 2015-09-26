@@ -42,6 +42,10 @@ gem 'mongoid', '4.0.0'
 
 gem 'mongoid_rails_migrations'
 
+gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
+
+gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+
 gem 'bson_ext'
 
 gem 'taps'
