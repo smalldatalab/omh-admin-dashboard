@@ -46,6 +46,8 @@ gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
 
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 
+gem 'rack-gridfs'
+
 gem 'bson_ext'
 
 gem 'taps'

@@ -20,7 +20,11 @@ Rails.application.routes.draw do
       resources :log_in_data_points
       resources :annotations
     end
+    mount Rack::GridFS::Endpoint.new(:db => 'omh'), :at => "gridfs"
   end
+
+
+
 
   # resources :mobility_dashboard, only: :index
   # resources :inbox, :controller => 'inbox', :only => [:show, :create]
