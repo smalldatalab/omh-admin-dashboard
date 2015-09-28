@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       resources :log_in_data_points
       resources :annotations
     end
-    mount Rack::GridFS::Endpoint.new(:db => "omh"), :at => "gridfs"
+    mount Rack::GridFS::Endpoint.new(:db => Mongoid.session('default')), :at => "gridfs"
   end
 
 

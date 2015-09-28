@@ -5,7 +5,7 @@ require 'rails/all'
 require 'rails/mongoid'
 require 'json'
 require 'rack/gridfs'
-config.middleware.use Rack::GridFS, :hostname => 'http://lifestreams.smalldata.io', :port => 27017, :database => "omh", :prefix => 'gridfs'
+
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -26,6 +26,7 @@ module SdlAdminDashboard
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+    config.middleware.use Rack::GridFS, :hostname => 'http://lifestreams.smalldata.io', :port => 27017, :database => Mongoid.session('default'), :prefix => 'gridfs'
     config.generators.orm :active_record
     initializer 'setup_asset_pipeline', :group => :all do |app|
       app.config.assets.precompile.shift
