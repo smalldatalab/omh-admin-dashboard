@@ -4,6 +4,8 @@ require 'csv'
 require 'rails/all'
 require 'rails/mongoid'
 require 'json'
+require 'rack/gridfs'
+config.middleware.use Rack::GridFS, :hostname => 'http://lifestreams.smalldata.io', :port => 27017, :database => "omh", :prefix => 'gridfs'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

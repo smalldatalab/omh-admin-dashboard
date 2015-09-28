@@ -42,7 +42,7 @@ gem 'mongoid', '4.0.0'
 
 gem 'mongoid_rails_migrations'
 
-gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
+gem "jnunemaker-rack-gridfs", :git =>"git://github.com/jnunemaker/rack-gridfs.git"
 
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 
