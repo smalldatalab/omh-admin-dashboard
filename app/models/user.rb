@@ -310,7 +310,7 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return nil
     else
-      log_in_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'app-log')
+      log_in_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'app-log').order('header.creation_date_time_epoch_milli ASC')
       if log_in_data_points.last.nil?
         return nil
       else

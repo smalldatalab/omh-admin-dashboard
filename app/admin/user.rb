@@ -426,7 +426,7 @@ ActiveAdmin.register User  do
   end
 
   action_item :only => :show do
-    link_to 'Log In Data csv File', admin_user_log_in_data_points_path(user, format: 'csv')
+    link_to '"Logging Data csv File', admin_user_log_in_data_points_path(user, format: 'csv')
   end
 
   csv do

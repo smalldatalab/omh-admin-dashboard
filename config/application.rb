@@ -27,7 +27,7 @@ module SdlAdminDashboard
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     config.middleware.use Rack::GridFS, :hostname => 'http://lifestreams.smalldata.io', :port => 27017, :database => "omh", :prefix => 'gridfs'
-    config.generators.orm :active_record
+    config.generators.orm :active_record3
     initializer 'setup_asset_pipeline', :group => :all do |app|
       app.config.assets.precompile.shift
       app.config.assets.precompile.push(Proc.new do |path|
