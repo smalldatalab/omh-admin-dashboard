@@ -3,6 +3,10 @@ ActiveAdmin.register User  do
 
   menu priority: 3, label: "Participants"
 
+  before_filter :only => :index do
+    @per_page = 10
+  end
+
 
   action_item :only => :index do
     link_to 'All PAM Data', all_users_pam_data_points_admin_users_path(format: 'csv')
