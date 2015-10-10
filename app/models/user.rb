@@ -253,7 +253,7 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return nil
     else
-      ohmage_data_points = user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/)
+      ohmage_data_points = user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/, 'header.acquisition_provenance.modality' => 'SELF_REPORTED')
       if ohmage_data_points.last.nil?
         return nil
       else
