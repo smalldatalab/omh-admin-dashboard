@@ -227,7 +227,7 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return nil
     else
-      pam_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
+      pam_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').order('header.creation_date_time_epoch_milli DESC')
       if pam_data_points.last.nil?
         return nil
       else
@@ -240,7 +240,7 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return nil
     else
-      mobility_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary')
+      mobility_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary').order('header.creation_date_time_epoch_milli DESC')
       if mobility_data_points.last.nil?
         return nil
       else
@@ -253,7 +253,7 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return nil
     else
-      ohmage_data_points = user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/, 'header.acquisition_provenance.modality' => 'SELF_REPORTED')
+      ohmage_data_points = user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/, 'header.acquisition_provenance.modality' => 'SELF_REPORTED').order('header.creation_date_time_epoch_milli DESC')
       if ohmage_data_points.last.nil?
         return nil
       else
@@ -296,7 +296,7 @@ class User < ActiveRecord::Base
     if user_record.nil?
       return nil
     else
-      fitbit_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'step_count', 'header.schema_id.namespace' => 'omh')
+      fitbit_data_points = user_record.pam_data_points.where('header.schema_id.name' => 'step_count', 'header.schema_id.namespace' => 'omh').order('header.creation_date_time_epoch_milli DESC')
       if fitbit_data_points.last.nil?
         return nil
       else
