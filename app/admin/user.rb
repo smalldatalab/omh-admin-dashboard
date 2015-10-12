@@ -396,6 +396,7 @@ ActiveAdmin.register User  do
   # filter :gmail
   # filter :first_name
   # filter :last_name
+  filter :id
   filter :studies, collection: Study.all
   filter :data_streams, collection: DataStream.all
   filter :surveys, collection: Survey.all
