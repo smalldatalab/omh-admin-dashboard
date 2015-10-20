@@ -14,13 +14,12 @@ class User < ActiveRecord::Base
   validates :studies, presence: true
   validates_uniqueness_of :username
 
-
   after_find :init
 
   def init
     user_name = self.username
-    pam_user = PamUser.find_by('_id' => user_name)
-    @user_record = pam_user.blank? ? nil : pam_user
+    pam_user = PamUser.where('_id' => user_name).first
+    @user_record = pam_user.nil? ? nil : pam_user
   end
 
   def registrated_in_database
