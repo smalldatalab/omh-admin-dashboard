@@ -68,6 +68,8 @@ gem 'foundation-rails'
 gem 'foundation-icons-sass-rails'
 
 gem 'mandrill-rails'
+# for debugging the slow issue
+gem 'tracer_bullets'
 
 group :development do
   gem "binding_of_caller"
@@ -76,7 +78,7 @@ group :development do
   gem 'capistrano',    '~> 2.15.5'
   gem 'capistrano-ext'
   gem 'capistrano_colors'
-  gem 'tracer_bullets'
+  # gem 'tracer_bullets'
 end
 
 # gem 'activeadmin',  github: 'gregbell/active_admin' #Move to specific version once a stable Rails 4 gem is on rubygems

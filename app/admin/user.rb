@@ -313,6 +313,7 @@ ActiveAdmin.register User  do
         common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
       end
     end
+
     column("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
     column("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point_date }
     column("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
@@ -392,10 +393,6 @@ ActiveAdmin.register User  do
     active_admin_comments
   end
 
-
-  # filter :gmail
-  # filter :first_name
-  # filter :last_name
   filter :id
   filter :studies, collection: Study.all
   filter :data_streams, collection: DataStream.all
@@ -408,7 +405,6 @@ ActiveAdmin.register User  do
       f.input :last_name
       f.input :username
       f.input :studies, as: :check_boxes, collection: Study.all
-      # current_admin_user.studies
     end
     f.actions
   end
