@@ -61,8 +61,8 @@ class User < ActiveRecord::Base
     if @user_record.nil?
       return ''
     else
-      ohmage_data_points = @user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).order('header.creation_date_time_epoch_milli DESC').limit(1).first
-      if ohmage_data_points.nil?
+      ohmage_data_points = @user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).order('header.creation_date_time_epoch_milli DESC')
+      if ohmage_data_points.blank?
         return ''
       else
         if AdminUser.find(admin_user_id).researcher?
@@ -77,7 +77,7 @@ class User < ActiveRecord::Base
             DateTime.parse(admin_ohmage_data_points.header.creation_date_time).to_formatted_s(:long_ordinal)
           end
         else
-          DateTime.parse(ohmage_data_points.header.creation_date_time).to_formatted_s(:long_ordinal)
+          DateTime.parse(ohmage_data_points.limit(1).first.header.creation_date_time).to_formatted_s(:long_ordinal)
         end
       end
     end
