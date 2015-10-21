@@ -430,7 +430,6 @@ class User < ActiveRecord::Base
       if keys
         csv << keys
         data_points = all_ohmage_data_points(admin_user_id)
-
         if data_points.nil?
           return nil
         else
@@ -579,6 +578,7 @@ class User < ActiveRecord::Base
     end
     return JSON.parse(json_data.to_json)
   end
+
 
   def escape_and_round(data)
     data ? data.round : 0
