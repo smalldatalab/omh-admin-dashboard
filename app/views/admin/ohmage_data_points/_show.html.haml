@@ -24,7 +24,7 @@
       font-family: $font-family
 -  def get_survey_image_link(filename)
   -  grid_fs = Mongoid::GridFs
-  -  image_id = SurveyImage.find_by('filename' => filename)._id
+  -  image_id = SurveyImage.find_by('metadata.media_id' => filename)._id
   -  image_link = grid_fs.get(image_id).data_uri
 
 
