@@ -61,7 +61,7 @@ class User < ActiveRecord::Base
     if @user_record.nil?
       return ''
     else
-      ohmage_data_points = @user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/).order('header.creation_date_time_epoch_milli DESC')
+      ohmage_data_points = @user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/,'header.acquisition_provenance.modality' => 'SELF_REPORTED').order('header.creation_date_time_epoch_milli DESC')
       if ohmage_data_points.blank?
         return ''
       else

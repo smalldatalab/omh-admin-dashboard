@@ -22,9 +22,10 @@
       padding-top: 1em
       padding-bottom: 1em
       font-family: $font-family
+
 -  def get_survey_image_link(filename)
   -  grid_fs = Mongoid::GridFs
-  -  image_id = SurveyImage.find_by('metadata.media_id' => filename)._id
+  -  image_id = SurveyImage.find_by('metadata.media_id'=> filename)._id
   -  image_link = grid_fs.get(image_id).data_uri
 
 
@@ -74,7 +75,7 @@
                     - if i <= survey_keys.length
                       - key = survey_keys[i]
                       - if data_point.body.data[key].is_a? String
-                        - if data_point.body.data[key].length >= 36
+                        - if data_point.body.data[key].to_s.include?("-") && data_point.body.data[key].to_s.length == 36
                           - image_link = get_survey_image_link(data_point.body.data[key])
                           %td
                             %img{src: image_link}
@@ -90,7 +91,7 @@
                   - data_point.body.attributes.each do |key, value|
                     - if i <= survey_keys.length
                       - key = survey_keys[i]
-                      - if data_point.body[key].length >= 36
+                      - if data_point.body[key].to_s.include?("-") && data_point.body[key].to_s.length == 36
                         - image_link = get_survey_image_link(data_point.body[key])
                         %td
                           %img{src: image_link}

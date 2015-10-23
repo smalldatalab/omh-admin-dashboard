@@ -11,5 +11,4 @@ class PamUser
   embeds_one :email_address
 
 
-
 end
