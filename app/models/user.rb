@@ -377,6 +377,7 @@ class User < ActiveRecord::Base
         survey_keys = [
                       'id',
                       'user_id',
+                      'source_name',
                       'creation_date_time',
                       'survey_namespace',
                       'survey_name',
@@ -402,6 +403,7 @@ class User < ActiveRecord::Base
     survey_values = [
                     data_point._id,
                     data_point.user_id,
+                    data_point.header.acquisition_provenance.source_name,
                     data_point.header.creation_date_time,
                     data_point.header.schema_id.namespace,
                     data_point.header.schema_id.name,
