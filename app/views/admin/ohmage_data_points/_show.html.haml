@@ -24,9 +24,13 @@
       font-family: $font-family
 
 -  def get_survey_image_link(filename)
-  -  grid_fs = Mongoid::GridFs
   -  image_id = SurveyImage.find_by('metadata.media_id'=> filename)._id
-  -  image_link = grid_fs.get(image_id).data_uri
+  -  image_file =  Mongoid::GridFs.get(image_id)
+  -  content_type = image_file.content_type
+  -  base64 = [image_file.to_s].pack('m').chomp
+  -  data_uri = "data:#{ content_type };base64,".concat(base64)
+  -  image_data_uri = data_uri
+
 
 
 .top-area
@@ -75,26 +79,27 @@
                     - if i <= survey_keys.length
                       - key = survey_keys[i]
                       - if data_point.body.data[key].is_a? String
-                        - if data_point.body.data[key].to_s.include?("-") && data_point.body.data[key].to_s.length == 36
+                        - if data_point.body.data[key].to_s.include?(".jpg")
                           - image_link = get_survey_image_link(data_point.body.data[key])
                           %td
                             %img{src: image_link}
-                          - i += 1
+                            - i += 1
                         - else
                           %td= data_point.body.data[key]
                           - i += 1
                       - else
                         %td= data_point.body.data[key]
-                      - i += 1
+                        - i += 1
 
                 - else
                   - data_point.body.attributes.each do |key, value|
                     - if i <= survey_keys.length
                       - key = survey_keys[i]
-                      - if data_point.body[key].to_s.include?("-") && data_point.body[key].to_s.length == 36
+                      - if data_point.body[key].to_s.include?(".jpg")
                         - image_link = get_survey_image_link(data_point.body[key])
                         %td
                           %img{src: image_link}
+                          - i += 1
                       - else
                         %td= data_point.body[key]
-                      - i += 1
+                        - i += 1

@@ -44,7 +44,7 @@ gem 'mongoid_rails_migrations'
 
 gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
 
-gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+# gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 
 gem 'rack-gridfs'
 

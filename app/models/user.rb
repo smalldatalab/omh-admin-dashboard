@@ -16,6 +16,8 @@ class User < ActiveRecord::Base
 
   after_find :init
 
+
+
   def init
     user_name = self.username
     pam_user = PamUser.where('_id' => user_name).first
@@ -113,7 +115,7 @@ class User < ActiveRecord::Base
     if @user_record.nil?
       return nil
     else
-      ohmage_data_points = @user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/, 'header.creation_date_time' => date)
+      ohmage_data_points = @user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/,'header.acquisition_provenance.modality' => 'SELF_REPORTED', 'header.creation_date_time' => date)
       if ohmage_data_points.last.nil?
         return nil
       else
