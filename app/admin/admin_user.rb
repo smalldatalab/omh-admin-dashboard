@@ -43,7 +43,7 @@ ActiveAdmin.register AdminUser do
   filter :current_sign_in_at
   filter :sign_in_count
   filter :created_at
-  filter :studies, collection: Study.all
+  filter :studies, as: :select, collection: proc{Study.all}
 
 
   form do |f|

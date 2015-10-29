@@ -394,9 +394,9 @@ ActiveAdmin.register User  do
   end
 
   filter :id
-  filter :studies, collection: Study.all
-  filter :data_streams, collection: DataStream.all
-  filter :surveys, collection: Survey.all
+  filter :studies, as: :select, collection: proc{Study.all}
+  filter :data_streams, as: :select, collection: proc{DataStream.all}
+  filter :surveys, as: :select, collection: proc{Survey.all}
 
   form do |f|
     f.inputs "User Details" do

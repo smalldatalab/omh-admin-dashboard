@@ -17,8 +17,8 @@ ActiveAdmin.register Study do
   end
 
   filter :name
-  filter :surveys, collection: Survey.all
-  filter :data_streams, collection: DataStream.all
+  filter :surveys, as: :select, collection: proc{Survey.all}
+  filter :data_streams, as: :select, collection: proc{DataStream.all}
 
 
   show do
