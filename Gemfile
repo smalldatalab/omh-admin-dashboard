@@ -40,15 +40,16 @@ gem 'd3-rails', '~> 3.5.2'
 
 gem 'mongoid', '4.0.0'
 
+gem 'bson_ext'
+
 gem 'mongoid_rails_migrations'
+
+gem 'rack-gridfs'
 
 gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
 
 # gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
-
-gem 'rack-gridfs'
-
-gem 'bson_ext'
+# gem 'jnunemaker-rack-gridfs', '0.3'
 
 gem 'taps'
 

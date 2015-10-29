@@ -1,5 +1,6 @@
 class SurveyImage
   include Mongoid::Document
+  # include MongoMapper::Document
 
   store_in collection: 'fs.files', database: 'omh'
 

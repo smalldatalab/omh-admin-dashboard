@@ -23,9 +23,9 @@
       padding-bottom: 1em
       font-family: $font-family
 
--  def get_survey_image_link(filename)
+- def get_survey_image_link(filename)
   -  image_id = SurveyImage.find_by('metadata.media_id'=> filename)._id
-  -  image_file =  Mongoid::GridFs.get(image_id)
+  -  image_file = Mongoid::GridFs.get(image_id)
   -  content_type = image_file.content_type
   -  base64 = [image_file.to_s].pack('m').chomp
   -  data_uri = "data:#{ content_type };base64,".concat(base64)

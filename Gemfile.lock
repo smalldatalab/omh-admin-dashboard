@@ -294,6 +294,7 @@ DEPENDENCIES
   jquery-rails
   json (= 1.8.2)
   mandrill-rails
+  mongo
   mongoid (= 4.0.0)
   mongoid-grid_fs!
   mongoid_rails_migrations
