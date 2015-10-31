@@ -4,9 +4,18 @@ class Admin::ImagesController < ApplicationController
     @filename = @image.filename
     @temp = Tempfile.new(params[:id])
     @data = File.read(@filename)
-    File.open(params[:id], 'wb') do |f|
-      f.write(@data)
+
+    begin
+      File.open(params[:id], 'wb') do |f|
+        f.write(@data)
+      end
+      send_file @image.path, type: @image.content_type, disposition: 'attachment'
+    ensure
+      @temp.close
+      @temp.unlink
+      spawn 'rm -Rf ' + @filename
     end
-    send_file @image.path, type: @image.content_type, disposition: 'attachment'
   end
+
+
 end
