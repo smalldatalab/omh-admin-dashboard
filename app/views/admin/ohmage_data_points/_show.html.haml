@@ -101,7 +101,7 @@
                   - data_point.body.attributes.each do |key, value|
                     - if i <= survey_keys.length
                       - key = survey_keys[i]
-                      - if data_point.body.data[key].is_a? String
+                      - if data_point.body[key].is_a? String
                         - if data_point.body[key].include?(".jpg") || data_point.body[key].length == 36
                           - download_link = get_survey_image_link(data_point.body[key])
                           %td
