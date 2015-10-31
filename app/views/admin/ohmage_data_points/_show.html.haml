@@ -25,7 +25,7 @@
 
 
 
-- def get_image_from_mongodb(filename)
+- def get_survey_image_download_link(filename)
   -  @image = SurveyImage.find_by('metadata.media_id'=> filename)
   -  @image_id = @image.id
   -  @filename = @image.filename
@@ -83,7 +83,7 @@
                       - key = survey_keys[i]
                       - if data_point.body.data[key].is_a? String
                         - if data_point.body.data[key].include?(".jpg") || data_point.body.data[key].length == 36
-                          - download_link = get_survey_image_link(data_point.body.data[key])
+                          - download_link = get_survey_image_download_link(data_point.body.data[key])
                           %td
                             %a{href: download_link}
                             - i += 1
@@ -103,7 +103,7 @@
                       - key = survey_keys[i]
                       - if data_point.body[key].is_a? String
                         - if data_point.body[key].include?(".jpg") || data_point.body[key].length == 36
-                          - download_link = get_survey_image_link(data_point.body[key])
+                          - download_link = get_survey_image_download_link(data_point.body[key])
                           %td
                             %a{href: download_link}
                             - i += 1
