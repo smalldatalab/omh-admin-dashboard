@@ -85,7 +85,7 @@
                         - if data_point.body.data[key].include?(".jpg") || data_point.body.data[key].length == 36
                           - download_link = get_survey_image_download_link(data_point.body.data[key])
                           %td
-                            %a{href: download_link}
+                            %a{href: download_link}= data_point.body.data[key]
                             - i += 1
                         - else
                           %td= data_point.body.data[key]
@@ -105,7 +105,7 @@
                         - if data_point.body[key].include?(".jpg") || data_point.body[key].length == 36
                           - download_link = get_survey_image_download_link(data_point.body[key])
                           %td
-                            %a{href: download_link}
+                            %a{href: download_link}= data_point.body[key]
                             - i += 1
                         - else
                           %td= data_point.body[key]
