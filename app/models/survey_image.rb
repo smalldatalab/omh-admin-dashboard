@@ -6,7 +6,7 @@ class SurveyImage
 
   field :_id, type: Object
 
-  # field :filename, type: Object
+  field :filename, type: Object
 
   # belongs_to :pam_user
 
