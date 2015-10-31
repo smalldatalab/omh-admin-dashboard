@@ -8,9 +8,8 @@ class SurveyImage
 
   # field :filename, type: Object
 
-  belongs_to :pam_user
+  # belongs_to :pam_user
 
   embeds_one :metadata
-
 
 end

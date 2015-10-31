@@ -66,7 +66,7 @@ GEM
     bourbon (3.2.4)
       sass (~> 3.2)
       thor
-    bson (3.2.4)
+    bson (3.2.6)
     bson_ext (1.5.1)
     builder (3.2.2)
     cancan (1.6.10)
@@ -148,8 +148,6 @@ GEM
       activesupport (>= 3.0.3)
     mime-types (1.25.1)
     minitest (5.8.1)
-    mongo (1.3.1)
-      bson (>= 1.3.1)
     mongoid (4.0.0)
       activemodel (~> 4.0)
       moped (~> 2.0.0)
@@ -184,10 +182,6 @@ GEM
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.5.5)
-    rack-gridfs (0.4.1)
-      mime-types
-      mongo (~> 1.2)
-      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.1.4)
@@ -300,7 +294,6 @@ DEPENDENCIES
   morrisjs-rails
   pg
   quiet_assets
-  rack-gridfs
   rails (= 4.1.4)
   raphael-rails
   sass-rails (~> 4.0.3)

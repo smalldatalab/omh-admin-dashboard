@@ -6,7 +6,7 @@ class PamUser
 
   has_many :pam_data_points
 
-  has_many :survey_images
+  # has_many :survey_images
 
   embeds_one :email_address
 

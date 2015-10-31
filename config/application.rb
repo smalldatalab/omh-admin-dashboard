@@ -4,7 +4,7 @@ require 'csv'
 require 'rails/all'
 require 'rails/mongoid'
 require 'json'
-require 'rack/gridfs'
+# require 'rack/gridfs'
 
 
 # Require the gems listed in Gemfile, including any gems

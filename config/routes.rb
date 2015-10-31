@@ -19,7 +19,9 @@ Rails.application.routes.draw do
       resources :log_in_data_points
       resources :annotations
     end
-    mount Rack::GridFS::Endpoint.new(:db => Mongoid::Config.sessions[:default], :fs_name => 'fs.files', :username => ENV['APP_DB_USERNAME'] || Rails.application.secrets.APP_DB_USERNAME, :password => ENV['APP_DB_PASSWORD'] || Rails.application.secrets.APP_DB_PASSWORD), :at => "gridfs"
+    resources :images
+
+    # mount Rack::GridFS::Endpoint.new(:db => Mongoid::Config.sessions[:default], :fs_name => 'fs.files', :username => ENV['APP_DB_USERNAME'] || Rails.application.secrets.APP_DB_USERNAME, :password => ENV['APP_DB_PASSWORD'] || Rails.application.secrets.APP_DB_PASSWORD), :at => "gridfs"
   end
 
 

@@ -35,7 +35,6 @@ gem 'devise', '~> 3.4.1'
 
 gem 'activeadmin', github: 'activeadmin'
 
-
 gem 'd3-rails', '~> 3.5.2'
 
 gem 'mongoid', '4.0.0'
@@ -43,8 +42,6 @@ gem 'mongoid', '4.0.0'
 gem 'bson_ext'
 
 gem 'mongoid_rails_migrations'
-
-gem 'rack-gridfs'
 
 gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
 
