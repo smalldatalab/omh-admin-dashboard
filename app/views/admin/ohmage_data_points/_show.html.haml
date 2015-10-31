@@ -24,6 +24,17 @@
       font-family: $font-family
 
 
+
+- def get_image_from_mongodb(filename)
+  -  @image = SurveyImage.find_by('metadata.media_id'=> filename)
+  -  @image_id = @image.id
+  -  @filename = @image.filename
+  -  spawn 'mongofiles -d omh get ' + @filename
+  -# -  spawn 'rm -Rf ' + @filename
+  -  @download_link = "http://ohmage-omh.smalldata.io/admin/images/" + @image_id
+
+
+
 .top-area
   .row
     .large-12.columns
@@ -70,28 +81,40 @@
                   - data_point.body.data.attributes.each do |key, value|
                     - if i <= survey_keys.length
                       - key = survey_keys[i]
-                      - if data_point.body.data[key].is_a? String
-                        - if data_point.body.data[key].to_s.include?(".jpg")
-                          - image_link = get_survey_image_link(data_point.body.data[key])
-                          %td
-                            %img{src: image_link}
+                      - if !data_point.header.media.blank?
+                        - if data_point.body.data[key].is_a? String
+                          - if data_point.body.data[key].include?(".jpg") || data_point.body.data[key].length == 36
+                            - download_link = get_survey_image_link(data_point.body.data[key])
+                            %td
+                              %a{href: download_link}
+                              - i += 1
+                          - else
+                            %td= data_point.body.data[key]
                             - i += 1
                         - else
                           %td= data_point.body.data[key]
                           - i += 1
                       - else
-                        %td= data_point.body.data[key]
-                        - i += 1
+                          %td= data_point.body.data[key]
+                          - i += 1
 
                 - else
                   - data_point.body.attributes.each do |key, value|
                     - if i <= survey_keys.length
                       - key = survey_keys[i]
-                      - if data_point.body[key].to_s.include?(".jpg")
-                        - image_link = get_survey_image_link(data_point.body[key])
-                        %td
-                          %img{src: image_link}
-                          - i += 1
+                      - if !data_point.header.media.blank?
+                        - if data_point.body.data[key].is_a? String
+                          - if data_point.body[key].include?(".jpg") || data_point.body[key].length == 36
+                            - download_link = get_survey_image_link(data_point.body[key])
+                            %td
+                              %a{href: download_link}
+                              - i += 1
+                          - else
+                            %td= data_point.body[key]
+                            - i += 1
+                        - else
+                            %td= data_point.body[key]
+                            - i += 1
                       - else
-                        %td= data_point.body[key]
-                        - i += 1
+                            %td= data_point.body[key]
+                            - i += 1
