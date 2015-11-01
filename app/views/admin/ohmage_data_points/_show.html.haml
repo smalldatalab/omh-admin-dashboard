@@ -26,12 +26,15 @@
 
 
 - def get_survey_image_download_link(filename)
-  -  @image = SurveyImage.find_by('metadata.media_id'=> filename)
-  -  @image_id = @image.id
-  -  @filename = @image.filename
-  -  spawn 'mongofiles -d omh get ' + @filename
-  -# -  spawn 'rm -Rf ' + @filename
-  -  @download_link = "http://ohmage-omh.smalldata.io/admin/images/" + @image_id
+  -  @image = SurveyImage.where('metadata.media_id'=> filename)
+  -  if !@image.blank?
+    -  @image_id = @image.first.id
+    -  @filename = @image.first.filename
+    -  spawn 'mongofiles -d omh get ' + @filename
+    -# -  spawn 'rm -Rf ' + @filename
+    -  @download_link = "http://ohmage-omh.smalldata.io/admin/images/" + @image_id
+  - else
+    - @link = ''
 
 
 

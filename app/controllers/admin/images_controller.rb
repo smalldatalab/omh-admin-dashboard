@@ -4,6 +4,7 @@ class Admin::ImagesController < ApplicationController
     @filename = @image.filename
     @temp = Tempfile.new(params[:id])
     @data = File.read(@filename)
+    spawn 'rm -Rf ' + @filename
 
     begin
       File.open(params[:id], 'wb') do |f|
@@ -13,9 +14,6 @@ class Admin::ImagesController < ApplicationController
     ensure
       @temp.close
       @temp.unlink
-      spawn 'rm -Rf ' + @filename
     end
   end
-
-
 end
