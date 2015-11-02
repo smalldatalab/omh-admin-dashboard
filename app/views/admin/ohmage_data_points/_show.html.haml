@@ -30,6 +30,7 @@
   -  if !@image.blank?
     -  @image_id = @image.first.id
     -  @filename = @image.first.filename
+    -  spawn 'mongofiles -d omh get ' + @filename
     -# -  spawn 'rm -Rf ' + @filename
     -  @download_link = "http://ohmage-omh.smalldata.io/admin/images/" + @image_id
   - else
