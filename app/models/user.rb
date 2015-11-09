@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  belongs_to :organization
 
   has_many :study_participants
   has_many :studies, through: :study_participants

@@ -1,5 +1,5 @@
 ActiveAdmin.register Study do
-  permit_params :name, :survey_ids => [], surveys_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
+  permit_params :name, :organization_id, organization_attribute: [:id, :name], :survey_ids => [], surveys_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
   menu priority: 5
 
   index do
@@ -37,9 +37,14 @@ ActiveAdmin.register Study do
   form do |f|
     f.inputs "Study Details" do
       f.input :name
-      f.input :surveys, as: :check_boxes, collection: Survey.all
       f.input :data_streams, as: :check_boxes, collection: DataStream.all
-
+      if current_admin_user.organizer?
+        f.input :organization, :input_html => {:value => current_admin_user.organization}, include_blank: false
+        f.input :surveys, as: :check_boxes, collection: current_admin_user.organization.surveys
+      else
+        f.input :organization
+        f.input :surveys, as: :check_boxes, collection: Survey.all
+      end
       f.actions
     end
   end

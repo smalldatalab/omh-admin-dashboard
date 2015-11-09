@@ -1,5 +1,5 @@
 ActiveAdmin.register Survey do
-  permit_params :name, :search_key_name, :version, :public_to_all_users, :description, :definition, :study_ids => [], studies_attributes: [:id, :name]
+  permit_params :name, :search_key_name, :version, :public_to_all_users, :description, :definition, :organization_id, organization_attribute: [:id, :name], :study_ids => [], studies_attributes: [:id, :name]
   menu priority: 7
 
   index do
@@ -7,7 +7,9 @@ ActiveAdmin.register Survey do
     id_column
     column :name
     column :version
-    column :public_to_all_users
+    if !current_admin_user.organizer? && !current_admin_user.researcher?
+      column :public_to_all_users
+    end
     column :description
     column :studies do |q|
       q.studies.all.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
@@ -30,7 +32,9 @@ ActiveAdmin.register Survey do
       row :definition
       row :created_at
       row :updated_at
-      bool_row :public_to_all_users
+      if !current_admin_user.organizer? && !current_admin_user.researcher?
+        bool_row :public_to_all_users
+      end
 
     end
     active_admin_comments
@@ -42,11 +46,12 @@ ActiveAdmin.register Survey do
       f.input :search_key_name
       f.input :version
       f.input :description
-      if !current_admin_user.researcher?
+      if !current_admin_user.organizer?
         f.input :public_to_all_users, as: :boolean
       end
-      if current_admin_user.researcher?
-        f.input :studies, as: :check_boxes, collection: current_admin_user.studies
+      if current_admin_user.organizer?
+        f.input :studies, as: :check_boxes, collection: current_admin_user.organization.studies
+        f.input :organization, :input_html => {:value => current_admin_user.organization}, include_blank: false
       end
       f.input :definition, as: :text, validates: true, size: nil
     end

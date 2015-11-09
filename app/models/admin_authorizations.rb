@@ -7,14 +7,25 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
       when normalized(DataStream)
         false
       when normalized(Survey)
-        action == :read || action == :create
+        action == :read
       when normalized(AdminUser)
         action == :read || action == :update
       when normalized(User)
         action == :read
+      when normalized(Organization)
+        false
   		else
   			true
   		end
+    elsif user.organizer
+      case subject
+      when normalized(DataStream)
+        false
+      when normalized(Organization)
+        false
+      else
+        true
+      end
   	else
   		true
   	end
@@ -25,12 +36,16 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
     when 'AdminUser'
       if user.researcher
         collection.where(:id => user.id)
+      elsif user.organizer
+        collection.where(:organization_id => user.organization)
       else
         AdminUser
       end
   	when 'User'
   	  if user.researcher
         user.users
+      elsif user.organizer
+        user.organization.users
   	  else
   	  	collection
   	  end
@@ -39,12 +54,16 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
     when 'Study'
       if user.researcher
         user.studies
+      elsif user.organizer
+        user.organization.studies
       else
         collection
       end
     when 'Survey'
       if user.researcher
         user.surveys
+      elsif user.organizer
+        user.organization.surveys
       else
         collection
       end

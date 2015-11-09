@@ -1,5 +1,6 @@
 ActiveAdmin.register AdminUser do
-  permit_params :email, :password, :password_confirmation, :researcher, :send_email, :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
+  # belongs_to :organization
+  permit_params :email, :password, :send_email, :password_confirmation, :researcher, :organizer, :organization_id, organization_attributes: [:id, :name],:study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
   menu priority: 2, label: "Administrators"
 
   index do
@@ -7,8 +8,11 @@ ActiveAdmin.register AdminUser do
     id_column
     column :email
     column :current_sign_in_at
+    if !current_admin_user.researcher? && !current_admin_user.organizer?
+      column :organizer
+      column :organization
+    end
     column :researcher
-
     column :studies do |q|
       if q.studies.present?
        study_name = q.studies.all.map {|a| a.name.inspect}.uniq.join(', ')
@@ -27,6 +31,10 @@ ActiveAdmin.register AdminUser do
       row :sign_in_count
       row :created_at
       row :updated_at
+      if !current_admin_user.researcher? && !current_admin_user.organizer?
+        bool_row :organizer
+        row :organization
+      end
       bool_row :researcher
       row :studies do |q|
         if q.studies.present?
@@ -34,7 +42,6 @@ ActiveAdmin.register AdminUser do
          study_name = study_name.gsub /"/, ''
         end
       end
-
     end
     active_admin_comments
   end
@@ -44,6 +51,9 @@ ActiveAdmin.register AdminUser do
   filter :sign_in_count
   filter :created_at
   filter :studies, as: :select, collection: proc{Study.all}
+  # if !current_admin_user.researcher? && !current_admin_user.organizer?
+  # filter :organization, as: :select, collection: proc{Organization.all}
+  # end
 
 
   form do |f|
@@ -51,9 +61,14 @@ ActiveAdmin.register AdminUser do
       f.input :email
       f.input :password
       f.input :password_confirmation
-      if !current_admin_user.researcher?
-        f.input :researcher, as: :boolean
+      f.input :organizer, as: :boolean
+      f.input :researcher, as: :boolean
+      if current_admin_user.organizer?
+        f.input :studies, as: :check_boxes, collection: current_admin_user.organization.studies
+        f.input :organization, :input_html => {:value => current_admin_user.organization}, include_blank: false, allow_blank: false
+      elsif !current_admin_user.researcher?
         f.input :studies, as: :check_boxes, collection: Study.all
+        f.input :organization
       end
       f.input :send_email, as: :boolean
     end

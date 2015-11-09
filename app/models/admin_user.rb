@@ -6,6 +6,8 @@ class AdminUser < ActiveRecord::Base
   has_many :study_owners
   has_many :studies, through: :study_owners
 
+  belongs_to :organization
+
   has_many :users, through: :studies
   has_many :surveys, through: :studies
   has_many :data_streams, through: :studies
