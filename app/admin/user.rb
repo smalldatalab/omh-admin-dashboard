@@ -437,9 +437,10 @@ ActiveAdmin.register User  do
   end
 
   csv do
-    column :gmail
-    column :first_name
-    column :last_name
+    # column :gmail
+    # column :first_name
+    # column :last_name
+    column :id
     column("Studies") {|user| user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
     column("Data Streams") {|user| user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
     column("Surveys") {|user| user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''}
