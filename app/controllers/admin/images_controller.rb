@@ -2,10 +2,11 @@ class Admin::ImagesController < ApplicationController
   def show
     @image = Mongoid::GridFs.get(params[:id])
     @filename = @image.filename
-    @save_path = File.join(Rails.root.to_s + '/data')
+    @save_path = '~/admindashboard/current/data'
+    @file_path = File.join('~/admindashboard/current/data/' + @filename)
 
     @temp = Tempfile.new(params[:id], @save_path)
-    @data = File.read(File.join(@save_path + '/' + @filename))
+    @data = File.read(@file_path)
     # spawn 'rm -Rf ' + @filename
     begin
       File.open(params[:id], 'wb') do |f|
