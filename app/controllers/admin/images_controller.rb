@@ -9,7 +9,7 @@ class Admin::ImagesController < ApplicationController
     @data = File.read(@file_path)
     # spawn 'rm -Rf ' + @filename
     begin
-      File.open(params[:id], 'wb') do |f|
+      File.open(params[:id], @save_path, 'wb') do |f|
         f.write(@data)
       end
       send_file @image.path, type: @image.content_type, disposition: 'attachment'
