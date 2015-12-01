@@ -50,6 +50,8 @@ gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
 
 gem 'taps'
 
+gem 'whenever', :require => false
+
 gem 'connection_ninja'
 
 gem 'cancan'
