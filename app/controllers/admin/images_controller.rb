@@ -3,7 +3,7 @@ class Admin::ImagesController < ApplicationController
     image = Mongoid::GridFs.get(params[:id])
     filename = image.filename
     save_path = '~/admindashboard/current/data'
-    file_path = File.join('~/admindashboard/current/data/' + filename)
+    file_path = File.join(Rails.root.to_s + '/data/' + filename)
 
     temp = Tempfile.new(params[:id])
     data = File.read(file_path)
