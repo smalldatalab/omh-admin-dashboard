@@ -12,7 +12,7 @@ class Admin::ImagesController < ApplicationController
       File.open(params[:id], 'wb') do |f|
         f.write(data)
       end
-      send_file image.path, type: image.content_type, disposition: 'attachment'
+      send_file file_path, type: image.content_type, disposition: 'attachment'
     ensure
       temp.close
       temp.unlink
