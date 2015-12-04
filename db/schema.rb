@@ -122,7 +122,10 @@ ActiveRecord::Schema.define(version: 20151203190752) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
   end
+
+  add_index "studies", ["organization_id"], name: "index_studies_on_organization_id", using: :btree
 
   create_table "study_common_surveys", force: true do |t|
     t.integer "common_survey_id"
@@ -174,7 +177,10 @@ ActiveRecord::Schema.define(version: 20151203190752) do
     t.datetime "updated_at"
     t.boolean  "public_to_all_users", default: false
     t.string   "search_key_name"
+    t.integer  "organization_id"
   end
+
+  add_index "surveys", ["organization_id"], name: "index_surveys_on_organization_id", using: :btree
 
   create_table "user_streams", force: true do |t|
     t.integer  "user_id"
@@ -193,6 +199,9 @@ ActiveRecord::Schema.define(version: 20151203190752) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "username"
+    t.integer  "organization_id"
   end
+
+  add_index "users", ["organization_id"], name: "index_users_on_organization_id", using: :btree
 
 end
