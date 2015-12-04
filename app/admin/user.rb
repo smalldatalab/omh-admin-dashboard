@@ -1,5 +1,5 @@
 ActiveAdmin.register User  do
-  permit_params :first_name, :last_name, :gmail, :username, :organization_id, organization_attribute: [:id, :name], :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
+  permit_params :first_name, :last_name, :gmail, :username, :organization_ids => [], organizations_attribute: [:id, :name], :study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
 
   menu priority: 3, label: "Participants"
 
@@ -396,7 +396,7 @@ ActiveAdmin.register User  do
   filter :studies, as: :select, collection: proc{Study.all}
   filter :data_streams, as: :select, collection: proc{DataStream.all}
   filter :surveys, as: :select, collection: proc{Survey.all}
-  filter :organization, as: :select, collection: proc{Organization.all}
+  # filter :organizations, as: :select, collection: proc{Organization.all}
 
   form do |f|
     f.inputs "User Details" do
@@ -405,11 +405,11 @@ ActiveAdmin.register User  do
       f.input :last_name
       f.input :username
       if current_admin_user.organizer?
-        f.input :studies, as: :check_boxes, collection: current_admin_user.organization.studies
-        f.input :organization, :input_html => {:value => current_admin_user.organization}, include_blank: false
+        f.input :studies, as: :check_boxes, collection: Study.joins(:organizations).where('organizations.id IN (?)', current_admin_user.organizations.ids)
+        # f.input :organization, :input_html => {:value => current_admin_user.organization}, include_blank: false
       else
         f.input :studies, as: :check_boxes, collection: Study.all
-        f.input :organization, as: :check_boxes, collection: Organization.all
+        # f.input :organization, as: :check_boxes, collection: Organization.all
       end
     end
     f.actions

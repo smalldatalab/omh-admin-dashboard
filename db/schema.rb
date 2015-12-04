@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151108201758) do
+ActiveRecord::Schema.define(version: 20151203190752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,11 +57,9 @@ ActiveRecord::Schema.define(version: 20151108201758) do
     t.boolean  "researcher",             default: false
     t.boolean  "send_email",             default: false
     t.boolean  "organizer",              default: false
-    t.integer  "organization_id"
   end
 
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
-  add_index "admin_users", ["organization_id"], name: "index_admin_users_on_organization_id", using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "annotations", force: true do |t|
@@ -81,6 +79,22 @@ ActiveRecord::Schema.define(version: 20151108201758) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "organization_owners", force: true do |t|
+    t.integer "organization_id"
+    t.integer "admin_user_id"
+  end
+
+  add_index "organization_owners", ["admin_user_id"], name: "index_organization_owners_on_admin_user_id", using: :btree
+  add_index "organization_owners", ["organization_id"], name: "index_organization_owners_on_organization_id", using: :btree
+
+  create_table "organization_studies", force: true do |t|
+    t.integer "organization_id"
+    t.integer "study_id"
+  end
+
+  add_index "organization_studies", ["organization_id"], name: "index_organization_studies_on_organization_id", using: :btree
+  add_index "organization_studies", ["study_id"], name: "index_organization_studies_on_study_id", using: :btree
 
   create_table "organizations", force: true do |t|
     t.string   "name"
@@ -108,10 +122,7 @@ ActiveRecord::Schema.define(version: 20151108201758) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "organization_id"
   end
-
-  add_index "studies", ["organization_id"], name: "index_studies_on_organization_id", using: :btree
 
   create_table "study_common_surveys", force: true do |t|
     t.integer "common_survey_id"
@@ -163,10 +174,7 @@ ActiveRecord::Schema.define(version: 20151108201758) do
     t.datetime "updated_at"
     t.boolean  "public_to_all_users", default: false
     t.string   "search_key_name"
-    t.integer  "organization_id"
   end
-
-  add_index "surveys", ["organization_id"], name: "index_surveys_on_organization_id", using: :btree
 
   create_table "user_streams", force: true do |t|
     t.integer  "user_id"
@@ -185,9 +193,6 @@ ActiveRecord::Schema.define(version: 20151108201758) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "username"
-    t.integer  "organization_id"
   end
-
-  add_index "users", ["organization_id"], name: "index_users_on_organization_id", using: :btree
 
 end

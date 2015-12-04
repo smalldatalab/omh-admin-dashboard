@@ -1,13 +1,14 @@
 class User < ActiveRecord::Base
-  belongs_to :organization
+  # belongs_to :organization
 
   has_many :study_participants
   has_many :studies, through: :study_participants
 
-  has_many :admin_users, through: :studies
+  # has_many :admin_users, through: :studies
 
   has_many :surveys, through: :studies
   has_many :data_streams, through: :studies
+  # has_many :organizations, through: :studies
 
   has_many :annotations
 

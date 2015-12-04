@@ -2,7 +2,8 @@ class Study < ActiveRecord::Base
   has_many :admin_users, through: :study_owners
   has_many :study_owners
 
-  belongs_to :organization
+  has_many :organizations, through: :organization_studies
+  has_many :organization_studies
 
   has_many :users, through: :study_participants
   has_many :study_participants

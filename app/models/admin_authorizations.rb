@@ -37,15 +37,15 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
       if user.researcher
         collection.where(:id => user.id)
       elsif user.organizer
-        collection.where(:organization_id => user.organization)
+        collection.joins(:organizations).where('organizations.id IN (?)', user.organizations.ids)
       else
         AdminUser
       end
   	when 'User'
   	  if user.researcher
-        user.users
+        collection.joins(:studies).where('studies.id IN (?)', user.studies.ids).uniq
       elsif user.organizer
-        user.organization.users
+        collection.joins(:studies).where('studies.id IN (?)', Study.joins(:organizations).where('organizations.id IN (?)', user.organizations.ids).ids).uniq
   	  else
   	  	collection
   	  end
@@ -55,15 +55,15 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
       if user.researcher
         user.studies
       elsif user.organizer
-        user.organization.studies
+        collection.joins(:organizations).where('organizations.id IN (?)', user.organizations.ids)
       else
         collection
       end
     when 'Survey'
       if user.researcher
-        user.surveys
+        collection.joins(:studies).where('studies.id IN (?)', user.studies.ids).uniq
       elsif user.organizer
-        user.organization.surveys
+        collection.joins(:studies).where('studies.id IN (?)', Study.joins(:organizations).where('organizations.id IN (?)', user.organizations.ids).ids).uniq
       else
         collection
       end

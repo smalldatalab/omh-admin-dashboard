@@ -1,5 +1,5 @@
 ActiveAdmin.register Survey do
-  permit_params :name, :search_key_name, :version, :public_to_all_users, :description, :definition, :organization_id, organization_attribute: [:id, :name], :study_ids => [], studies_attributes: [:id, :name]
+  permit_params :name, :search_key_name, :version, :public_to_all_users, :description, :definition, :organization_ids => [], organizations_attribute: [:id, :name], :study_ids => [], studies_attributes: [:id, :name]
   menu priority: 7
 
   index do
@@ -50,8 +50,10 @@ ActiveAdmin.register Survey do
         f.input :public_to_all_users, as: :boolean
       end
       if current_admin_user.organizer?
-        f.input :studies, as: :check_boxes, collection: current_admin_user.organization.studies
-        f.input :organization, :input_html => {:value => current_admin_user.organization}, include_blank: false
+        f.input :studies, as: :check_boxes, collection: Study.joins(:organizations).where('organizations.id IN (?)', current_admin_user.organizations.ids)
+        # f.input :organization, :input_html => {:value => current_admin_user.organization}, include_blank: false
+      else
+        f.input :studies, as: :check_boxes, collection: Study.all
       end
       f.input :definition, as: :text, validates: true, size: nil
     end

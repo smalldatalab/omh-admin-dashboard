@@ -1,22 +1,32 @@
 ActiveAdmin.register AdminUser do
-  # belongs_to :organization
-  permit_params :email, :password, :send_email, :password_confirmation, :researcher, :organizer, :organization_id, organization_attributes: [:id, :name],:study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
+  permit_params :email, :password, :send_email, :password_confirmation, :organizer, :researcher, :organization_ids => [], organizations_attributes: [:id, :name],:study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
   menu priority: 2, label: "Administrators"
 
   index do
     selectable_column
     id_column
+
     column :email
     column :current_sign_in_at
     if !current_admin_user.researcher? && !current_admin_user.organizer?
       column :organizer
-      column :organization
+      column :organizations do |q|
+        if q.organizations.present?
+         organization_name = q.organizations.all.map {|a| a.name.inspect}.uniq.join(', ')
+         organization_name = organization_name.gsub /"/, ''
+        end
+      end
     end
     column :researcher
     column :studies do |q|
       if q.studies.present?
        study_name = q.studies.all.map {|a| a.name.inspect}.uniq.join(', ')
        study_name = study_name.gsub /"/, ''
+      elsif q.organizer?
+        if q.organizations.first.studies.present?
+          studies_name = Study.joins(:organizations).where('organizations.id IN (?)', q.organizations.ids).all.map {|a| a.name.inspect}.uniq.join(', ')
+          studies_name = studies_name.gsub /"/, ''
+        end
       end
     end
     column :sign_in_count
@@ -33,13 +43,23 @@ ActiveAdmin.register AdminUser do
       row :updated_at
       if !current_admin_user.researcher? && !current_admin_user.organizer?
         bool_row :organizer
-        row :organization
+        row :organizations do |q|
+          if q.organizations.present?
+           organization_name = q.organizations.all.map {|a| a.name.inspect}.uniq.join(', ')
+           organization_name = organization_name.gsub /"/, ''
+          end
+        end
       end
       bool_row :researcher
       row :studies do |q|
         if q.studies.present?
          study_name = q.studies.all.map {|a| a.name.inspect}.uniq.join(', ')
          study_name = study_name.gsub /"/, ''
+        elsif q.organizer?
+          if q.organizations.first.studies.present?
+            studies_name = Study.joins(:organizations).where('organizations.id IN (?)', q.organizations.ids).all.map {|a| a.name.inspect}.uniq.join(', ')
+            studies_name = studies_name.gsub /"/, ''
+          end
         end
       end
     end
@@ -64,11 +84,11 @@ ActiveAdmin.register AdminUser do
       f.input :organizer, as: :boolean
       f.input :researcher, as: :boolean
       if current_admin_user.organizer?
-        f.input :studies, as: :check_boxes, collection: current_admin_user.organization.studies
-        f.input :organization, :input_html => {:value => current_admin_user.organization}, include_blank: false, allow_blank: false
+        f.input :studies, as: :check_boxes, collection: Study.joins(:organizations).where('organizations.id IN (?)', current_admin_user.organizations.ids)
+        f.input :organizations, as: :check_boxes, collection: current_admin_user.organizations
       elsif !current_admin_user.researcher?
         f.input :studies, as: :check_boxes, collection: Study.all
-        f.input :organization
+        f.input :organizations, as: :check_boxes, collection: Organization.all
       end
       f.input :send_email, as: :boolean
     end
