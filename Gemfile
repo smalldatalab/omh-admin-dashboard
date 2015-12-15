@@ -45,6 +45,8 @@ gem 'mongoid_rails_migrations'
 
 gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
 
+gem 'bcrypt', '~> 3.1.7'
+
 # gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 # gem 'jnunemaker-rack-gridfs', '0.3'
 

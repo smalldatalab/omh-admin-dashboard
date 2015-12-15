@@ -31,7 +31,7 @@
     -  @image_id = @image.first.id
     -  @filename = @image.first.filename
     -  spawn 'cd ~/admindashboard/current/data && mongofiles -d omh get ' + @filename
-    -  @download_link = "http://ohmage-omh.smalldata.io/admin/images/" + @image_id
+    -  @download_link = "//ohmage-omh.smalldata.io/admin/images/" + @image_id
   - else
     - @link = ''
 

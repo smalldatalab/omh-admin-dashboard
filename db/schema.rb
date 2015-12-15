@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151203190752) do
+ActiveRecord::Schema.define(version: 20151213001604) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,9 +57,11 @@ ActiveRecord::Schema.define(version: 20151203190752) do
     t.boolean  "researcher",             default: false
     t.boolean  "send_email",             default: false
     t.boolean  "organizer",              default: false
+    t.integer  "organization_id"
   end
 
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
+  add_index "admin_users", ["organization_id"], name: "index_admin_users_on_organization_id", using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "annotations", force: true do |t|
@@ -72,6 +74,13 @@ ActiveRecord::Schema.define(version: 20151203190752) do
   add_index "annotations", ["user_id"], name: "index_annotations_on_user_id", using: :btree
 
   create_table "common_surveys", force: true do |t|
+  end
+
+  create_table "custom_users", force: true do |t|
+    t.string "username"
+    t.string "password"
+    t.string "password_digest"
+    t.string "annotation"
   end
 
   create_table "data_streams", force: true do |t|
