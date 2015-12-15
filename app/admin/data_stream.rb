@@ -9,6 +9,8 @@ ActiveAdmin.register DataStream do
     column :studies do |q|
       q.studies.all.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
     end
+    column :created_at
+    column :updated_at
 
     actions
   end

@@ -14,6 +14,9 @@ class Study < ActiveRecord::Base
   has_many :s_surveys
   has_many :surveys, through: :s_surveys
 
+  has_many :custom_studies
+  has_many :custom_users, through: :custom_studies
+
   accepts_nested_attributes_for :data_streams
   accepts_nested_attributes_for :surveys
 

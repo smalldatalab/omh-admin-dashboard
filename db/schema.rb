@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151213001604) do
+ActiveRecord::Schema.define(version: 20151215161736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,11 +76,21 @@ ActiveRecord::Schema.define(version: 20151213001604) do
   create_table "common_surveys", force: true do |t|
   end
 
+  create_table "custom_studies", force: true do |t|
+    t.integer "study_id"
+    t.integer "custom_user_id"
+  end
+
+  add_index "custom_studies", ["custom_user_id"], name: "index_custom_studies_on_custom_user_id", using: :btree
+  add_index "custom_studies", ["study_id"], name: "index_custom_studies_on_study_id", using: :btree
+
   create_table "custom_users", force: true do |t|
-    t.string "username"
-    t.string "password"
-    t.string "password_digest"
-    t.string "annotation"
+    t.string   "username"
+    t.string   "password"
+    t.string   "password_digest"
+    t.string   "annotation"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "data_streams", force: true do |t|

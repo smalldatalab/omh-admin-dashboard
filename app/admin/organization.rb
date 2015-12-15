@@ -9,6 +9,9 @@ ActiveAdmin.register Organization do
     column :studies do |q|
       q.studies.all.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
     end
+    column :created_at
+    column :updated_at
+
     actions
   end
 
@@ -20,6 +23,8 @@ ActiveAdmin.register Organization do
       row :studies do |q|
         q.studies.all.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
       end
+      row :created_at
+      row :updated_at
     end
     active_admin_comments
   end

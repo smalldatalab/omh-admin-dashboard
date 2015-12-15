@@ -12,6 +12,8 @@ ActiveAdmin.register Study do
     column :data_streams do |user|
       user.data_streams.all.map { |a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
     end
+    column :created_at
+    column :updated_at
 
     actions
   end
@@ -30,6 +32,8 @@ ActiveAdmin.register Study do
       row :data_streams do |user|
         user.data_streams.all.map { |a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
       end
+      row :created_at
+      row :updated_at
     end
     active_admin_comments
   end

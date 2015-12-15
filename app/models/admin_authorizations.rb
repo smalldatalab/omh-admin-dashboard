@@ -69,6 +69,13 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
       else
         collection
       end
+    when 'CustomUser'
+      if user.organizer
+        collection.joins(:studies).where('studies.id IN (?)', Study.joins(:organizations).where('organizations.id IN (?)', user.organizations.ids).ids).uniq
+      else
+        collection
+      end
+
   	else
   	  collection
   	end
