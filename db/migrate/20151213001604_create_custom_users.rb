@@ -6,7 +6,7 @@ class CreateCustomUsers < ActiveRecord::Migration
       t.string :password_digest
       t.string :annotation
 
-      t.timestamp
+      t.timestamps
     end
   end
 end

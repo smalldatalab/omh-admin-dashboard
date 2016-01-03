@@ -53,7 +53,6 @@ ActiveAdmin.register Survey do
       end
       if current_admin_user.organizer?
         f.input :studies, as: :check_boxes, collection: Study.joins(:organizations).where('organizations.id IN (?)', current_admin_user.organizations.ids)
-        # f.input :organization, :input_html => {:value => current_admin_user.organization}, include_blank: false
       else
         f.input :studies, as: :check_boxes, collection: Study.all
       end

@@ -4,34 +4,18 @@ ActiveAdmin.setup do |config|
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #
-   
+
   module ActiveAdmin
     module Views
-      # class TableFor
-      #   def bool_column(attribute)
-      #     column(attribute){ |model| model[attribute] ? '&#x2714;'.html_safe : '&#x2717;'.html_safe }
-      #   end
-      # end
-
       class AttributesTable
         def bool_row(attribute)
           row(attribute){ |model| model[attribute] ? "Yes" : "No" }
         end
       end
     end
-
-
-    class User < ActiveRecord::Base 
-      # after_create :consent_email 
-
-      # def consent_email 
-      #   UserMailer.user_created(self.id).deliver
-      # end 
-
-    end 
   end
-  
- 
+
+
   config.site_title = "SDL Admin Dashboard"
 
   # Set the link url for the title. For example, to take
@@ -118,7 +102,7 @@ ActiveAdmin.setup do |config|
   config.current_user_method = :current_admin_user
 
   # config.load_paths = [File.expand_path('app/admin', Rails.root), File.expand_path('app/users', Rails.root)]
-  
+
   # config.namespace :users do |namespaced|
   #   namespaced.authentication_method = :current_user
   # end
@@ -126,7 +110,7 @@ ActiveAdmin.setup do |config|
 
   # config.namespace :user do |user|
   #   user.root_to :user
-  # end 
+  # end
 
   # config.namespace :researchers do |researcher|
   #   researcher.authentication_method = false
@@ -184,8 +168,8 @@ ActiveAdmin.setup do |config|
   # You can add before, after and around filters to all of your
   # Active Admin resources and pages from here.
   #
-   
-  
+
+
 
   # == Setting a Favicon
   #

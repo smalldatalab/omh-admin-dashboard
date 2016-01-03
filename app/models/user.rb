@@ -1,9 +1,6 @@
 class User < ActiveRecord::Base
-  # belongs_to :organization
-
   has_many :study_participants
   has_many :studies, through: :study_participants
-
   # has_many :admin_users, through: :studies
 
   has_many :surveys, through: :studies
@@ -17,8 +14,6 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username
 
   after_find :init
-
-
 
   def init
     user_name = self.username

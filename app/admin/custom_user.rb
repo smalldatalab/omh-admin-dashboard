@@ -7,8 +7,8 @@ ActiveAdmin.register CustomUser do
 
     column :username
     column :annotation
-    # column :created_at
-    # column :updated_at
+    column :created_at
+    column :updated_at
     column :studies do |user|
       user.studies.all.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
     end
@@ -20,8 +20,8 @@ ActiveAdmin.register CustomUser do
     attributes_table do
       row :username
       row :annotation
-      # row :created_at
-      # row :updated_at
+      row :created_at
+      row :updated_at
 
       row :studies do |user|
         user.studies.all.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''

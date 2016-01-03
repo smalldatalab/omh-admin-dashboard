@@ -7,7 +7,7 @@ ActiveAdmin.register User  do
     @per_page = 10
   end
 
-
+  ##### All data download buttons group for Participant Tab
   action_item :only => :index do
     link_to 'All PAM Data', all_users_pam_data_points_admin_users_path(format: 'csv')
   end
@@ -16,16 +16,30 @@ ActiveAdmin.register User  do
     link_to 'All Mobility Data', all_users_mobility_data_points_admin_users_path(format: 'csv')
   end
 
-  # action_item :only => :index do
-  #   link_to 'All ohmage Data', all_users_ohmage_data_points_admin_users_path(format: 'csv')
-  # end
-
   action_item :only => :index do
     link_to 'All Fitbit Data', all_users_fitbit_data_points_admin_users_path(format: 'csv')
   end
 
-  controller do
+  collection_action :all_users_pam_data_points do
+    respond_to do |format|
+      format.csv {render text: all_users_pam_csv }
+    end
+  end
 
+  collection_action :all_users_mobility_data_points do
+    respond_to do |format|
+      format.csv {render text: all_users_mobility_csv}
+    end
+  end
+
+  collection_action :all_users_fitbit_data_points do
+    respond_to do |format|
+      format.csv {render text: all_users_fitbit_csv}
+    end
+  end
+
+  ##### Controller for all data download button group
+  controller do
     def all_users_pam_csv
       @users = current_admin_user.users
       CSV.generate do |csv|
@@ -134,77 +148,6 @@ ActiveAdmin.register User  do
       end
     end
 
-
-    # def get_all_survey_question_keys
-    #   ohmage_data_points = all_ohmage_data_points(current_admin_user.id)
-    #   if user_record.nil?
-    #     return nil
-    #   else
-    #     if ohmage_data_points.nil?
-    #       return nil
-    #     else
-    #       survey_keys = [
-    #                     'id',
-    #                     'user_id',
-    #                     'creation_date_time',
-    #                     'survey_namespace',
-    #                     'survey_name',
-    #                     'survey_version'
-    #                     ]
-    #       ohmage_data_points.each do |a|
-    #         if a.body.data
-    #           a.body.data.attributes.each do |key, value|
-    #             survey_keys.push(key) unless survey_keys.include? key
-    #           end
-    #         end
-    #       end
-    #       return survey_keys
-    #     end
-    #   end
-    # end
-
-    # def get_all_survey_question_values(survey_keys, data_point)
-    #   survey_values = [
-    #                   data_point._id,
-    #                   data_point.user_id,
-    #                   data_point.header.creation_date_time,
-    #                   data_point.header.schema_id.namespace,
-    #                   data_point.header.schema_id.name,
-    #                   data_point.header.schema_id.version.major.to_s + '.' + data_point.header.schema_id.version.minor.to_s
-    #                   ]
-    #   fixed_survey_values_count = survey_values.length
-    #   if data_point.body.data
-    #     survey_keys.each_with_index do |key, index|
-    #       if index >= fixed_survey_values_count
-    #         survey_values << data_point.body.data[key] ? data_point.body.data[key] : nil
-    #       end
-    #     end
-    #   end
-    #   return survey_values
-    # end
-
-
-    # def all_users_ohmage_csv
-    #   @users = current_admin_user.users
-    #   CSV.generate do |csv|
-    #     keys = get_all_survey_question_keys(current_admin_user.id)
-
-    #     if keys
-    #       csv << keys
-    #       @users.each do |user|
-    #         data_points = user.all_ohmage_data_points(current_admin_user.id)
-
-    #         if !user.data_points.nil?
-
-    #           user.data_points.each do |data_point|
-    #             csv << get_all_survey_question_values(keys, data_point) if data_point.body.data
-    #           end
-    #         end
-    #       end
-    #     end
-    #   end
-    # end
-
     def all_users_fitbit_csv
       @users = current_admin_user.users
       CSV.generate do |csv|
@@ -239,76 +182,31 @@ ActiveAdmin.register User  do
     end
   end
 
-  collection_action :all_users_pam_data_points do
-
-    respond_to do |format|
-      format.csv {render text: all_users_pam_csv }
-    end
-  end
-
-  collection_action :all_users_mobility_data_points do
-    respond_to do |format|
-      format.csv {render text: all_users_mobility_csv}
-    end
-  end
-
-  # collection_action :all_users_ohmage_data_points do
-  #   respond_to do |format|
-  #     format.csv {render text: all_users_ohmage_csv}
-  #   end
-  # end
-
-  collection_action :all_users_fitbit_data_points do
-    respond_to do |format|
-      format.csv {render text: all_users_fitbit_csv}
-    end
-  end
-
-
+  ##### Index part for Participant Tab
   index do
     selectable_column
     id_column
-    # if current_admin_user.researcher?
-    # column :gmail
-    # end
-
-    # if current_admin_user.researcher?
-    #   column :first_name
-    # end
-
-    # if current_admin_user.researcher?
-    #   column :last_name
-    # end
-    # column :user_name_id
 
     if !current_admin_user.researcher?
       column :studies do |user|
         user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+      end
+      column :surveys do |user|
+        user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+      end
+      column :data_streams do |user|
+        user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
       end
     else
       column :studies do |user|
         a = user.studies & current_admin_user.studies
         a.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
       end
-    end
-
-    if !current_admin_user.researcher?
-      column :surveys do |user|
-        user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
-      end
-    else
       column :surveys do |user|
         common_elements = user.surveys & current_admin_user.surveys
         common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
       end
-    end
-
-    if !current_admin_user.researcher?
-      column :data_streams do |user|
-        user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
-      end
-    else
-      column :data_streams do |user|
+       column :data_streams do |user|
         common_elements = user.data_streams & current_admin_user.data_streams
         common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
       end
@@ -324,55 +222,33 @@ ActiveAdmin.register User  do
     actions
   end
 
-
+  ##### Show part for individual participant
   show title: :id do
-  # :title => proc {|user| (user.first_name.blank? && user.last_name.blank?) ? user.gmail : ( user.first_name.blank? ? user.last_name : user.first_name ) }  do
     panel "Calendar of Daily Data" do
       render partial: 'calendar_view', locals: { users: @user}
     end
 
     attributes_table do
       row :id
-      # if current_admin_user.researcher?
-      #   row :gmail
-      # end
-
-      # if current_admin_user.researcher?
-      #   row :first_name
-      # end
-
-      # if current_admin_user.researcher?
-      #   row :last_name
-      # end
-      # row :user_name_id
-
       if !current_admin_user.researcher?
         row :studies do |user|
           user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
+         row :surveys do |user|
+          user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
+        row :data_streams do |user|
+          user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
         end
       else
         row :studies do |user|
           common_elements = user.studies & current_admin_user.studies
           common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
         end
-      end
-
-      if !current_admin_user.researcher?
-        row :surveys do |user|
-          user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
-        end
-      else
         row :surveys do |user|
           common_elements = user.surveys & current_admin_user.surveys
           common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
         end
-      end
-
-      if !current_admin_user.researcher?
-        row :data_streams do |user|
-          user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
-        end
-      else
         row :data_streams do |user|
           common_elements = user.data_streams & current_admin_user.data_streams
           common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
@@ -392,30 +268,7 @@ ActiveAdmin.register User  do
     active_admin_comments
   end
 
-  filter :id
-  filter :studies, as: :select, collection: proc{Study.all}
-  filter :data_streams, as: :select, collection: proc{DataStream.all}
-  filter :surveys, as: :select, collection: proc{Survey.all}
-  # filter :organizations, as: :select, collection: proc{Organization.all}
-
-  form do |f|
-    f.inputs "User Details" do
-      f.input :gmail
-      f.input :first_name
-      f.input :last_name
-      f.input :username
-      if current_admin_user.organizer?
-        f.input :studies, as: :check_boxes, collection: Study.joins(:organizations).where('organizations.id IN (?)', current_admin_user.organizations.ids)
-        # f.input :organization, :input_html => {:value => current_admin_user.organization}, include_blank: false
-      else
-        f.input :studies, as: :check_boxes, collection: Study.all
-        # f.input :organization, as: :check_boxes, collection: Organization.all
-      end
-    end
-    f.actions
-  end
-
-
+  ##### Show part csv download buttons
   action_item :only => :show do
     link_to 'PAM Data CSV File', admin_user_pam_data_points_path(user, format: 'csv')
   end
@@ -436,10 +289,44 @@ ActiveAdmin.register User  do
     link_to 'Logging Data csv File', admin_user_log_in_data_points_path(user, format: 'csv')
   end
 
+  ##### Filter Part
+  filter :id
+  filter :data_streams, as: :select, collection: proc { DataStream.all }
+  filter :surveys, as: :select, collection: proc {
+    if current_admin_user.organizer? || current_admin_user.researcher?
+      current_admin_user.surveys.uniq
+    else
+      Survey.all
+    end
+  }
+  filter :studies, as: :select, collection: proc {
+    if current_admin_user.organizer?
+      Study.joins(:organizations).where('organizations.id IN (?)', current_admin_user.organizations.ids)
+    elsif current_admin_user.researcher?
+      current_admin_user.studies
+    else
+      Study.all
+    end
+  }
+
+  ##### Input part
+  form do |f|
+    f.inputs "User Details" do
+      f.input :gmail
+      f.input :first_name
+      f.input :last_name
+      f.input :username
+      if current_admin_user.organizer?
+        f.input :studies, as: :check_boxes, collection: Study.joins(:organizations).where('organizations.id IN (?)', current_admin_user.organizations.ids)
+      else
+        f.input :studies, as: :check_boxes, collection: Study.all
+      end
+    end
+    f.actions
+  end
+
+  ##### Index csv part
   csv do
-    # column :gmail
-    # column :first_name
-    # column :last_name
     column :id
     column("Studies") {|user| user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }
     column("Data Streams") {|user| user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }

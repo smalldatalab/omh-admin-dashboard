@@ -66,15 +66,18 @@ ActiveAdmin.register AdminUser do
     active_admin_comments
   end
 
+  filter :id
   filter :email
-  filter :current_sign_in_at
-  filter :sign_in_count
-  filter :created_at
-  filter :studies, as: :select, collection: proc{Study.all}
-  # if !current_admin_user.researcher? && !current_admin_user.organizer?
-  # filter :organization, as: :select, collection: proc{Organization.all}
-  # end
-
+  filter :studies, as: :select, collection: proc {
+    if current_admin_user.organizer?
+      Study.joins(:organizations).where('organizations.id IN (?)', current_admin_user.organizations.ids)
+    elsif current_admin_user.researcher?
+      current_admin_user.studies
+    else
+      Study.all
+    end
+  }
+  filter :organizations, as: :select, collection: proc {Organization.all}
 
   form do |f|
     f.inputs "Admin User Details" do

@@ -19,8 +19,14 @@ ActiveAdmin.register Study do
   end
 
   filter :name
-  filter :surveys, as: :select, collection: proc{Survey.all}
-  filter :data_streams, as: :select, collection: proc{DataStream.all}
+  filter :surveys, as: :select, collection: proc {
+    if current_admin_user.organizer? || current_admin_user.researcher?
+      current_admin_user.surveys.uniq
+    else
+      Survey.all
+    end
+  }
+  filter :data_streams, as: :select, collection: proc {DataStream.all}
 
 
   show do
