@@ -1,4 +1,4 @@
-var dsu = "https://ohmage-omh.smalldata.io/dsu/";
+var dsu = "https://aws-qa.smalldata.io/dsu/";
 
 function getDatapointId(username, date, device){
     return  ["mobility-daily-segments", username, date, device].join("-");
