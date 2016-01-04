@@ -189,26 +189,38 @@ ActiveAdmin.register User  do
 
     if !current_admin_user.researcher?
       column :studies do |user|
-        user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+        if user.studies.present?
+          user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
       end
       column :surveys do |user|
-        user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+        if user.surveys.present?
+          user.surveys.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
       end
       column :data_streams do |user|
-        user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+        if user.data_streams.present?
+          user.data_streams.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
       end
     else
       column :studies do |user|
-        a = user.studies & current_admin_user.studies
-        a.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+        common_elements = user.studies & current_admin_user.studies
+        if common_elements.present?
+          common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
       end
       column :surveys do |user|
         common_elements = user.surveys & current_admin_user.surveys
-        common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+        if common_elements.present?
+          common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
       end
-       column :data_streams do |user|
+      column :data_streams do |user|
         common_elements = user.data_streams & current_admin_user.data_streams
-        common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+        if common_elements.present?
+          common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
+        end
       end
     end
 
