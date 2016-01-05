@@ -1,19 +1,19 @@
 staging:
   sessions:
     default:
-      database: omh
+      database: <%= (ENV['APP_MONGO_DATABASE'] || Rails.application.secrets.APP_MONGO_DATABASE) %>
       hosts:
-        - localhost:27017
+        - <%= (ENV['APP_MONGO_HOST'] || Rails.application.secrets.APP_MONGO_HOST) %>
       options:
   options:
 
 production:
   sessions:
     default:
-      database: omh
+      database: <%= (ENV['APP_MONGO_DATABASE'] || Rails.application.secrets.APP_MONGO_DATABASE) %>
       hosts:
         # - omh-mongo:27017
-        - localhost:27017
+        - <%= (ENV['APP_MONGO_HOST'] || Rails.application.secrets.APP_MONGO_HOST) %>
       options:
   options:
 
@@ -24,11 +24,11 @@ development:
     default:
       # Defines the name of the default database that Mongoid can connect to.
       # (required).
-      database: omh
+      database: <%= (ENV['APP_MONGO_DATABASE'] || Rails.application.secrets.APP_MONGO_DATABASE) %>
       # Provides the hosts the default session can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:
-        - localhost:27017
+        - <%= (ENV['APP_MONGO_HOST'] || Rails.application.secrets.APP_MONGO_HOST) %>
       options:
         # Change the default write concern. (default = { w: 1 })
         # write:
