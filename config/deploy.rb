@@ -1,7 +1,7 @@
 require 'capistrano/ext/multistage'
 require 'capistrano_colors'
 require 'bundler/capistrano'
-require 'whenever/capistrano'
+require "whenever/capistrano"
 
 def template(from, to)
   erb = File.read(File.expand_path("../templates/#{from}", __FILE__))
