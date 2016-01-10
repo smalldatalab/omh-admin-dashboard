@@ -29,19 +29,9 @@
 
  <body>
         <div id="calendar_data_points" data-url="/admin/users/<%= @user.id %>/calendar_data_points.json"></div>
-
-        <!-- http://aws-qa.smalldata.io/-->
-
-        <!-- http://lifestreams.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json -->
-
-        <!-- http://localhost:3000/admin/users/<%= @user.id %>/calendar_data_points.json -->
-
-        <!-- http://ohmage-omh.smalldata.io/admin/users/<%= @user.id %>/calendar_data_points.json -->
-
         <div id="one_day_pam_data" data-url="/admin/users/<%= @user.id %>/pam_data_points?date="></div>
         <div id="one_day_ohmage_data" data-url="/admin/users/<%= @user.id %>/ohmage_data_points?date="></div>
         <div id="one_day_fitbit_data" data-url="/admin/users/<%= @user.id %>/fitbit_data_points?date="></div>
-
 
         <div id="pam_events_array" data-attribute="<%= @user.calendar_pam_events_array %>"></div>
         <div id="ohmage_events_array" data-attribute="<%= @user.calendar_ohmage_events_array(current_admin_user.id) %>"></div>

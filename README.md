@@ -28,3 +28,17 @@
   <li>Annotation</li>
 </ul>
 
+<h5>Code Related</h5>
+<p>
+  SDL Admin Dashboard used <a href="http://activeadmin.info/">Active Admin</a>, a Ruby on Rails plugin for generating administration style interfaces. It intergates with ohmage-omh MongoDB using <a href="https://docs.mongodb.org/ecosystem/tutorial/ruby-mongoid-tutorial/">Mongoid</a>, a Ruby MongoDB Driver. You can edit mongoid.yml for changing database information.
+</p>
+
+<h5></h5>
+
+<h5>Models</h5>
+
+
+
+<h5>Migrations</h5>
+<p></p>
+

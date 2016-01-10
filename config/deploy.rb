@@ -1,6 +1,7 @@
 require 'capistrano/ext/multistage'
 require 'capistrano_colors'
 require 'bundler/capistrano'
+require 'whenever/capistrano'
 
 def template(from, to)
   erb = File.read(File.expand_path("../templates/#{from}", __FILE__))
@@ -32,7 +33,7 @@ namespace :deploy do
   desc "Deploy"
   task :default do
     update
-    # crontab.install
+    crontab.install
     assets.precompile
     foreman.restart
     cleanup
@@ -42,7 +43,7 @@ namespace :deploy do
   desc "Deploy with out assets rsync"
   task :skip_precompile do
     update
-    # crontab.install
+    crontab.install
     foreman.restart
     cleanup
     # memcached.restart
@@ -219,14 +220,14 @@ namespace :memcached do
 end
 
 namespace :crontab do
-  # task :install do
-  #   install_web
-  # end
+  task :install do
+    install_web
+  end
 
-  # desc "Install crontab"
-  # %w[web].each do |role|
-  #   task "install_#{role}", roles: role.to_sym do
-  #     run "cd #{current_path} && RAILS_ENV=#{rails_env} bundle exec whenever --update-crontab #{application}"
-  #   end
-  # end
+  desc "Install crontab"
+  %w[web].each do |role|
+    task "install_#{role}", roles: role.to_sym do
+      run "cd #{current_path} && RAILS_ENV=#{rails_env} bundle exec whenever --update-crontab #{application}"
+    end
+  end
 end
