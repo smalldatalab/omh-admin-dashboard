@@ -38,6 +38,7 @@ Rails.application.configure do
     Thread.current.keys.each{ |k| Thread.current[k] = nil if k.to_s =~ /_scoped_methods$/ }
   end
 
+  config.reload_classes_only_on_change = false
   config.log_level = :debug
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

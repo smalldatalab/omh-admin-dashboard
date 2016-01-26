@@ -1,4 +1,5 @@
 ActiveAdmin.register AdminUser do
+  ##
   permit_params :email, :password, :send_email, :password_confirmation, :organizer, :researcher, :organization_ids => [], organizations_attributes: [:id, :name],:study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
   menu priority: 2, label: "Administrators"
 
@@ -78,6 +79,8 @@ ActiveAdmin.register AdminUser do
     end
   }
   filter :organizations, as: :select, collection: proc {Organization.all}
+  filter :researcher
+  filter :organizer
 
   form do |f|
     f.inputs "Admin User Details" do

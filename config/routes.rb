@@ -1,14 +1,9 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
-  # devise_for :users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
   namespace :admin do
     resources :users do
-      # collection do
-      #   get 'all_users_data_points'
-      # end
-
       resources :mobility_user_interface
       resources :pam_data_points
       resources :mobility_data_points
@@ -23,22 +18,6 @@ Rails.application.routes.draw do
 
     # mount Rack::GridFS::Endpoint.new(:db => Mongoid::Config.sessions[:default], :fs_name => 'fs.files', :username => ENV['APP_DB_USERNAME'] || Rails.application.secrets.APP_DB_USERNAME, :password => ENV['APP_DB_PASSWORD'] || Rails.application.secrets.APP_DB_PASSWORD), :at => "gridfs"
   end
-
-
-
-
-  # resources :mobility_dashboard, only: :index
-  # resources :inbox, :controller => 'inbox', :only => [:show, :create]
-
-  # namespace :users do
-  #   # resources :pam_data_points
-  #   # resources :mobility_data_points
-  #   # resources :ohmage_data_points
-  #   # resources :calendar_data_points, :format => :json
-
-  # end
-
-
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

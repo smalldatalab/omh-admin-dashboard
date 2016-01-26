@@ -319,9 +319,7 @@ class User < ActiveRecord::Base
   def pam_data_csv
     CSV.generate do |csv|
       csv << [
-              'id',
               'class',
-              'user id',
               'name space',
               'name',
               'version major',
@@ -341,9 +339,7 @@ class User < ActiveRecord::Base
         else
           all_pam_data_points.each do |data_point|
             csv << [
-                  data_point._id,
                   data_point._class,
-                  data_point.user_id,
                   data_point.header.schema_id.namespace,
                   data_point.header.schema_id.name,
                   data_point.header.schema_id.version.major,
@@ -372,8 +368,6 @@ class User < ActiveRecord::Base
         return nil
       else
         survey_keys = [
-                      'id',
-                      'user_id',
                       'source_name',
                       'creation_date_time',
                       'survey_namespace',
@@ -398,8 +392,6 @@ class User < ActiveRecord::Base
 
   def get_all_survey_question_values(survey_keys, data_point)
     survey_values = [
-                    data_point._id,
-                    data_point.user_id,
                     data_point.header.acquisition_provenance.source_name,
                     data_point.header.creation_date_time,
                     data_point.header.schema_id.namespace,
@@ -446,8 +438,6 @@ class User < ActiveRecord::Base
   def mobility_daily_summary_data_csv
      CSV.generate do |csv|
       csv << [
-              'id',
-              'user id',
               'class',
               'namespace',
               'name',
@@ -474,8 +464,6 @@ class User < ActiveRecord::Base
       else
         all_mobility_data_points.each do |data_point|
           csv << [
-                  data_point._id,
-                  data_point.user_id,
                   data_point._class,
                   data_point.header.schema_id.namespace,
                   data_point.header.schema_id.name,
@@ -492,8 +480,8 @@ class User < ActiveRecord::Base
                   escape_nil_body(data_point, :steps),
                   escape_nil_body(data_point, :geodiameter_in_km),
                   escape_nil_body(data_point, :max_gait_speed_in_meter_per_second),
-                  escape_nil_body(data_point, :leave_home_time),
-                  escape_nil_body(data_point, :return_home_time),
+                  escape_nil_home(data_point, :leave_home_time),
+                  escape_nil_home(data_point, :return_home_time),
                   escape_nil_body(data_point, :time_not_at_home_in_seconds).nil? ? nil : (data_point.body.time_not_at_home_in_seconds / 60.00),
                   escape_nil_body(data_point, :coverage)
                   ]
@@ -505,8 +493,6 @@ class User < ActiveRecord::Base
   def fitbit_data_csv
     CSV.generate do |csv|
       csv << [
-              'id',
-              'user_id',
               'date',
               'steps'
       ]
@@ -515,8 +501,6 @@ class User < ActiveRecord::Base
       else
         all_fitbit_data_points.each do |data_point|
         csv << [
-                 data_point._id,
-                 data_point.user_id,
                  data_point.header.creation_date_time,
                  data_point.body.step_count
         ]

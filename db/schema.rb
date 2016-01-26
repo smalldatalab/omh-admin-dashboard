@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151215161736) do
+ActiveRecord::Schema.define(version: 20160123025043) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,6 +142,7 @@ ActiveRecord::Schema.define(version: 20151215161736) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "organization_id"
+    t.boolean  "remove_gps",      default: false
   end
 
   add_index "studies", ["organization_id"], name: "index_studies_on_organization_id", using: :btree

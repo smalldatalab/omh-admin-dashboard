@@ -1,5 +1,5 @@
 ActiveAdmin.register Study do
-  permit_params :name, :organization_ids => [], organizations_attribute: [:id, :name], :survey_ids => [], surveys_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
+  permit_params :name, :remove_gps, :organization_ids => [], organizations_attribute: [:id, :name], :survey_ids => [], surveys_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
   menu priority: 5
 
   index do
@@ -12,6 +12,7 @@ ActiveAdmin.register Study do
     column :data_streams do |user|
       user.data_streams.all.map { |a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
     end
+    column :remove_gps
     column :created_at
     column :updated_at
 
@@ -27,6 +28,7 @@ ActiveAdmin.register Study do
     end
   }
   filter :data_streams, as: :select, collection: proc {DataStream.all}
+  filter :remove_gps
 
 
   show do
@@ -38,6 +40,7 @@ ActiveAdmin.register Study do
       row :data_streams do |user|
         user.data_streams.all.map { |a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
       end
+      bool_row :remove_gps
       row :created_at
       row :updated_at
     end
@@ -51,9 +54,11 @@ ActiveAdmin.register Study do
       if current_admin_user.organizer?
         f.input :organizations, as: :check_boxes, collection: current_admin_user.organizations
         f.input :surveys, as: :check_boxes, collection: current_admin_user.surveys
+        f.input :remove_gps, as: :boolean, label: "Remove GPS Data"
       else
         f.input :organizations, as: :check_boxes, collection: Organization.all
         f.input :surveys, as: :check_boxes, collection: Survey.all
+        f.input :remove_gps, as: :boolean, label: "Remove GPS Data"
       end
       f.actions
     end

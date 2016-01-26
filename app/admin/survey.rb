@@ -37,7 +37,6 @@ ActiveAdmin.register Survey do
       if !current_admin_user.organizer? && !current_admin_user.researcher?
         bool_row :public_to_all_users
       end
-
     end
     active_admin_comments
   end
@@ -45,7 +44,8 @@ ActiveAdmin.register Survey do
   form do |f|
     f.inputs "Survey Details" do
       f.input :name
-      f.input :search_key_name
+      # f.input :search_key_name
+      # , :input_html => {:value => }
       f.input :version
       f.input :description
       if !current_admin_user.organizer?
