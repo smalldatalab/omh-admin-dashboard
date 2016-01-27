@@ -6,6 +6,7 @@ class Survey < ActiveRecord::Base
 
   validates :studies, presence: true
 
+  ### For automatically adding search key name
   def set_search_key_name
     survey_definition = self.definition
     definition_json = JSON.parse(survey_definition)

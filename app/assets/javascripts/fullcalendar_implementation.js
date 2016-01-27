@@ -92,15 +92,19 @@ $(document).ready(function() {
     var my_daily_data = null;
     var ranges = null;
     var metrics = ['max_gait_speed_in_meter_per_second', 'active_time_in_seconds','time_not_at_home_in_seconds'];
+    ///Get data for daily mobility variables
     var calendar_data = $('#calendar_data_points').data('url');
+
+    /// Get one day data
     var one_day_pam_data = $('#one_day_pam_data').data('url');
     var one_day_ohmage_data = $('#one_day_ohmage_data').data('url');
     var one_day_fitbit_data = $('#one_day_fitbit_data').data('url');
+
+    /// Get array of all data for rendering
     var ohmage_events_array = $('#ohmage_events_array').data('attribute');
     var pam_events_array = $('#pam_events_array').data('attribute');
     var fitbit_events_array = $('#fitbit_events_array').data('attribute');
     var annotation_events_array = $('#annotation_events_array').data('attribute');
-    console.log(annotation_events_array);
     var events_array = $.merge($.merge($.merge( $.merge( [], pam_events_array ), ohmage_events_array), fitbit_events_array), annotation_events_array);
 
 
@@ -292,13 +296,12 @@ $(document).ready(function() {
         }
     });
 
-
+    //// Enable to select one varibales at a time on the calendar's gragh
     $('#max_gait_speed_in_meter_per_second_button').click(function() {
         $('div.day_viz div.time_not_at_home_in_seconds_bar').hide();
         $('div.day_viz div.active_time_in_seconds_bar').hide();
         $('div.day_viz div.max_gait_speed_in_meter_per_second_bar').show();
     });
-
 
     $('#time_not_at_home_in_seconds_button').click(function() {
         $('div.day_viz div.max_gait_speed_in_meter_per_second_bar').hide();

@@ -1,4 +1,5 @@
 class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
+  ### For authorization of Admin User Types
   def authorized?(action, subject = nil)
   	if user.researcher
   		case subject

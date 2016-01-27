@@ -15,12 +15,14 @@ class User < ActiveRecord::Base
 
   after_find :init
 
+  ### Search participant in the endUser collection in the mongodb using username attribute
   def init
     user_name = self.username
     pam_user = PamUser.where('_id' => user_name).first
     @user_record = pam_user.nil? ? nil : pam_user
   end
 
+  #### Check whehter the participant is registered
   def registrated_in_database
     if @user_record.nil?
       return "No"
@@ -29,6 +31,7 @@ class User < ActiveRecord::Base
     end
   end
 
+  #### Get most recent uploaded date for all data and render it on Participant's Index
   def most_recent_data_point_date(data_stream, device=nil)
     if @user_record.nil?
       return ''
@@ -82,6 +85,7 @@ class User < ActiveRecord::Base
     end
   end
 
+  ##### Get one day data
   def one_day_pam_data_points(date)
     if @user_record.nil?
       return nil
@@ -129,7 +133,7 @@ class User < ActiveRecord::Base
     end
   end
 
-
+  ### Get arrays of data to render on the calendar
   def calendar_pam_events_array
     pam_events_array = []
     pam_events_date = []
@@ -219,7 +223,7 @@ class User < ActiveRecord::Base
     return ohmage_events_array.to_json
   end
 
-
+  ##### Get all data
   def all_pam_data_points
     if @user_record.nil?
       return nil
@@ -316,6 +320,8 @@ class User < ActiveRecord::Base
     end
   end
 
+
+  ##### For all CSV data download functions
   def pam_data_csv
     CSV.generate do |csv|
       csv << [
@@ -538,7 +544,7 @@ class User < ActiveRecord::Base
     end
   end
 
-
+  ### For rendering mobility data for the grapg on the calender in individual participant page
   def calendar_data_json
     json_data = {
                   users: {

@@ -1,4 +1,5 @@
 class Metadatum
+  #### Mongodb attributes
   include Mongoid::Document
 
   store_in collection: 'fs.files', database: 'omh'

@@ -38,7 +38,7 @@ ActiveAdmin.register User  do
     end
   end
 
-  ##### Controller for all data download button group
+  ##### Controller for all data download button group (Customized)
   controller do
     def all_users_pam_csv
       @users = current_admin_user.users
@@ -234,16 +234,19 @@ ActiveAdmin.register User  do
     actions
   end
 
-  ##### Show part for individual participant
+  ##### Individual participant Show (Customized)
   show title: :id do
+    #### Embed the Calender. Go to views/users/_calender_view.html.erb
     panel "Calendar of Daily Data" do
       render partial: 'calendar_view', locals: { users: @user}
     end
 
     attributes_table do
       row :id
+      ### Access difference for Admin User types
       if !current_admin_user.researcher?
         row :studies do |user|
+          ## Strip the quotes and join the name of studies together
           user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, ''
         end
          row :surveys do |user|
@@ -254,6 +257,7 @@ ActiveAdmin.register User  do
         end
       else
         row :studies do |user|
+          ## Get the shared studies of current admin user and the participant
           common_elements = user.studies & current_admin_user.studies
           common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
         end
@@ -266,7 +270,7 @@ ActiveAdmin.register User  do
           common_elements.map {|b| b.name.inspect}.uniq.join(', ').gsub /"/, ''
         end
       end
-
+      ## Call back the methods defined in models/user.rb
       row("Pam Data Last Uploaded") { |user| user.most_recent_data_point_date('photographic-affect-meter-scores')}
       row("Mobility Data Last Uploaded") { |user| user.most_recent_mobility_data_point_date}
       row("Moves Data Last Uploaded") { |user| user.most_recent_data_point_date('mobility-daily-summary', 'moves-app')}
@@ -280,7 +284,7 @@ ActiveAdmin.register User  do
     active_admin_comments
   end
 
-  ##### Show part csv download buttons
+  ##### CSV download buttons in individual participant page (Customized)
   action_item :only => :show do
     link_to 'PAM Data CSV File', admin_user_pam_data_points_path(user, format: 'csv')
   end
@@ -301,7 +305,7 @@ ActiveAdmin.register User  do
     link_to 'Logging Data csv File', admin_user_log_in_data_points_path(user, format: 'csv')
   end
 
-  ##### Filter Part
+  ##### Filter (Customized)
   filter :id
   filter :data_streams, as: :select, collection: proc { DataStream.all }
   filter :surveys, as: :select, collection: proc {
@@ -321,7 +325,7 @@ ActiveAdmin.register User  do
     end
   }
 
-  ##### Input part
+  ##### Input (Customized)
   form do |f|
     f.inputs "User Details" do
       f.input :gmail
@@ -337,7 +341,7 @@ ActiveAdmin.register User  do
     f.actions
   end
 
-  ##### Index csv part
+  ##### Index CSV Format (Customized)
   csv do
     column :id
     column("Studies") {|user| user.studies.map {|a| a.name.inspect}.uniq.join(', ').gsub /"/, '' }

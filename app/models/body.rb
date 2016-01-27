@@ -1,4 +1,5 @@
 class Body
+  #### Mongodb attributes
   include Mongoid::Document
 
   store_in collection: 'dataPoint', database: 'omh'

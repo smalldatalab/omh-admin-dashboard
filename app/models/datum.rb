@@ -1,10 +1,10 @@
 class Datum
+  #### Mongodb attributes
   include Mongoid::Document
 
   store_in collection: 'dataPoint', database: 'omh'
 
   embedded_in :body, :inverse_of => :data
-
 
 ## for knee
   field :RisefromSitting, type: String

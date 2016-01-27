@@ -1,4 +1,5 @@
-class PamDataPoint
+class PamDataPoint ### dataPoint collection
+  #### Mongodb attributes
   include Mongoid::Document
 
   store_in collection: 'dataPoint', database: 'omh'
