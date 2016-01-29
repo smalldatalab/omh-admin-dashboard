@@ -486,8 +486,8 @@ class User < ActiveRecord::Base
                   escape_nil_body(data_point, :steps),
                   escape_nil_body(data_point, :geodiameter_in_km),
                   escape_nil_body(data_point, :max_gait_speed_in_meter_per_second),
-                  escape_nil_home(data_point, :leave_home_time),
-                  escape_nil_home(data_point, :return_home_time),
+                  escape_nil_body(data_point, :leave_home_time),
+                  escape_nil_body(data_point, :return_home_time),
                   escape_nil_body(data_point, :time_not_at_home_in_seconds).nil? ? nil : (data_point.body.time_not_at_home_in_seconds / 60.00),
                   escape_nil_body(data_point, :coverage)
                   ]

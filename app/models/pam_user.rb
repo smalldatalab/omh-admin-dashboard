@@ -1,4 +1,4 @@
-class PamUser
+class PamUser ## endUser collection
   #### Mongodb attributes
   include Mongoid::Document
   store_in collection: 'endUser', database: 'omh'

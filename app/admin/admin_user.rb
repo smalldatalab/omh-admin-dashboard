@@ -1,8 +1,9 @@
 ActiveAdmin.register AdminUser do
-  ##
+  #### Parameters and Page order
   permit_params :email, :password, :send_email, :password_confirmation, :organizer, :researcher, :organization_ids => [], organizations_attributes: [:id, :name],:study_ids => [], studies_attributes: [:id, :name], :data_stream_ids => [], data_streams_attributes: [:id, :name]
   menu priority: 2, label: "Administrators"
 
+  ##### Index page
   index do
     selectable_column
     id_column
@@ -35,6 +36,7 @@ ActiveAdmin.register AdminUser do
     actions
   end
 
+  ###### Show Page
   show do
     attributes_table do
       row :id

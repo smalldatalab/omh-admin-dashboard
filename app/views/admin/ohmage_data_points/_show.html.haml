@@ -29,12 +29,9 @@
   -  @image = SurveyImage.where('metadata.media_id'=> filename)
   -  if !@image.blank?
     -  @image_id = @image.first.id
-    -  @filename = @image.first.filename
-    -  spawn 'cd data && mongofiles -d omh get ' + @filename
     -  @download_link = "/admin/images/" + @image_id
   - else
     - @link = ''
-
 
 
 .top-area
