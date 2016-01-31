@@ -60,7 +60,7 @@ config.action_mailer.smtp_settings = {
     Take ohmage survey data as an example, in models/user.rb the ohmage data for one specific participant get collected.
     </p>
     
-```Ruby
+```ruby
     def one_day_ohmage_data_points(admin_user_id, date)
       if @user_record.nil?
         return nil
