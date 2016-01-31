@@ -41,6 +41,7 @@
 
 
 .survey-area
+  // Getinng the admin user id and the date
   - url_var = request.original_url
   - a = url_var.split(//).last(13).join.to_i
   - a = Time.zone.at(a / 1000.0).to_s[0..9]
@@ -51,7 +52,6 @@
     - survey_name = []
     - @user.one_day_ohmage_data_points(current_admin_user.id, /#{a}/).each do |data_point|
       - survey_name = survey_name.push(data_point.header.schema_id.name).uniq
-
     - survey_name.each do |name|
       .single-survey-group
         .row
@@ -78,6 +78,7 @@
                 - i = 0
                 - if data_point.body.data
                   - data_point.body.data.attributes.each do |key, value|
+                    // Checking for image data
                     - if i <= survey_keys.length
                       - key = survey_keys[i]
                       - if data_point.body.data[key].is_a? String

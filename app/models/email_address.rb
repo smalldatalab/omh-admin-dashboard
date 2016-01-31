@@ -7,5 +7,4 @@ class EmailAddress
 
   embedded_in :pam_user, :inverse_of => :email_address
 
-
 end

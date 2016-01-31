@@ -89,8 +89,8 @@ ActiveAdmin.register AdminUser do
       f.input :email
       f.input :password
       f.input :password_confirmation
-      f.input :organizer, as: :boolean
-      f.input :researcher, as: :boolean
+      f.input :organizer, as: :boolean, label: "Organizer (Please select one from the Organizations if you check this)"
+      f.input :researcher, as: :boolean, label: "Researcher (Please select one from the Studies if you check this)"
       if current_admin_user.organizer?
         f.input :studies, as: :check_boxes, collection: Study.joins(:organizations).where('organizations.id IN (?)', current_admin_user.organizations.ids)
         f.input :organizations, as: :check_boxes, collection: current_admin_user.organizations
