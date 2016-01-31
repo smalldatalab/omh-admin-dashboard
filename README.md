@@ -29,23 +29,24 @@
 
 <h5>Emails Sending</h5>
 <p>
-  It uses <a href="https://www.mandrill.com/">Mandrill</a> for sending emails. You need to create a username and password. Also, you can follow the instructions on Mandrill to set up a domain name for your email sender. Afterwards you can edit the config/application.rb or save them in the config/secrets.yml.
-
-  ```
-    config.action_mailer.default_url_options = {:host => ENV['MANDRILL_HOST'] || Rails.application.secrets.MANDRILL_HOST}
-    config.action_mailer.default :charset => "utf-8"
-    config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = {
-      address:                 'smtp.mandrillapp.com',
-      port:                     587,
-      domain:                  'smalldata.io',
-      user_name:               ENV['MANDRILL_USERNAME'] || Rails.application.secrets.MANDRILL_USERNAME,
-      password:                ENV['MANDRILL_PASSWORD'] || Rails.application.secrets.MANDRILL_PASSWORD,
-      authentication:          'plain',
-      enable_starttls_auto:     true
-    }
-  ```
+  It uses <a href="https://www.mandrill.com/">Mandrill</a> for sending emails. You need to create a username and password. Also, you can follow the instructions on Mandrill to set up a domain name for your email sender. Please edit config/application.rb.
 </p>
+
+        ```
+        config.action_mailer.default_url_options = {:host => ENV['MANDRILL_HOST'] || Rails.application.secrets.MANDRILL_HOST}
+        config.action_mailer.default :charset => "utf-8"
+        config.action_mailer.delivery_method = :smtp
+        config.action_mailer.smtp_settings = {
+            address:                 'smtp.mandrillapp.com',
+            port:                     587,
+            domain:                  'smalldata.io',
+            user_name:               ENV['MANDRILL_USERNAME'] || Rails.application.secrets.MANDRILL_USERNAME,
+            password:                ENV['MANDRILL_PASSWORD'] || Rails.application.secrets.MANDRILL_PASSWORD,
+            authentication:          'plain',
+            enable_starttls_auto:     true
+        }
+        ```
+<p>models/admin_user.rb</p>
 
 <h5>Feature in Participant Panel</h5>
 <ul>
