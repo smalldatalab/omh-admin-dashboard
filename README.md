@@ -21,7 +21,7 @@ Active Admin brought with the set of framework including controller, models, vie
 
 #### Later Added On Functions (Customized)
 ##### Feature in Admin User Panel
-Authorization
+> Authorization
 
 Edit models/admin_authoriations.rb for Admin User type's access. See [here](http://activeadmin.info/docs/13-authorization-adapter.html) for more information. If you want to edit the content of each individual panel, edit individual file under app/admin.
 
@@ -48,14 +48,14 @@ models/admin_user.rb
 
 ##### Feature in Participant Panel
 
-Calendar
+> Calendar
 The calendar is built with [FullCalendar](http://fullcalendar.io/), an open source JavaScript jQuery plugin for a full-sized, drag & drop event calendar. The codebase is in assets/fullcalendar_implementation.js.
 
-Graph
+> Graph
 
 The graph is built with [D3](http://d3js.org/), a JavaScript library for visualizing data with HTML, SVG, and CSS. It renders three aspects of the daily summarized Mobility data, "Time Not At Home", "Active Time" and "Max Speed". See assets/fullcalendar_implementation.js for more information.
 
-One Day Data
+> One Day Data
 
 One day data array of all three data streams, PAM, ohmage ang Fitbit are handled by in the models/user.rb and the arrays are rendered as events on the calendar of individual partcipant. The event also has a hyperlink that will direct to a page that shows the data for that date. 
   
@@ -140,8 +140,7 @@ $('#calendar').fullCalendar({
 
 In controllers/ohmage_data_points_controller.rb, the functions are called and the paths are created for the one day ohmage data.
 
-
-```
+```Ruby
 class Admin::OhmageDataPointsController < ApplicationController
   def index
     @user = User.find(params[:user_id])
@@ -155,6 +154,7 @@ end
 
 In the views/admin/ohmage_data_points/_show.html.haml, the data for that specific date are rendered.
 Related files
+
 * models/user.rb
 * controllers/pam_data_points_controller.rb
 * controllers/ohmage_data_points_controller.rb
@@ -163,11 +163,11 @@ Related files
 * views/admin/ohmage_data_points/_show.html.haml
 * views/admin/fitbi_data_points/_show.html.haml
   
-Image download
+> Image download
 
 The dashboard used [mongoid-grid_fs](https://github.com/ahoward/mongoid-grid_fs), a pure Mongoid/Moped implementation of the MongoDB GridFS specification. In controllers/admin/images_controller.rb, the meta data of images will be directly pulled out from the mongodb and send the files as download.
 
-```
+```Ruby
 class Admin::ImagesController < ApplicationController
   def show
     image = Mongoid::GridFs.get(params[:id])
@@ -188,4 +188,113 @@ def get_survey_image_download_link(filename)
     @download_link = "/admin/images/" + @image_id
   else
     @link = ''
+```
+> Annotation
+
+annotation_controller.rb
+
+> CSV File Download
+
+##### Data Integration
+
+> Mongodb
+
+config/mongoid.yml
+
+In order to have a copy of the attributes in the mongodb, you need to set each attribute as a class under models folder to establish the relationship but you don't need to run migration yourself.
+
+PamUser model is refered to the endUser collection in the omh mongodb. PamDataPoint is refered to the dataPoint collection. Image model is refered to the fs.files collection. The fs.chucks collection stores the meta data of the images in fs.files collection. See [here](http://guides.rubyonrails.org/association_basics.html) for information about the relation. Please see the example below.
+
+The format of the endUser data in the mongodb
+
+```json
+{ "_id" : "test_user_1", "_class" : "org.openmhealth.dsu.domain.EndUser", "password_hash" : "$2a$10$tI8FQMDq8CbJVgVvf4h3euauAtr.CBzk4XujD4ueFpSe8inODQNwu", "email_address" : { "address" : "useremail@gmail.com" }, "registration_timestamp" : "2015-12-16T20:39:57.415Z" }
+```
+
+In the model/pam_user.rb
+
+```ruby
+class PamUser
+  #### Mongodb attributes
+  include Mongoid::Document
+  store_in collection: 'endUser', database: 'omh'
+
+  field :_id, type: Object
+
+  #### Establish the relationship
+  has_many :pam_data_points
+
+  embeds_one :email_address
+end
+
+```
+
+Since it embeds email_address field, you need to create a model for the email_address field. In email_address.rb
+
+```Ruby
+class EmailAddress
+  #### Mongodb attributes
+  include Mongoid::Document
+  store_in collection: 'endUser', database: 'omh'
+
+  field :address, type: String
+  embedded_in :pam_user, :inverse_of => :email_address
+end
+```
+
+> Postgres
+
+Active Admin is built in with Postgres and you need to run migration to create new tables. Run "rails g active_record:migration xxxxxxxx" for adding new migration and then run 'rake db:migrate' after you have edited the migration file. All th migration are located in db/migrate.
+
+When you establish a relation, you need to establish the relation in the migration and also in the models. Please see the following relation.
+
+Admin User has many to many relation with Study through study_owner table. Study has many to many relation with User(Participant) through study_participant table. Survey has many to many relation with Study through s_survey table. Data Stream has many to many relation with Study through s_data_stream table. Organization has a many to many relation with Study through organization_study table and with Admin User through organization_owner table. The relation is important because researcher can only see the participants and data belong to their studies and it could help to give access to researchers.
+
+See example for the relation between Admin User and Study.
+
+In config/migrate/20150124183817_create_study_owners.rb
+
+```Ruby
+class CreateStudyOwners < ActiveRecord::Migration
+  def change
+    create_table :study_owners do |t|
+      ##### Establish relation here
+      t.belongs_to :admin_user, index: true
+      t.belongs_to :study, index: true
+
+      t.timestamps
+    end
+  end
+end
+```
+
+In models/admin_user.rb
+
+```Ruby
+class AdminUser < ActiveRecord::Base
+has_many :study_owners
+has_many :studies, through: :study_owners
+end
+
+```
+
+In models/study.rb
+
+```Ruby
+class Study < ActiveRecord::Base
+  has_many :admin_users, through: :study_owners
+  has_many :study_owners
+end
+```
+
+In models/study_owner.rb
+
+```Ruby
+class StudyOwner < ActiveRecord::Base
+  belongs_to :admin_user
+  belongs_to :study
+
+  validates_presence_of :admin_user
+  validates_presence_of :study
+end
 ```
