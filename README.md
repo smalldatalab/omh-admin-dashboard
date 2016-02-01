@@ -8,13 +8,6 @@ The admin dashboard is a web-based interface that enables the researchers (or cl
 
 SDL Admin Dashboard is a Ruby on Rails project. It uses [Active Admin](http://activeadmin.info/), a Ruby on Rails plugin for generating administration style interfaces. It intergates with ohmage-omh MongoDB using <a href="https://docs.mongodb.org/ecosystem/tutorial/ruby-mongoid-tutorial/">Mongoid</a>, a Ruby MongoDB Driver. You can edit config/mongoid.yml for changing database information. See Gemfile for a complete list of gems used in the project.
 
-* Ruby on Rails
-* Active Admin
-* Mongodb
-* Mongoid
-* d3
-* JavaScript
- 
 #### Built-in Active Admin Functions
 
 Active Admin brought with the set of framework including controller, models, views and migration for Admin USer and Users. Please see Active Admin main page for more information.
@@ -25,7 +18,7 @@ Active Admin brought with the set of framework including controller, models, vie
 
 Edit models/admin_authoriations.rb for Admin User type's access. See [here](http://activeadmin.info/docs/13-authorization-adapter.html) for more information. If you want to edit the content of each individual panel, edit individual file under app/admin.
 
-##### Emails Sending
+>  Emails Sending
 
 It uses [Mandrill](https://www.mandrill.com/) for sending emails. You need to create a username and password. Also, you can follow the instructions on Mandrill to set up a domain name for your email sender. Please edit config/application.rb.
 
@@ -44,11 +37,10 @@ config.action_mailer.smtp_settings = {
 }
 ```
 
-models/admin_user.rb
-
 ##### Feature in Participant Panel
 
 > Calendar
+
 The calendar is built with [FullCalendar](http://fullcalendar.io/), an open source JavaScript jQuery plugin for a full-sized, drag & drop event calendar. The codebase is in assets/fullcalendar_implementation.js.
 
 > Graph
@@ -191,9 +183,174 @@ def get_survey_image_download_link(filename)
 ```
 > Annotation
 
-annotation_controller.rb
+Fullcalendar js plugin enables you click on any date on the calendar and that function is edited in fullcalendar_implementation.js as below. 
+
+```JavaScript
+select: function(start, end) {
+         document.getElementById("eventDate").setAttribute('value', moment(end['_d']).format('YYYY-MM-DD'));
+         document.getElementById("eventButton").click();
+     }
+```
+A #eventButton div in the views/_calendar_view.html.haml is a Bootstrap modal that will get triggered when a date is selected on the calendar. 
+
+```HTML
+<button id="eventButton" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#annotationInput" style="display: none;">Open Modal</button>
+
+ <div class="modal fade" id="annotationInput" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+           <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal">
+                   &times;
+               </button>
+               <h4>Annotation:</h4>
+           </div>
+           <%= form_for :annotation, url: admin_user_annotations_path(@user.id) do |f| %>
+               <div class="modal-body">
+                   <p>
+                      <%= f.label 'Note: ' %>
+                      <%= f.text_field :title, id: 'eventTitle' %>
+                   </p>
+                   <br>
+                   <p>
+                       <%= f.label 'Date: ' %>
+                       <%= f.text_field :start, id: 'eventDate', value: ''%>
+                   </p>
+               </div>
+               <div class="modal-footer">
+                   <%= f.submit %>
+               </div>
+          <% end %>
+       </div>
+   </div>
+ </div>
+```
+
+The creation of the annotations is handled in the controllers/admin/annotation_controller.rb and the has many relation between User and Annotation are handled in models/annotation.rb and models/user.rb. 
 
 > CSV File Download
+
+The buttons for download are added in app/admin/user.rb as below. Take Fitbit data as an example.  
+
+``` 
+action_item :only => :show do
+   link_to 'Fitbit Data csv File', admin_user_fitbit_data_points_path(user, format: 'csv')
+end
+```
+
+Then in controllers/admin/fitbit_data_points_controller.rb, the path for the CSV download is established. 
+
+```
+class Admin::FitbitDataPointsController < ApplicationController
+  def index
+    @user = User.find(params[:user_id])
+    respond_to do |format|
+      format.csv {render text: @user.fitbit_data_csv }
+      format.html {render partial: 'show', method: @user.calendar_fitbit_events_array}
+    end
+  end
+end
+```
+
+The fitbit_data_csv function is located in models/user.rb 
+
+```Ruby
+def fitbit_data_csv
+   CSV.generate do |csv|
+     csv << [
+              'date',
+              'steps'
+            ]
+     if all_fitbit_data_points.nil?
+       return nil
+     else
+       all_fitbit_data_points.each do |data_point|
+       csv << [
+                 data_point.header.creation_date_time,
+                 data_point.body.step_count
+        ]
+       end
+     end
+   end
+end
+```
+
+CSV download function of ohmage survey data is a bit more complex because it uses a horizontal data input method in order to capture the surveys with different number of questions. It requires three functions as below. 
+
+```
+def get_all_survey_question_keys(admin_user_id)
+   ohmage_data_points = all_ohmage_data_points(admin_user_id)
+   if @user_record.nil?
+      return nil
+   else
+      if ohmage_data_points.nil?
+        return nil
+      else
+        survey_keys = [
+                      'source_name',
+                      'creation_date_time',
+                      'survey_namespace',
+                      'survey_name',
+                      'survey_version'
+                      ]
+        ohmage_data_points.each do |a|
+          if a.body.data
+            a.body.data.attributes.each do |key, value|
+              survey_keys.push(key) unless survey_keys.include? key
+            end
+          else
+             a.body.attributes.each do |key, value|
+              survey_keys.push(key) unless survey_keys.include? key
+            end
+          end
+        end
+        return survey_keys
+      end
+   end
+end
+
+def get_all_survey_question_values(survey_keys, data_point)
+   survey_values = [
+                    data_point.header.acquisition_provenance.source_name,
+                    data_point.header.creation_date_time,
+                    data_point.header.schema_id.namespace,
+                    data_point.header.schema_id.name,
+                    data_point.header.schema_id.version.major.to_s + '.' + data_point.header.schema_id.version.minor.to_s
+                    ]
+   fixed_survey_values_count = survey_values.length
+   if data_point.body.data
+      survey_keys.each_with_index do |key, index|
+        if index >= fixed_survey_values_count
+          survey_values << data_point.body.data[key] ? data_point.body.data[key] : nil
+        end
+      end
+    else
+      survey_keys.each_with_index do |key, index|
+        if index >= fixed_survey_values_count
+          survey_values << data_point.body[key] ? data_point.body[key] : nil
+       end
+     end
+   end
+   return survey_values
+ end
+ 
+def ohmage_data_csv(admin_user_id=nil)
+   CSV.generate do |csv|
+     keys = get_all_survey_question_keys(admin_user_id)
+      if keys
+        csv << keys
+        data_points = all_ohmage_data_points(admin_user_id)
+       if data_points.nil?
+          return nil
+       else
+         data_points.each do |data_point|
+            csv << get_all_survey_question_values(keys, data_point) if data_point.body.data || data_point.body
+         end
+       end
+     end
+   end
+end
+```
 
 ##### Data Integration
 
