@@ -52,7 +52,7 @@ ActiveAdmin.register Study do
       f.input :name
       f.input :data_streams, as: :check_boxes, collection: DataStream.all
       if current_admin_user.organizer?
-        f.input :organizations, as: :check_boxes, collection: current_admin_user.organizations
+        f.input :organizations, as: :check_boxes, collection: current_admin_user.organizations, label: "Organizations (Please select your organization from the list)"
         f.input :surveys, as: :check_boxes, collection: current_admin_user.surveys
         f.input :remove_gps, as: :boolean, label: "Remove GPS Data"
       else
