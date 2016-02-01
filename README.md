@@ -232,7 +232,7 @@ The creation of the annotations is handled in the controllers/admin/annotation_c
 
 The buttons for download are added in app/admin/user.rb as below. Take Fitbit data as an example.  
 
-``` 
+``` Ruby
 action_item :only => :show do
    link_to 'Fitbit Data csv File', admin_user_fitbit_data_points_path(user, format: 'csv')
 end
@@ -240,7 +240,7 @@ end
 
 Then in controllers/admin/fitbit_data_points_controller.rb, the path for the CSV download is established. 
 
-```
+```Ruby
 class Admin::FitbitDataPointsController < ApplicationController
   def index
     @user = User.find(params[:user_id])
@@ -277,7 +277,7 @@ end
 
 CSV download function of ohmage survey data is a bit more complex because it uses a horizontal data input method in order to capture the surveys with different number of questions. It requires three functions as below. 
 
-```
+```Ruby
 def get_all_survey_question_keys(admin_user_id)
    ohmage_data_points = all_ohmage_data_points(admin_user_id)
    if @user_record.nil?
