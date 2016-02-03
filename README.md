@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # SDL ADMIN DASHBOARD - Manage Users' Data
 
 ## Overview
@@ -458,4 +456,3 @@ class StudyOwner < ActiveRecord::Base
   validates_presence_of :study
 end
 ```
->>>>>>> 7be5ec6117ff7e5bbef444e74f3a4a394392019c
