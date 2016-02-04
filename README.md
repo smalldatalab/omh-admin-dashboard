@@ -1,26 +1,30 @@
-# SDL ADMIN DASHBOARD - Manage Participants' Data
+# SDL ADMIN DASHBOARD - Accessing and Administering Participants' Data
 
 ## Overview
 
-The admin dashboard is a web-based interface that enables the researchers (or clinicians) to setup, monitor, and retrieve data from authorized participants of their studies using a specified set of mobile health applications. It is one part of [ohmage-omh](http://ohmage-omh.smalldata.io/) project, which is an open-source, open-architecture, mobile health platform intended for rapid prototyping and piloting of mobile health applications. The dashboard is integrated with Mobilty, ohmage, PAM, Moves and Fitbit apps and available for CSV and image data donwload.
+The admin dashboard is a web-based interface that enables researchers (or clinicians) to setup, monitor, and retrieve data from authorized participants of their studies using a specified set of mobile health applications. It is one part of the [ohmage-omh](http://ohmage-omh.smalldata.io/) project, which is an open-source, open-architecture, mobile health platform intended for rapid prototyping and piloting of mobile health applications. The dashboard integrates with Mobility, ohmage, PAM, Moves and Fitbit apps and available for CSV and image data download.
 
 ## Background
 
-SDL Admin Dashboard is a Ruby on Rails project and it uses [Active Admin](http://activeadmin.info/) as the framework, a Ruby on Rails plugin for generating administration style interfaces. It also intergates with the ohmage-omh Mongo DataBase using <a href="https://docs.mongodb.org/ecosystem/tutorial/ruby-mongoid-tutorial/">Mongoid</a>, a Ruby MongoDB Driver. Please customize the database information in `config/mongoid.yml`.
+SDL Admin Dashboard is built on [Ruby on Rails](http://rubyonrails.org/) project and uses [Active Admin](http://activeadmin.info/) to abstract out most of the views and controllers, so that editing basic functionality should be straightforward for those with no Ruby, Rails, or even programming experience.
 
-#### Active Admin Built-in Functions
+##### Database configuration
 
-Active Admin gem comes with a set of files for the framework including Controller, Models, Views and Migration and the creation of Admin User and Users. Please see Active Admin's main page for more explanations.
+Integration with the ohmage-omh Mongo database is handled via [Mongoid](http://mongoid.github.io/en/mongoid/index.html). The connection can be customized in the `config/mongoid.yml` file.
+
+#### ActiveAdmin Built-in Functionality
+
+ActiveAdmin automatically handles most of the presentation layer of the dashboard and can be configured using the ActiveAdmin DSL, which is further [explained here](http://activeadmin.info/):
 
 #### Later Added On Functions (Customized)
 ##### Feature in Admin User Panel
 > Authorization
 
-There are three types of Admin User and they all have different access to the dashboard. The file that sets up the authorization is `models/admin_authoriations.rb`. See [here](http://activeadmin.info/docs/13-authorization-adapter.html) for examples. The authorization only provides access to the whole tabs but if you would like to control the content within the tab, please edit the files under `app/admin` directly.  
+There are three types of AdminUser, each with different levels of access and permissions on the dashboard. These authorizations are configured in `models/admin_authoriations.rb`(see [here](http://activeadmin.info/docs/13-authorization-adapter.html) for examples). The authorization levels in the file only control access to tabs (tables) at the top of the dashboard, to control access to specific items within a tab the permissions will have to be edited in the appropriate file in `app/admin` directly.
 
->  Emails Sending
+> Mailers
 
-The email sending function is for Admin User to set up the passwords for the first time and reset the passwords. The dashboard uses a gem called 'mandrill-rails', an API provided by [Mandrill](https://www.mandrill.com/) for transactional emails from websites and applications. Create your username and password and pass them into your `config/secrets.yml`. The names of the varibales should follow the names in `config/application.rb` below. Also, you can follow the instructions on Mandrill to set up a domain name for your email sender.
+The email sending function is currently used to allow AdminUsers to set and reset passwords. The dashboard uses the `'mandrill-rails'` gem to interface with the [Mandrill](https://www.mandrill.com/) API for sending the mailers, though other adapters/API could be used. Mandrill credentials should be declared in `config/secrets.yml` and conform to the variable names in `config/application.rb` (see below). You will also need to follow the instructions on the Mandrill site to create an account and set up a domain name for your email sender.
 
 ```Ruby
 config.action_mailer.default_url_options = {:host => ENV['MANDRILL_HOST'] || Rails.application.secrets.MANDRILL_HOST}
@@ -41,17 +45,17 @@ config.action_mailer.smtp_settings = {
 
 > Calendar
 
-The calendar embeded framework is built using [FullCalendar](http://fullcalendar.io/), an open source JavaScript jQuery plugin for a full-sized, drag & drop event calendar. Please see the comments in `assets/fullcalendar_implementation.js` for detailed implementation and `views/admin/users/_calendar.html.haml for the HTML structure. 
+The calendar embedded framework is built using [FullCalendar](http://fullcalendar.io/), an open source JavaScript jQuery plugin for a full-sized, drag & drop event calendar. Please see the comments in `assets/fullcalendar_implementation.js` for detailed implementation and `views/admin/users/_calendar.html.haml` for the HTML structure.
 
 > Graph
 
-The graph is built using [D3](http://d3js.org/), a JavaScript library for visualizing data with HTML, SVG, and CSS. It renders three aspects of the daily summarized Mobility data, "Time Not At Home", "Active Time" and "Max Speed". The implementation is similar with One Day Data and please see below for more information. 
+The graph is built using [D3](http://d3js.org/), a JavaScript library for visualizing data with HTML, SVG, and CSS. It renders three aspects of the daily summarized Mobility data: "Time Not At Home", "Active Time" and "Max Speed". The implementation is similar with One Day Data (see below).
 
 > One Day Data
 
-One Day Data array of all three data streams, PAM, ohmage ang Fitbit are handled in the models/user.rb and the data in the arrays are rendered as events on the calendar of individual partcipant. Each event has a hyperlink that will direct users to a page that contains the data for that date. 
-  
-For example, for ohmage survey data, in `models/user.rb` the ohmage data is sorted by the date and the scope of the study the participant belongs to.
+One Day Data is an array of three data streams: PAM, ohmage and Fitbit. These streams are handled by `models/user.rb`, with the data in the arrays rendered as events on the calendar of individual participants. Each event has a hyperlink that will direct users to a page that contains the data for that specific date.
+
+For example, for ohmage survey data, in `models/user.rb` the ohmage data is sorted by the date and the scope of the study the participant belongs to.  
 
 ```Ruby
 def one_day_ohmage_data_points(admin_user_id, date)
@@ -102,13 +106,12 @@ def calendar_ohmage_events_array(admin_user_id)
 end
 ```
 
-In `views/users/_calendar_view.html.erb`, the ohmage array function is called and the result is stored in the `data-attribute` for the `#ohmage_events_array` div. The path for One Day ohmage data also get stored into the `data-url` attribute of the `#one_day_ohmage_data` div as below.
+In `views/users/_calendar_view.html.erb`, the ohmage array function is called and the result is stored in the `data-attribute` for the `#ohmage_events_array` div. The path for One Day ohmage data also gets stored into the `data-url` attribute of the `#one_day_ohmage_data` div, as below.
 
 ```HTML
 <div id="one_day_ohmage_data" data-url="/admin/users/<%= @user.id %>/ohmage_data_points?date="></div>
 <div id="ohmage_events_array" data-attribute="<%= @user.calendar_ohmage_events_array(current_admin_user.id) %>"></div>
 ```
-
 Then in the `assets/fullcalendar_implementation.js`, the attributes of `#ohmage_events_array` get called and rendered on the calendar as events on the calendar.
 
 ```JavaScript
@@ -152,16 +155,16 @@ Related files
 * `models/user.rb`
 * `controllers/pam_data_points_controller.rb`
 * `controllers/ohmage_data_points_controller.rb`
-* `controllers/fitbit_data_points_cntroller.rb`
+* `controllers/fitbit_data_points_controller.rb`
 * `views/admin/pam_data_points/_show.html.haml`
 * `views/admin/ohmage_data_points/_show.html.haml`
 * `views/admin/fitbi_data_points/_show.html.haml`
 
-All the routes are defined in `config/routes.rb`. You can also run `rake routes` for the list of paths.
-  
-> Image download
+All the routes are defined in `config/routes.rb`. You can also run the bash command `rake routes` for the list of paths and Rails helpers that will automatically generate specific paths.  
 
-The dashboard used [mongoid-grid_fs](https://github.com/ahoward/mongoid-grid_fs), a pure Mongoid/Moped implementation of the MongoDB GridFS specification. In `controllers/admin/images_controller.rb`, the meta data of images will be directly pulled out from the mongodb and send the data as download files.
+> Image Download
+
+The dashboard used [mongoid-grid_fs](https://github.com/ahoward/mongoid-grid_fs), a pure Mongoid/Moped implementation of the MongoDB GridFS specification. In `controllers/admin/images_controller.rb`, the metadata of images will be directly pulled out from the mongodb and then send the data as a downloadable file.
 
 ```Ruby
 class Admin::ImagesController < ApplicationController
@@ -174,7 +177,7 @@ class Admin::ImagesController < ApplicationController
 end
 ```
 
-In a survey datapoint that contains images, the name of the image file equals to the metadata.media_id field of the actual image file in the fs.files collection. In `views/admin/ohmage_data_points/_show.html.haml`, it finds the id of the image file by searching it with its metadata.media_id attribute from the survery datapoint. After that, it assigns the path of the images as hyperlink to the filename of the image on the One Day ohmage data.
+In a survey datapoint that contains images, the name of the image file is set as the metadata.media_id field of the actual image file in the fs.files collection. In `views/admin/ohmage_data_points/_show.html.haml`, the view finds the id of the image file by searching it with its metadata.media_id attribute from the survey datapoint. After that, it assigns the path of the images as hyperlink to the filename of the image on the One Day ohmage data.
 
 ``` Ruby
 def get_survey_image_download_link(filename)
@@ -185,9 +188,10 @@ def get_survey_image_download_link(filename)
   else
     @link = ''
 ```
+
 > Annotation
 
-Fullcalendar js plugin enables you click on any day on the calendar and that feature is implemented in   `fullcalendar_implementation.js` as below. 
+Fullcalendar js plugin enables you click on any day on the calendar and that feature is implemented in `assets/fullcalendar_implementation.js` as below.
 
 ```JavaScript
 select: function(start, end) {
@@ -195,7 +199,8 @@ select: function(start, end) {
          document.getElementById("eventButton").click();
      }
 ```
-A `#eventButton` div in the `views/_calendar_view.html.haml` is a Bootstrap modal that gets triggered when a day is selected on the calendar. 
+
+A `#eventButton` div in the `views/_calendar_view.html.haml` is a Bootstrap modal that gets triggered when a day is selected on the calendar.
 
 ```HTML
 <button id="eventButton" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#annotationInput" style="display: none;">Open Modal</button>
@@ -229,12 +234,11 @@ A `#eventButton` div in the `views/_calendar_view.html.haml` is a Bootstrap moda
    </div>
  </div>
 ```
-
 The creation of the annotations is handled in the `controllers/admin/annotation_controller.rb` and the has-many relation between User and Annotation are handled in `models/annotation.rb` and `models/user.rb`. For relation between tables please continue reading.
 
 > CSV File Download
 
-The buttons for download are added in `app/admin/user.rb` as below. See the implementation for Fitbit data below.  
+The buttons for download are added in `app/admin/user.rb` as below. See the implementation for Fitbit data below.
 
 ``` Ruby
 action_item :only => :show do
@@ -242,7 +246,7 @@ action_item :only => :show do
 end
 ```
 
-Then in `controllers/admin/fitbit_data_points_controller.rb`, the path for the CSV download is established. 
+Then in `controllers/admin/fitbit_data_points_controller.rb`, the path for the CSV download is established.
 
 ```Ruby
 class Admin::FitbitDataPointsController < ApplicationController
@@ -256,7 +260,7 @@ class Admin::FitbitDataPointsController < ApplicationController
 end
 ```
 
-The `fitbit_data_csv` function is called from `models/user.rb`. 
+The `fitbit_data_csv` function is called from `models/user.rb`.
 
 ```Ruby
 def fitbit_data_csv
@@ -279,7 +283,7 @@ def fitbit_data_csv
 end
 ```
 
-CSV download function of ohmage survey data is a bit more complex because it uses a horizontal data input method in order to capture the surveys with different number of questions. There are not fixed number for the survey questions so the function collects all the survey questions and insert the corresponding answers in the CSV file. 
+CSV download function of ohmage survey data is a bit more complex because it uses a horizontal data input method in order to capture the surveys with different number of questions. There is no fixed number of survey questions, so the function collects all the survey questions and inserts the corresponding answers in the CSV file.
 
 ```Ruby
 def get_all_survey_question_keys(admin_user_id)
@@ -360,9 +364,9 @@ end
 
 > Mongodb
 
-Please see `config/mongoid.yml` for configuration on how to connect the mongodb. 
+Please see `config/mongoid.yml` for configuration on how to connect the mongodb.
 
-In order for Mongoid to work, you need to define the format for the data that will be pulled out in a model. PamUser model is refered to the endUser collection in the omh mongodb. PamDataPoint is refered to the dataPoint collection. Image model is refered to the fs.files collection. The fs.chucks collection stores the meta data of the images in fs.files collection.
+In order for Mongoid to work, you need to define the format for the data that will be pulled out in a model. PamUser model is the Rails alias of the endUser collection in the omh mongodb. PamDataPoint is aliases the dataPoint collection. Image model aliases `fs.files`. The fs.chucks collection stores the meta data of the images in `fs.files` collection.
 
 An example of the format of the endUser data in the mongodb.
 
@@ -403,9 +407,7 @@ end
 
 > Postgres
 
-Postgres comes as the default database for Active Admin and migration is needed to create new tables. Run `rails g active_record:migration xxxxxxxx` for adding new migration and then run `rake db:migrate` after you have completed editing the migration file. All th migration files are located in `db/migrate`.
-
-All the tables have relation with each other. When you establish a relation, you need to establish the relation in the migration files and also in the models.Admin User has a many-to-many relation with Study through study_owner table. Study has a many-to-many relation with User(Participant) through study_participant table. Survey has a many-to-many relation with Study through s_survey table. Data Stream has a many-to-many relation with Study through s_data_stream table. Organization has a many-to-many relation with Study through organization_study table and with Admin User through organization_owner table. The relation is important in giving access to researchers who can only see the participants and data belong to their studies.
+Postgres comes as the default database for ActiveAdmin and a migration is needed to create new tables. Run `rails g active_record:migration xxxxxxxx` for adding new migrations and then run `rake db:migrate` after you have completed editing the migration file. All previously created migration files are located in `db/migrate`.
 
 See the relation between Admin User and Study below as an example.
 
