@@ -118,6 +118,8 @@ ActiveAdmin.register User  do
                ]
         @users.each do |user|
           if !user.all_mobility_data_points.nil?
+            user.all_mobility_data_points
+            tracer_bullet
             user.all_mobility_data_points.each do |data_point|
               csv << [
                       find_user_id(data_point.user_id),
@@ -143,7 +145,6 @@ ActiveAdmin.register User  do
                       escape_nil_body(data_point, :time_not_at_home_in_seconds).nil? ? nil : (data_point.body.time_not_at_home_in_seconds / 60.00),
                       escape_nil_body(data_point, :coverage)
                       ]
-              tracer_bullet
             end
           end
         end
