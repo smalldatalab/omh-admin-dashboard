@@ -455,4 +455,5 @@ class StudyOwner < ActiveRecord::Base
   validates_presence_of :admin_user
   validates_presence_of :study
 end
+
 ```
