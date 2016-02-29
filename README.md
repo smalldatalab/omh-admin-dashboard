@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # SDL ADMIN DASHBOARD - Manage Users' Data
 
 ## Overview
@@ -51,8 +49,8 @@ The graph is built with [D3](http://d3js.org/), a JavaScript library for visuali
 
 > One Day Data
 
-One day data array of all three data streams, PAM, ohmage ang Fitbit are handled by in the models/user.rb and the arrays are rendered as events on the calendar of individual partcipant. The event also has a hyperlink that will direct to a page that shows the data for that date. 
-  
+One day data array of all three data streams, PAM, ohmage ang Fitbit are handled by in the models/user.rb and the arrays are rendered as events on the calendar of individual partcipant. The event also has a hyperlink that will direct to a page that shows the data for that date.
+
 Take ohmage survey data as an example, in `models/user.rb` the ohmage data for one specific participant get collected.
 
 ```Ruby
@@ -157,7 +155,7 @@ Related files
 * `views/admin/pam_data_points/_show.html.haml`
 * `views/admin/ohmage_data_points/_show.html.haml`
 * `views/admin/fitbi_data_points/_show.html.haml`
-  
+
 > Image download
 
 The dashboard used [mongoid-grid_fs](https://github.com/ahoward/mongoid-grid_fs), a pure Mongoid/Moped implementation of the MongoDB GridFS specification. In `controllers/admin/images_controller.rb`, the meta data of images will be directly pulled out from the mongodb and send the files as download.
@@ -186,7 +184,7 @@ def get_survey_image_download_link(filename)
 ```
 > Annotation
 
-Fullcalendar js plugin enables you click on any date on the calendar and that function is edited in   `fullcalendar_implementation.js` as below. 
+Fullcalendar js plugin enables you click on any date on the calendar and that function is edited in   `fullcalendar_implementation.js` as below.
 
 ```JavaScript
 select: function(start, end) {
@@ -194,7 +192,7 @@ select: function(start, end) {
          document.getElementById("eventButton").click();
      }
 ```
-A #eventButton div in the `views/_calendar_view.html.haml` is a Bootstrap modal that will get triggered when a date is selected on the calendar. 
+A #eventButton div in the `views/_calendar_view.html.haml` is a Bootstrap modal that will get triggered when a date is selected on the calendar.
 
 ```HTML
 <button id="eventButton" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#annotationInput" style="display: none;">Open Modal</button>
@@ -229,11 +227,11 @@ A #eventButton div in the `views/_calendar_view.html.haml` is a Bootstrap modal 
  </div>
 ```
 
-The creation of the annotations is handled in the `controllers/admin/annotation_controller.rb` and the has many relation between User and Annotation are handled in `models/annotation.rb` and `models/user.rb`. 
+The creation of the annotations is handled in the `controllers/admin/annotation_controller.rb` and the has many relation between User and Annotation are handled in `models/annotation.rb` and `models/user.rb`.
 
 > CSV File Download
 
-The buttons for download are added in `app/admin/user.rb` as below. Take Fitbit data as an example.  
+The buttons for download are added in `app/admin/user.rb` as below. Take Fitbit data as an example.
 
 ``` Ruby
 action_item :only => :show do
@@ -241,7 +239,7 @@ action_item :only => :show do
 end
 ```
 
-Then in `controllers/admin/fitbit_data_points_controller.rb`, the path for the CSV download is established. 
+Then in `controllers/admin/fitbit_data_points_controller.rb`, the path for the CSV download is established.
 
 ```Ruby
 class Admin::FitbitDataPointsController < ApplicationController
@@ -255,7 +253,7 @@ class Admin::FitbitDataPointsController < ApplicationController
 end
 ```
 
-The fitbit_data_csv function is located in `models/user.rb` 
+The fitbit_data_csv function is located in `models/user.rb`
 
 ```Ruby
 def fitbit_data_csv
@@ -278,7 +276,7 @@ def fitbit_data_csv
 end
 ```
 
-CSV download function of ohmage survey data is a bit more complex because it uses a horizontal data input method in order to capture the surveys with different number of questions. It requires three functions as below. 
+CSV download function of ohmage survey data is a bit more complex because it uses a horizontal data input method in order to capture the surveys with different number of questions. It requires three functions as below.
 
 ```Ruby
 def get_all_survey_question_keys(admin_user_id)
@@ -336,7 +334,7 @@ def get_all_survey_question_values(survey_keys, data_point)
    end
    return survey_values
  end
- 
+
 def ohmage_data_csv(admin_user_id=nil)
    CSV.generate do |csv|
      keys = get_all_survey_question_keys(admin_user_id)
@@ -359,7 +357,7 @@ end
 
 > Mongodb
 
-Please see `config/mongoid.yml` for configuration to connect to the mongodb. 
+Please see `config/mongoid.yml` for configuration to connect to the mongodb.
 
 In order to have a copy of the attributes in the mongodb, you need to set each attribute as a class under models folder to establish the relationship but you don't need to run migration yourself.
 
@@ -458,4 +456,3 @@ class StudyOwner < ActiveRecord::Base
   validates_presence_of :study
 end
 ```
->>>>>>> 7be5ec6117ff7e5bbef444e74f3a4a394392019c

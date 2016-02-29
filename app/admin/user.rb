@@ -90,6 +90,7 @@ ActiveAdmin.register User  do
 
     def all_users_mobility_csv
       @users = current_admin_user.users
+
       CSV.generate do |csv|
         csv << [
                 'user id',
@@ -142,6 +143,7 @@ ActiveAdmin.register User  do
                       escape_nil_body(data_point, :time_not_at_home_in_seconds).nil? ? nil : (data_point.body.time_not_at_home_in_seconds / 60.00),
                       escape_nil_body(data_point, :coverage)
                       ]
+              tracer_bullet
             end
           end
         end

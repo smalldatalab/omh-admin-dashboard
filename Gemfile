@@ -17,7 +17,6 @@ gem 'coffee-rails', '~> 4.0.0'
 # gem 'therubyracer',  platforms: :ruby
 
 gem 'thin'
-
 gem 'json', '1.8.2'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -30,34 +29,20 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',   group: :development
-
 gem 'devise', '~> 3.4.1'
-
 gem 'activeadmin', github: 'activeadmin'
-
 gem 'd3-rails', '~> 3.5.2'
-
 gem 'mongoid', '4.0.0'
-
 gem 'bson_ext'
-
 gem 'mongoid_rails_migrations'
-
 gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
-
 gem 'bcrypt', '~> 3.1.7'
 
-# gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
-# gem 'jnunemaker-rack-gridfs', '0.3'
 
 gem 'taps'
-
 gem 'whenever', :require => false
-
 gem 'connection_ninja'
-
 gem 'cancan'
-
 gem 'foreman',  '~> 0.63.0'
 
 #### Assets ####
@@ -68,7 +53,6 @@ gem 'simple_form',      '~> 3.1'
 ### Foundation ###
 gem 'foundation-rails'
 gem 'foundation-icons-sass-rails'
-
 gem 'mandrill-rails'
 # for debugging the slow issue
 # gem 'tracer_bullets'
