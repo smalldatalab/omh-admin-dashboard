@@ -24,35 +24,23 @@ class User < ActiveRecord::Base
 
   #### Check whehter the participant is registered
   def registrated_in_database
-    if @user_record.nil?
-      return "No"
-    else
-      return "Yes"
-    end
+    @user_record.nil? ? "No" : "Yes"
   end
 
   #### Get most recent uploaded date for all data and render it on Participant's Index
   def most_recent_data_point_date(data_stream, device=nil)
-    if @user_record.nil?
-      return ''
-    else
+    if !@user_record.nil?
       recent_data_point = @user_record.pam_data_points.where('header.schema_id.name' => data_stream, 'body.device' => device).order('header.creation_date_time_epoch_milli DESC').limit(1).first
-      if recent_data_point.nil?
-        return ''
-      else
+      if !recent_data_point.blank?
         DateTime.parse(recent_data_point.header.creation_date_time).to_formatted_s(:long_ordinal)
       end
     end
   end
 
   def most_recent_mobility_data_point_date
-    if @user_record.nil?
-      return ''
-    else
+    if !@user_record.nil?
       recent_data_point = @user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary', 'body.device' => {'$in' => ['ios', 'android', 'iOS', 'Android']}).order('header.creation_date_time_epoch_milli DESC').limit(1).first
-      if recent_data_point.nil?
-        return ''
-      else
+      if !recent_data_point.blank?
         DateTime.parse(recent_data_point.header.creation_date_time).to_formatted_s(:long_ordinal)
       end
     end
@@ -60,22 +48,16 @@ class User < ActiveRecord::Base
 
 
   def most_recent_ohmage_data_point_date(admin_user_id)
-    if @user_record.nil?
-      return ''
-    else
+    if !@user_record.nil?
       ohmage_data_points = @user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/,'header.acquisition_provenance.modality' => 'SELF_REPORTED').order('header.creation_date_time_epoch_milli DESC')
-      if ohmage_data_points.blank?
-        return ''
-      else
+      if !ohmage_data_points.blank?
         if AdminUser.find(admin_user_id).researcher?
           admin_surveys = []
           AdminUser.find(admin_user_id).surveys.each do |a|
             admin_surveys.push(a.search_key_name)
           end
           admin_ohmage_data_points = ohmage_data_points.where('header.schema_id.name' => { '$in' => admin_surveys}).order('header.creation_date_time_epoch_milli DESC').limit(1).first
-          if admin_ohmage_data_points.blank?
-            return ''
-          else
+          if !admin_ohmage_data_points.blank?
             DateTime.parse(admin_ohmage_data_points.header.creation_date_time).to_formatted_s(:long_ordinal)
           end
         else
@@ -87,39 +69,27 @@ class User < ActiveRecord::Base
 
   ##### Get one day data
   def one_day_pam_data_points(date)
-    if @user_record.nil?
-      return nil
-    else
+    if !@user_record.blank?
       pam_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores')
-      if pam_data_points.last.nil?
-        return nil
-      else
+      if !pam_data_points.blank?
         pam_data_points.where('header.creation_date_time' => date)
       end
     end
   end
 
   def one_day_fitbit_data_points(date)
-    if @user_record.nil?
-      return nil
-    else
+    if !@user_record.blank?
       fitbit_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'step_count', 'header.schema_id.namespace' => 'omh')
-      if fitbit_data_points.last.nil?
-        return nil
-      else
+      if !fitbit_data_points.blank?
         fitbit_data_points.where('header.creation_date_time' => date)
       end
     end
   end
 
   def one_day_ohmage_data_points(admin_user_id, date)
-    if @user_record.nil?
-      return nil
-    else
+    if !@user_record.nil?
       ohmage_data_points = @user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/,'header.acquisition_provenance.modality' => 'SELF_REPORTED', 'header.creation_date_time' => date)
-      if ohmage_data_points.last.nil?
-        return nil
-      else
+      if !ohmage_data_points.last.nil?
         if AdminUser.find(admin_user_id).researcher?
           admin_surveys = []
           AdminUser.find(admin_user_id).surveys.each do |a|
@@ -138,9 +108,7 @@ class User < ActiveRecord::Base
     pam_events_array = []
     pam_events_date = []
 
-    if  all_pam_data_points.nil?
-      return nil
-    else
+    if !all_pam_data_points.blank?
       all_pam_data_points.each do |pam_data|
         pam_events_date << pam_data.header.creation_date_time[0..9]
         pam_events_date = pam_events_date.uniq
@@ -161,9 +129,7 @@ class User < ActiveRecord::Base
     fitbit_events_array = []
     fitbit_events_date = []
 
-    if all_fitbit_data_points.nil?
-      return nil
-    else
+    if !all_fitbit_data_points.blank?
       all_fitbit_data_points.each do |fitbit_data|
         fitbit_events_date << fitbit_data.header.creation_date_time[0..9]
         fitbit_events_date = fitbit_events_date.uniq
@@ -184,9 +150,7 @@ class User < ActiveRecord::Base
   def calendar_annotation_events_array
     annotations_array = []
 
-    if self.annotations.nil?
-      return nil
-    else
+    if !self.annotations.blank?
      self.annotations.all.each do |anno|
         annotations_array.push({
           title: anno.title,
@@ -204,9 +168,7 @@ class User < ActiveRecord::Base
     ohmage_events_array = []
     ohamge_events_date = []
 
-    if all_ohmage_data_points(admin_user_id).nil?
-      return nil
-    else
+    if !all_ohmage_data_points(admin_user_id).blank?
       all_ohmage_data_points(admin_user_id).each do |ohmage_data|
         ohamge_events_date << ohmage_data.header.creation_date_time[0..9]
         ohamge_events_date = ohamge_events_date.uniq
@@ -225,39 +187,27 @@ class User < ActiveRecord::Base
 
   ##### Get all data
   def all_pam_data_points
-    if @user_record.nil?
-      return nil
-    else
+    if !@user_record.nil?
       pam_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'photographic-affect-meter-scores').order('header.creation_date_time_epoch_milli DESC')
-      if pam_data_points.last.nil?
-        return nil
-      else
-        return pam_data_points
+      if !pam_data_points.blank?
+        pam_data_points
       end
     end
   end
 
   def all_mobility_data_points
-    if @user_record.nil?
-      return nil
-    else
+    if !@user_record.nil?
       mobility_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary').order('header.creation_date_time_epoch_milli DESC')
-      if mobility_data_points.last.nil?
-        return nil
-      else
+      if !mobility_data_points.blank?
         mobility_data_points
       end
     end
   end
 
   def all_ohmage_data_points(admin_user_id)
-    if @user_record.nil?
-      return nil
-    else
+    if !@user_record.nil?
       ohmage_data_points = @user_record.pam_data_points.where('header.acquisition_provenance.source_name' => /^Ohmage/, 'header.acquisition_provenance.modality' => 'SELF_REPORTED').order('header.creation_date_time_epoch_milli DESC')
-      if ohmage_data_points.last.nil?
-        return nil
-      else
+      if !ohmage_data_points.blank?
         if AdminUser.find(admin_user_id).researcher?
           admin_surveys = []
           AdminUser.find(admin_user_id).surveys.each do |a|
@@ -272,13 +222,9 @@ class User < ActiveRecord::Base
   end
 
   def all_calendar_data_points
-    if @user_record.nil?
-      return nil
-    else
+    if !@user_record.nil?
       mobility_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary')
-      if mobility_data_points.last.nil?
-        return nil
-      else
+      if !mobility_data_points.blank?
         if mobility_data_points.where('body.device' => 'ios').last.nil?
           if mobility_data_points.where('body.device' => 'android').last.nil?
             mobility_data_points.where('body.device' => 'moves-app')
@@ -294,13 +240,9 @@ class User < ActiveRecord::Base
 
 
   def all_fitbit_data_points
-    if @user_record.nil?
-      return nil
-    else
+    if !@user_record.nil?
       fitbit_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'step_count', 'header.schema_id.namespace' => 'omh').order('header.creation_date_time_epoch_milli DESC')
-      if fitbit_data_points.last.nil?
-        return nil
-      else
+      if !fitbit_data_points.blank?
         fitbit_data_points
       end
     end
@@ -308,13 +250,9 @@ class User < ActiveRecord::Base
 
 
   def all_log_in_data_points
-    if @user_record.nil?
-      return nil
-    else
+    if !@user_record.nil?
       log_in_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'app-log').order('header.creation_date_time_epoch_milli DESC')
-      if log_in_data_points.last.nil?
-        return nil
-      else
+      if !log_in_data_points.blank?
         log_in_data_points
       end
     end
@@ -340,9 +278,7 @@ class User < ActiveRecord::Base
               'affect valence',
               'mood'
              ]
-        if all_pam_data_points.nil?
-          return nil
-        else
+        if !all_pam_data_points.blank?
           all_pam_data_points.each do |data_point|
             csv << [
                   data_point._class,
@@ -367,12 +303,8 @@ class User < ActiveRecord::Base
 
   def get_all_survey_question_keys(admin_user_id)
     ohmage_data_points = all_ohmage_data_points(admin_user_id)
-    if @user_record.nil?
-      return nil
-    else
-      if ohmage_data_points.nil?
-        return nil
-      else
+    if !@user_record.nil?
+      if !ohmage_data_points.blank?
         survey_keys = [
                       'source_name',
                       'creation_date_time',
@@ -429,9 +361,7 @@ class User < ActiveRecord::Base
       if keys
         csv << keys
         data_points = all_ohmage_data_points(admin_user_id)
-        if data_points.nil?
-          return nil
-        else
+        if !data_points.blank?
           data_points.each do |data_point|
             csv << get_all_survey_question_values(keys, data_point) if data_point.body.data || data_point.body
           end
@@ -465,9 +395,7 @@ class User < ActiveRecord::Base
               'time not at home in minutes',
               'coverage'
              ]
-      if all_mobility_data_points.nil?
-        return nil
-      else
+      if !all_mobility_data_points.blank?
         all_mobility_data_points.each do |data_point|
           csv << [
                   data_point._class,
@@ -502,9 +430,7 @@ class User < ActiveRecord::Base
               'date',
               'steps'
       ]
-      if all_fitbit_data_points.nil?
-        return nil
-      else
+      if !all_fitbit_data_points.blank?
         all_fitbit_data_points.each do |data_point|
         csv << [
                  data_point.header.creation_date_time,
@@ -526,9 +452,7 @@ class User < ActiveRecord::Base
         'event',
         'message'
       ]
-      if all_log_in_data_points.nil?
-        return nil
-      else
+      if !all_log_in_data_points.blank?
         all_log_in_data_points.each do |data_point|
           csv << [
             data_point.header.schema_id.name,
@@ -556,9 +480,7 @@ class User < ActiveRecord::Base
                     }
                   }
                 }
-    if all_calendar_data_points.nil?
-      return nil
-    else
+    if !all_calendar_data_points.blank?
       all_calendar_data_points.each do |data_point|
         json_data[:users][:c6651b99_8f9c_4d83_8f4b_8c02a00ddf9c][:daily][data_point.body.date + 'T00:00:00.000Z'] = {
           max_gait_speed_in_meter_per_second: escape_and_round(data_point.body.max_gait_speed_in_meter_per_second),

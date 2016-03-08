@@ -29,6 +29,7 @@ ActiveAdmin.register User  do
   collection_action :all_users_mobility_data_points do
     respond_to do |format|
       format.csv {render text: all_users_mobility_csv}
+      tracer_bullet
     end
   end
 
@@ -62,7 +63,7 @@ ActiveAdmin.register User  do
                 'mood'
                ]
         @users.each do |user|
-          if !user.all_pam_data_points.nil?
+          if !user.all_pam_data_points.blank?
             user.all_pam_data_points.each do |data_point|
               csv << [
                     find_user_id(data_point.user_id),
@@ -82,6 +83,7 @@ ActiveAdmin.register User  do
                     escape_nil_body(data_point, :affect_valence),
                     escape_nil_body(data_point, :mood)
                    ]
+
             end
           end
         end
@@ -90,7 +92,6 @@ ActiveAdmin.register User  do
 
     def all_users_mobility_csv
       @users = current_admin_user.users
-
       CSV.generate do |csv|
         csv << [
                 'user id',
@@ -162,7 +163,6 @@ ActiveAdmin.register User  do
         ]
         @users.each do |user|
           if !user.all_fitbit_data_points.nil?
-
             user.all_fitbit_data_points.each do |data_point|
             csv << [
                      find_user_id(data_point.user_id),
