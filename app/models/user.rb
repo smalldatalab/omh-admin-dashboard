@@ -79,7 +79,7 @@ class User < ActiveRecord::Base
 
   def one_day_fitbit_data_points(date)
     if !@user_record.blank?
-      fitbit_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'step_count', 'header.schema_id.namespace' => 'omh')
+      fitbit_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'step-count', 'header.schema_id.namespace' => 'omh')
       if !fitbit_data_points.blank?
         fitbit_data_points.where('header.creation_date_time' => date)
       end
@@ -241,7 +241,8 @@ class User < ActiveRecord::Base
 
   def all_fitbit_data_points
     if !@user_record.nil?
-      fitbit_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'step_count', 'header.schema_id.namespace' => 'omh').order('header.creation_date_time_epoch_milli DESC')
+      fitbit_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'step-count', 'header.schema_id.namespace' => 'omh').order('header.creation_date_time_epoch_milli DESC')
+      logger.debug "Number of fitbit records: #{fitbit_data_points.size}"
       if !fitbit_data_points.blank?
         fitbit_data_points
       end
