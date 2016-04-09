@@ -54,9 +54,8 @@ gem 'simple_form',      '~> 3.1'
 gem 'foundation-rails'
 gem 'foundation-icons-sass-rails'
 gem 'mandrill-rails'
-# for debugging the slow issue
-# gem 'tracer_bullets'
 
+# for debugging the slow issue
 group :development do
   gem "binding_of_caller"
   gem "better_errors"
