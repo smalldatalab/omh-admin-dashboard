@@ -1,10 +1,11 @@
 development:
   adapter: postgresql
   encoding: utf8
-  database: sdl_admin_dashboard_development
   pool: 5
-  username:
-  password:
+  database: <%= (ENV['APP_DB_DATABASE'] || Rails.application.secrets.APP_DB_DATABASE) %>
+  username: <%= (ENV['APP_DB_USERNAME'] || Rails.application.secrets.APP_DB_USERNAME) %>
+  password: <%= (ENV['APP_DB_PASSWORD'] || Rails.application.secrets.APP_DB_PASSWORD) %>
+  host: <%= (ENV['APP_DB_HOST'] || Rails.application.secrets.APP_DB_HOST) %>
 
 test:
   adapter: postgresql
@@ -32,4 +33,3 @@ production:
   host: <%= (ENV['APP_DB_HOST'] || Rails.application.secrets.APP_DB_HOST) %>
 
   # port: 5432
-

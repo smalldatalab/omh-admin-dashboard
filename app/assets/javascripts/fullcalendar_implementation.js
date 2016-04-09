@@ -159,7 +159,7 @@ $(document).ready(function() {
             right: 'prev,next,today,year,month',
             left: 'title'
         },
-        defaultView: 'year',
+        defaultView: 'month',
         yearColumns: 2,
         selectable: true,
         timezone: "UTC",
