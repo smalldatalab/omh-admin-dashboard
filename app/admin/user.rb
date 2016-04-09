@@ -42,7 +42,9 @@ ActiveAdmin.register User  do
   ##### Controller for all data download button group (Customized)
   controller do
     def all_users_pam_csv
-      @users = current_admin_user.users
+      @users_data = current_admin_user.users.map { |user| user.all_pam_data_points }
+      @all_data_points = @users_data.compact.collect {|data| data.to_a}.flatten
+     
       CSV.generate do |csv|
         csv << [
                 'user id',
@@ -62,37 +64,38 @@ ActiveAdmin.register User  do
                 'affect valence',
                 'mood'
                ]
-        @users.each do |user|
-          if !user.all_pam_data_points.blank?
-            user.all_pam_data_points.each do |data_point|
-              csv << [
-                    find_user_id(data_point.user_id),
-                    data_point._id,
-                    data_point._class,
-                    data_point.header.schema_id.namespace,
-                    data_point.header.schema_id.name,
-                    data_point.header.schema_id.version.major,
-                    data_point.header.schema_id.version.minor,
-                    data_point.header.creation_date_time,
-                    data_point.header.acquisition_provenance.source_name,
-                    data_point.header.acquisition_provenance.modality,
-                    escape_nil_body(data_point, :affect_arousal),
-                    escape_nil_body(data_point, :negative_affect),
-                    escape_nil_body(data_point, :positive_affect),
-                    data_point.body.effective_time_frame.nil? ? nil : data_point.body.effective_time_frame.date_time,
-                    escape_nil_body(data_point, :affect_valence),
-                    escape_nil_body(data_point, :mood)
-                   ]
+        @all_data_points.each do |data_point|
+          csv << [
+                find_user_id(data_point.user_id),
+                data_point._id,
+                data_point._class,
+                data_point.header.schema_id.namespace,
+                data_point.header.schema_id.name,
+                data_point.header.schema_id.version.major,
+                data_point.header.schema_id.version.minor,
+                data_point.header.creation_date_time,
+                data_point.header.acquisition_provenance.source_name,
+                data_point.header.acquisition_provenance.modality,
+                escape_nil_body(data_point, :affect_arousal),
+                escape_nil_body(data_point, :negative_affect),
+                escape_nil_body(data_point, :positive_affect),
+                data_point.body.effective_time_frame.nil? ? nil : data_point.body.effective_time_frame.date_time,
+                escape_nil_body(data_point, :affect_valence),
+                escape_nil_body(data_point, :mood)
+               ]
 
-            end
-          end
         end
       end
     end
 
     def all_users_mobility_csv
-      @users = current_admin_user.users
-      CSV.generate do |csv|
+      t1 = Time.now
+      @users_data = current_admin_user.users.map {|user| user.all_mobility_data_points }
+      t2 = Time.now
+      @all_data_points = @users_data.compact.collect {|data| data.to_a}.flatten
+      t3 = Time.now
+
+      csv = CSV.generate do |csv|
         csv << [
                 'user id',
                 'id',
@@ -117,43 +120,45 @@ ActiveAdmin.register User  do
                 'time not at home in minutes',
                 'coverage'
                ]
-        @users.each do |user|
-          if !user.all_mobility_data_points.nil?
-            user.all_mobility_data_points
-            tracer_bullet
-            user.all_mobility_data_points.each do |data_point|
-              csv << [
-                      find_user_id(data_point.user_id),
-                      data_point._id,
-                      data_point._class,
-                      data_point.header.schema_id.namespace,
-                      data_point.header.schema_id.name,
-                      data_point.header.schema_id.version.major,
-                      data_point.header.schema_id.version.minor,
-                      data_point.header.creation_date_time,
-                      data_point.header.creation_date_time_epoch_milli,
-                      data_point.header.acquisition_provenance.source_name,
-                      data_point.header.acquisition_provenance.modality,
-                      escape_nil_body(data_point, :date),
-                      escape_nil_body(data_point, :device),
-                      escape_nil_body(data_point, :active_time_in_seconds).nil? ? nil : (data_point.body.active_time_in_seconds / 60.00),
-                      escape_nil_body(data_point, :walking_distance_in_km),
-                      escape_nil_body(data_point, :steps),
-                      escape_nil_body(data_point, :geodiameter_in_km),
-                      escape_nil_body(data_point, :max_gait_speed_in_meter_per_second),
-                      escape_nil_body(data_point, :leave_home_time),
-                      escape_nil_body(data_point, :return_home_time),
-                      escape_nil_body(data_point, :time_not_at_home_in_seconds).nil? ? nil : (data_point.body.time_not_at_home_in_seconds / 60.00),
-                      escape_nil_body(data_point, :coverage)
-                      ]
-            end
-          end
+        @all_data_points.each do |data_point|
+          csv << [
+                  find_user_id(data_point.user_id),
+                  data_point._id,
+                  data_point._class,
+                  data_point.header.schema_id.namespace,
+                  data_point.header.schema_id.name,
+                  data_point.header.schema_id.version.major,
+                  data_point.header.schema_id.version.minor,
+                  data_point.header.creation_date_time,
+                  data_point.header.creation_date_time_epoch_milli,
+                  data_point.header.acquisition_provenance.source_name,
+                  data_point.header.acquisition_provenance.modality,
+                  escape_nil_body(data_point, :date),
+                  escape_nil_body(data_point, :device),
+                  escape_nil_body(data_point, :active_time_in_seconds).nil? ? nil : (data_point.body.active_time_in_seconds / 60.00),
+                  escape_nil_body(data_point, :walking_distance_in_km),
+                  escape_nil_body(data_point, :steps),
+                  escape_nil_body(data_point, :geodiameter_in_km),
+                  escape_nil_body(data_point, :max_gait_speed_in_meter_per_second),
+                  escape_nil_body(data_point, :leave_home_time),
+                  escape_nil_body(data_point, :return_home_time),
+                  escape_nil_body(data_point, :time_not_at_home_in_seconds).nil? ? nil : (data_point.body.time_not_at_home_in_seconds / 60.00),
+                  escape_nil_body(data_point, :coverage)
+                  ]
         end
       end
+      t4 = Time.now
+      Rails.logger.info time_diff_milli t1, t2
+      Rails.logger.info time_diff_milli t2, t3
+      Rails.logger.info time_diff_milli t3, t4
+
+      return csv
     end
 
     def all_users_fitbit_csv
-      @users = current_admin_user.users
+      @users_data = current_admin_user.users.map { |user| user.all_fitbit_data_points}
+      @all_data_points = @users_data.compact.collect {|data| data.to_a}.flatten
+
       CSV.generate do |csv|
         csv << [
                 'user_id',
@@ -161,17 +166,13 @@ ActiveAdmin.register User  do
                 'date',
                 'steps'
         ]
-        @users.each do |user|
-          if !user.all_fitbit_data_points.nil?
-            user.all_fitbit_data_points.each do |data_point|
-            csv << [
-                     find_user_id(data_point.user_id),
-                     data_point._id,
-                     data_point.header.creation_date_time,
-                     data_point.body.step_count
-            ]
-            end
-          end
+        @all_data_points.each do |data_point|
+          csv << [
+                   find_user_id(data_point.user_id),
+                   data_point._id,
+                   data_point.header.creation_date_time,
+                   data_point.body.step_count
+          ]
         end
       end
     end

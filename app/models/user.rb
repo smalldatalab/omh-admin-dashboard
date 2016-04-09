@@ -197,7 +197,7 @@ class User < ActiveRecord::Base
 
   def all_mobility_data_points
     if !@user_record.nil?
-      mobility_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary').order('header.creation_date_time_epoch_milli DESC')
+      mobility_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary').without('body.episodes').order('header.creation_date_time_epoch_milli DESC')
       if !mobility_data_points.blank?
         mobility_data_points
       end
@@ -225,14 +225,14 @@ class User < ActiveRecord::Base
     if !@user_record.nil?
       mobility_data_points = @user_record.pam_data_points.where('header.schema_id.name' => 'mobility-daily-summary')
       if !mobility_data_points.blank?
-        if mobility_data_points.where('body.device' => 'ios').last.nil?
-          if mobility_data_points.where('body.device' => 'android').last.nil?
-            mobility_data_points.where('body.device' => 'moves-app')
-          else
+        if mobility_data_points.where('body.device' => 'moves-app').last.nil?
+          if mobility_data_points.where('body.device' => 'ios').last.nil?
             mobility_data_points.where('body.device' => 'android')
+          else
+            mobility_data_points.where('body.device' => 'ios')
           end
         else
-          mobility_data_points.where('body.device' => 'ios')
+          mobility_data_points.where('body.device' => 'moves-app')
         end
       end
     end
