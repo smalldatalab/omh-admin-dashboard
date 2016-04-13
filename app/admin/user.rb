@@ -43,7 +43,7 @@ ActiveAdmin.register User  do
     def all_users_pam_csv
       @users_data = current_admin_user.users.map { |user| user.all_pam_data_points }
       @all_data_points = @users_data.compact.collect {|data| data.to_a}.flatten
-     
+
       CSV.generate do |csv|
         csv << [
                 'user id',
@@ -147,9 +147,6 @@ ActiveAdmin.register User  do
         end
       end
       t4 = Time.now
-      Rails.logger.info time_diff_milli t1, t2
-      Rails.logger.info time_diff_milli t2, t3
-      Rails.logger.info time_diff_milli t3, t4
 
       return csv
     end
@@ -360,4 +357,3 @@ ActiveAdmin.register User  do
   end
 
 end
-
