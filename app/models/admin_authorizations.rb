@@ -16,7 +16,7 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
       when normalized(Organization)
         false
       when normalized(CustomUser)
-        false
+        action == :read
   		else
   			true
   		end
@@ -26,11 +26,18 @@ class AdminAuthorizations < ActiveAdmin::AuthorizationAdapter
         false
       when normalized(Organization)
         false
+      when normalized(CustomUser)
+        action == :read || action == :create
       else
         true
       end
   	else
-  		true
+      case subject
+      when normalized(CustomUser)
+        action == :read || action == :create
+      else
+  		  true
+      end
   	end
   end
 

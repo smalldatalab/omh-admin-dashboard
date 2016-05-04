@@ -1,6 +1,7 @@
 ActiveAdmin.register CustomUser do
+  ### In order to store the attributes
   permit_params :username, :password, :annotation, :study_ids => [], studies_attributes: [:id, :name]
-
+  
   index do |f|
     selectable_column
     id_column
@@ -33,7 +34,7 @@ ActiveAdmin.register CustomUser do
 
   filter :username
   filter :annotation
-
+ 
   form do |f|
     f.inputs "Custom User Details" do
       f.input :username
@@ -47,5 +48,4 @@ ActiveAdmin.register CustomUser do
     end
     f.actions
   end
-
 end
